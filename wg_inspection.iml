@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="communication" level="project" />
+    <orderEntry type="library" name="ems_fwk" level="project" />
+    <orderEntry type="library" name="toolkit" level="project" />
+    <orderEntry type="library" name="commons_logging" level="project" />
+    <orderEntry type="library" name="client_topo" level="project" />
+    <orderEntry type="library" name="client" level="project" />
+    <orderEntry type="library" name="NETemplet" level="project" />
+    <orderEntry type="library" name="jdom" level="project" />
+    <orderEntry type="library" name="selfm_common" level="project" />
+    <orderEntry type="library" name="mysqldriver" level="project" />
+    <orderEntry type="library" name="rmp_1.44_epon" level="project" />
+    <orderEntry type="library" name="rmp_2.50_pon" level="project" />
+    <orderEntry type="library" name="dbConnections" level="project" />
+    <orderEntry type="library" name="commons-io-2.6" level="project" />
+    <orderEntry type="library" name="json-20160212" level="project" />
+    <orderEntry type="library" name="commons-dbcp2-2.5.0" level="project" />
+    <orderEntry type="library" name="commons-pool2-2.6.0" level="project" />
+    <orderEntry type="library" name="commons-dbcp2-2.4.0" level="project" />
+    <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="commons_snmp" level="project" />
+    <orderEntry type="library" name="ehcache-core-2.4.2" level="project" />
+    <orderEntry type="library" name="slf4j-api-1.6.1" level="project" />
+    <orderEntry type="library" name="rmp_2.20_epon" level="project" />
+  </component>
+</module>

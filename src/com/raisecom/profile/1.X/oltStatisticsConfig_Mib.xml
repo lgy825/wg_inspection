@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding="UTF-8"?>
+
+<!DOCTYPE MIB [
+<!ELEMENT MIB (MibTable)>
+<!ELEMENT MibTable (MibNode)>
+<!ELEMENT MibNode (EnumValue)>
+
+<!ATTLIST MIB  
+	MibFiles CDATA #REQUIRED  
+	ResourceBundle CDATA  #REQUIRED
+	ReInitSnmp CDATA "false"	
+>
+
+<!ATTLIST MibTable  
+	Name   			ID 		#REQUIRED
+	Type   			CDATA 	"Table"
+	Column			CDATA  	"1"
+	Height			CDATA  	"22"   
+	LabelWidth		CDATA  	"200"
+	ValueWidth		CDATA  	"200"
+	XInterval		CDATA  	"4"
+	YInterval		CDATA  	"2"
+	MaxColWidth		CDATA  	"80"
+	Align			CDATA  	"CENTER"
+	UseExtendStyle  CDATA   "true"
+>
+<!ATTLIST MibNode  
+	Logic  	 CDATA 	#REQUIRED
+	Physics  CDATA 	#REQUIRED
+	Unit	 CDATA  ""
+	Checker  CDATA  ""
+	MibNodeAdapter CDATA  ""
+>
+<!ATTLIST EnumValue  
+	Value ID #REQUIRED  
+	Label CDATA #REQUIRED 
+>
+
+]>
+ 
+<MIB  ResourceBundle = "com/raisecom/ems/epon/client/resource/oam/Resource" MibProfile = "com/raisecom/ems/eponcommon/server/modules/cfgmgt/profile/1.44/eponv2.rmp" >
+ 
+   <MibTable Name="rfc1213 System Group" Type="List" Column="1" Height="22" LabelWidth="200" ValueWidth="200" XInterval="4" YInterval="2" MaxColWidth="80" Align="CENTER" UseExtendStyle="true">
+    <MibNode Logic="sysObjectID" Physics="sysObjectID.0" Unit="" Checker="" MibNodeAdapter="" />
+  </MibTable>
+	
+  <MibTable Name="raisecomShelfTable" Type="List" ModifyRefresh="true" Column="1" Height="22" LabelWidth="200" ValueWidth="200" XInterval="4" YInterval="2" MaxColWidth="80" Align="CENTER" UseExtendStyle="true">
+    <MibNode Logic="raisecomShelfTemperature" Physics="raisecomShelfTemperature.0" ValueAdapter="com.raisecom.ems.eponcommon.client.onu.devicemgt.adapter.CentigradeAndFahrenheitTemperatureValueAdapter" SyntaxName="STRING" Unit="unit.centigradeAndFahrenheitTemperature" Checker="" MibNodeAdapter="" />
+  </MibTable>
+	
+  <MibTable Name="SwitchInformation" Type="List" ModifyRefresh="true" ValueWidth="240" Column="1" Height="22" LabelWidth="200" XInterval="4" YInterval="2" MaxColWidth="80" Align="CENTER" UseExtendStyle="true">
+    <MibNode Logic="rcSwitchRoseVersion" Physics="rcSwitchRoseVersion.0" Unit="" Checker="" MibNodeAdapter="">
+      <MibNodeAdapter Class="com.raisecom.ems.templet.server.adapter.OctetStringMibNodeAdapter" />
+    </MibNode>
+  </MibTable>
+  
+  <MibTable Name = "raisecomSlotTable" Type = "Table"> 	  
+	<MibNode Logic = "raisecomSlotId" 	                              Physics = "raisecomSlotId"/>
+	<MibNode Logic = "raisecomSlotExpectCardType" 	                  Physics = "raisecomSlotExpectCardType" Access = "ROnly"
+		PanelClass = "com.raisecom.ems.eponcommon.client.olt.devicemgt.panel.SlotCardTypePanel">
+        <EnumValue Value = "2"    Label = "NULL" />
+		<EnumValue Value = "1101" Label = "SMC" />
+		<EnumValue Value = "1102" Label = "2PON" />
+		<EnumValue Value = "1105" Label = "4PON" />
+		<EnumValue Value = "1103" Label = "4GE" />
+		<EnumValue Value = "1104" Label = "2GE" />
+		<!--ValueAdapter Class = "com.raisecom.ems.eponcommon.client.olt.devicemgt.adapter.SlotInfoValueAdapter"/-->		
+	</MibNode>
+	<MibNode Logic = "raisecomSlotActCardState" 	                  Physics = "raisecomSlotActCardState" />
+  </MibTable>
+	
+	<MibTable Name = "rcCpuMonTable" Type = "List" >
+		<MibNode Logic = "raisecomCPUUtilizationTotal" 								Physics = "raisecomCPUUtilizationTotal.0" SyntaxName="String"/> 
+	</MibTable>
+
+	<MibTable Name = "raisecomPowerOutputTable" Type = "Table" ModifyRefresh = "true">
+		<MibNode Logic = "raisecomPowerDeviceIndex" 				Physics = "raisecomPowerDeviceIndex"  Access = "noaccess" IsIndex = "true"/>
+		<MibNode Logic = "raisecomPowerOutputType" 					Physics = "raisecomPowerOutputType" Access = "noaccess" IsIndex = "true"/>
+		<MibNode Logic = "raisecomPowerStatus" 				        Physics = "raisecomPowerStatus">
+			<EnumValue Value = "1" Label = "alarm_normal" />
+			<EnumValue Value = "2" Label = "alarm_abnormal" />
+			<EnumValue Value = "3" Label = "alarm_null" />
+			<EnumValue Value = "4" Label = "alarm_highAlarm" />
+			<EnumValue Value = "5" Label = "alarm_lowAlarm" />
+		</MibNode>
+	</MibTable>
+	
+	 <!--  版本信息表 -->
+	  <MibTable Name = "raisecomSWFileTable" Type = "Table">
+		<MibNode Logic = "raisecomSWFileVersion" 	            Physics = "raisecomSWFileVersion"/>
+	  </MibTable>
+	
+  <MibTable Name="raisecomFanTable" Type="Table" PageSize="25" Column="1" Height="22" LabelWidth="200" ValueWidth="200" XInterval="4" YInterval="2" MaxColWidth="80" Align="CENTER" UseExtendStyle="true">
+    <MibNode Logic="raisecomFanIndex" Physics="raisecomFanIndex" OrderType="Integer" Access="noaccess" Unit="" Checker="" MibNodeAdapter="" />
+    <MibNode Logic="raisecomFanStatus" Physics="raisecomFanStatus" Unit="" Checker="" MibNodeAdapter="" />
+  </MibTable>
+	
+  <MibTable Name="rcVlanCfgPortTable" Type="Table" PageSize="25" ModifyRefresh="true" Column="1" Height="22" LabelWidth="200" ValueWidth="200" XInterval="4" YInterval="2" MaxColWidth="80" Align="CENTER" UseExtendStyle="true">
+    <MibNode Logic="rcPortIndex" Physics="rcPortIndex" OrderType="Integer" Access="noaccess" IsIndex="true" Unit="" Checker="" MibNodeAdapter="" />
+	<MibNode Logic="rcPortMode" Physics="rcPortMode" Unit="" Checker="" MibNodeAdapter="">
+      <EnumValue Value="1" Label="access" />
+      <EnumValue Value="2" Label="trunk" />
+    </MibNode>
+    <MibNode Logic="rcPortTrunkAllowVlanList" Physics="rcPortTrunkAllowVlanList" Unit="" Checker="" MibNodeAdapter="">
+      <MibNodeAdapter Class="com.raisecom.ems.eponcommon.client.olt.devicemgt.adapter.VlansetAdapter" />
+      <ValueAdapter Class="com.raisecom.ems.templet.client.adapter.VlansetValueAdapter" />
+    </MibNode>
+  </MibTable>
+	
+</MIB>

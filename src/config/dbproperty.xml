@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="GB2312"?>
+<Properties>
+    <ConnectionPool Name="Pool" Passwd="OSSDB123"
+                    URL="jdbc:mysql://127.0.0.1:13306/nnm5?autoReconnect=true"
+                    User="root" checkStatement="select 1" createWaitTime="2000"
+                    driver="org.gjt.mm.mysql.Driver" growBlock="1" initialSize="3"
+                    maxSize="30" refreshThreadCheckInterval="10"/>
+</Properties>

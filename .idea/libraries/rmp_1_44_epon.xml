@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="rmp_1.44_epon">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/rmp_1.44_epon.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

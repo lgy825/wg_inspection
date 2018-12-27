@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="NETemplet">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/NETemplet.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

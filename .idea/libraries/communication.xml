@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="communication">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/communication.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

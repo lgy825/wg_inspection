@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="rmp_2.50_pon">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/rmp_2.50_pon.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

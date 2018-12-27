@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="toolkit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/toolkit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
