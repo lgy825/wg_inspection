@@ -28,9 +28,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
     String ip="";
     String netype="";
 
-
-
-
     public DeviceStatisticOperatorThread(ObjService objService){
         this.objService=objService;
     }
