@@ -26,6 +26,8 @@ import java.util.*;
  */
 public class BatDispectMode implements DispectMode {
 
+
+
     private static final Logger logger = LogFactory.getLogger("selfm");
     public static void main(String[] args) {
         DispectMode dispectMode=new BatDispectMode();
