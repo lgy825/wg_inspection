@@ -6,4 +6,6 @@ package com.raisecom.bean;
 public class JsonBean {
     //
 
+
+    //jiaru xinde
 }
