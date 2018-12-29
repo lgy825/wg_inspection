@@ -14,7 +14,10 @@ import com.raisecom.util.EPONConstants;
 import java.sql.*;
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -34,10 +37,12 @@ public class OLTDeviceContrller implements DeviceTask {
         //ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
         XPONThreadPool xponPool = XPONThreadPool.getNewPool("DeviceStatistic", 5);
         String configFile = "";
+        Map<String,Future<Boolean>> results = new HashMap<String,Future<Boolean>>();
         if(addres!=null){
              for(ObjService rcnetnode:rcnetnodes){
                  String softVer=rcnetnode.getStringValue("SOFTWARE_VER");
                  String ver=getVersBySoftVer(softVer);
+                 String ip=rcnetnode.getStringValue("IPADDRESS");
                  if(ver.startsWith("2.") || ver.startsWith("3.")){
                      configFile= "com/raisecom/profile/2.X/oltStatisticsConfig_Mib.xml";
                  }else{
@@ -45,9 +50,25 @@ public class OLTDeviceContrller implements DeviceTask {
                  }
                  rcnetnode.setValue("configFile",configFile);
                  Future<Boolean> fs = xponPool.submitTask(new DeviceStatisticOperatorThread(rcnetnode));
+                 results.put(ip,fs);
              }
         }
-        return false;
+        boolean flag = false;
+        for (String key :results.keySet()) {//get()操作会等待线程完成
+            try {
+                Future<Boolean> fs = results.get(key);
+                flag = fs.get();
+                if (flag == false) {
+                    continue;
+                }
+            }catch (InterruptedException e) {
+                return false;
+            }catch (ExecutionException e) {
+                return false;
+            }
+        }
+        xponPool.shutDown();
+        return true;
     }
 
     public static List<ObjService> getOLTInfoByIP(List<String> addres){
