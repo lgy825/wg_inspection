@@ -11,6 +11,8 @@ import java.util.Set;
  * Created by ligy-008494 on 2018/11/13.
  */
 public class EponGlobalVariablesInit {
+
+
     private static String DELETE_ONU_DEVICE_STATUS = "1";
     private static String CREATE_ONU_DEVICE_STATUS = "1";
     private static String UPDATE_ONU_DEVICE_STATUS = "1";
