@@ -6,6 +6,7 @@ import com.raisecom.controller.DeviceTask;
 import com.raisecom.controller.DispectMode;
 import com.raisecom.db.InitSelfmDBPoolTask;
 import com.raisecom.db.JdbcUtils_DBCP;
+import com.raisecom.exportExcelDemo.Main;
 import com.raisecom.nms.platform.client.ResourceManager;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
@@ -66,10 +67,14 @@ public class BatDispectMode implements DispectMode {
                 JSONObject btn = (JSONObject) ips.next();
                 list.add(btn.get("ip").toString());
             }
-
             DeviceTask deviceTask=new OLTDeviceContrller();
-            deviceTask.processStatistics(list);
-
+            boolean isSuccessful=deviceTask.processStatistics(list);
+            if(isSuccessful){
+                Main.FromDbToExcel();
+                System.out.print("导出成功");
+            }else{
+                System.out.print("巡检失败");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
