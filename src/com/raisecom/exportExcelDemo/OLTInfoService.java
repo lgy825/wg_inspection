@@ -40,7 +40,7 @@ public class OLTInfoService {
                 oltInfo.setSmc(result.getString("SMC"));
                 oltInfo.setCpu(result.getString("CPU"));
                 oltInfo.setTemperature(result.getString("TEMPERATURE"));
-                oltInfo.setPower(result.getString("TEMPERATURE"));
+                oltInfo.setPower(result.getString("POWER"));
                 oltInfo.setFan(result.getString("FAN"));
                 oltInfo.setSoftware_ver(result.getString("SOFTWARE_VER"));
                 oltInfo.setBussiness_card_amount(result.getString("BUSSINESS_CARD_AMOUNT"));
