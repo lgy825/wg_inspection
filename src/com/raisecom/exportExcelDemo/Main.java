@@ -4,6 +4,7 @@ import com.raisecom.bean.OLTInfo;
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
+import com.raisecom.util.ExportExcel;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
@@ -12,6 +13,8 @@ import jxl.write.WritableWorkbook;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,6 +30,60 @@ public class Main {
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");
+        }
+    }
+
+
+    public static  void ExcelPort(){
+        ExportExcel ee=null;
+        try {
+            List<OLTInfo> lists = OLTInfoService.getAllByDb();
+            //设置表头
+            List<String> headerList = new ArrayList<>();
+            headerList.add("局点");
+            headerList.add("OLT设备类型");
+            headerList.add("OLT设备IP地址");
+            headerList.add("SMC");
+            headerList.add("内存(%)");
+            headerList.add("CPU(%)");
+            headerList.add("温度(℃)");
+            headerList.add("电源");
+            headerList.add("风扇");
+            headerList.add("OLT版本信息");
+            headerList.add("OLT业务板卡类型和数量统计");
+            headerList.add("VLAN广播域是否能优化缩小");
+            headerList.add("系统运行时间");
+            headerList.add("主备倒换次数");
+            headerList.add("主控异常重启次数");
+            headerList.add("主控电压");
+            headerList.add("PON口隔离");
+            headerList.add("ONU数量统计");
+            List<List<String>> list = new ArrayList();
+            for(OLTInfo olt:lists){
+                List<String> detail = new ArrayList<String>();
+                detail.add(olt.getFriendly_name());
+                detail.add(olt.getIpaddress());
+                detail.add(olt.getIpaddress());
+                detail.add(olt.getSmc());
+                detail.add(olt.getRam());
+                detail.add(olt.getCpu());
+                detail.add(olt.getTemperature());
+                detail.add(olt.getPower());
+                detail.add(olt.getFan());
+                detail.add(olt.getSoftware_ver());
+                detail.add(olt.getBussiness_card_amount());
+                detail.add(olt.getVlan_optimize());
+                detail.add(olt.getSys_uptime());
+                detail.add(olt.getSwitched_count().toString());
+                detail.add(olt.getOlt_power());
+                detail.add(olt.getPort_is_solate());
+                detail.add(olt.getOnu_count_info());
+
+                list.add(detail);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public static void FromDbToExcel() {
