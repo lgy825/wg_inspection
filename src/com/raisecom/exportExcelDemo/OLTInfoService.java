@@ -22,7 +22,7 @@ public class OLTInfoService {
         Connection conn = null;
         ResultSet result = null;
         PreparedStatement pstmt = null;
-
+        //连接数据库 将数据放入List中
         try {
             conn = DBConnectionManager.getConnection();
             pstmt = conn.prepareStatement(sql);

@@ -1,21 +1,20 @@
 package com.raisecom.exportExcelDemo;
 
+
 import com.raisecom.bean.OLTInfo;
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
-import jxl.CellView;
-import jxl.SheetSettings;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.write.*;
 
 
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Vector;
+
 
 /**
  * Created by liujs-008398 on 2018-12-28.
@@ -31,6 +30,7 @@ public class Main {
             logger.log(300,"数据库初始化失败");
         }
     }
+    //从数据库导出Excel
     public static void FromDbToExcel() {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
@@ -38,10 +38,14 @@ public class Main {
 
         try {
             List<OLTInfo> list = OLTInfoService.getAllByDb();
+            // 创建可写入的Excel工作簿
             WritableWorkbook wwb = null;
 
-            // 创建可写入的Excel工作簿
-            String fileName = "D://oltInfo.xls";
+            //文件名为时间精确到秒
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddhhmmss");
+            String dataStr=sdf.format(new Date());
+
+            String fileName = "D://"+dataStr+".xls";
             File file=new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
@@ -49,22 +53,25 @@ public class Main {
             //以fileName为文件名来创建一个Workbook
             wwb = Workbook.createWorkbook(file);
 
-            // 创建工作表
-            WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 8, WritableFont.NO_BOLD);
-//            fontTitle.setColour(jxl.format.Colour.RED);
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+
+            WritableSheet ws = wwb.createSheet("Test Sheet 1", 0);
+            //设置列宽默认宽度
+            ws.getSettings().setDefaultColumnWidth(15);
+            //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
+            WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
+            //定义格式
             WritableCellFormat formatTitle = new WritableCellFormat(fontTitle);
+            //表头设置背景为灰色
+            formatTitle.setBackground(Colour.GRAY_25);
+            //自动换行
             formatTitle.setWrap(true);
-            formatTitle.setAlignment(Alignment.CENTRE); //设置垂直对齐
-
-            CellView navCellView = new CellView();
-            //navCellView.setAutosize(true); //设置自动大小
-            navCellView.setSize(3500);
-            WritableSheet ws = wwb.createSheet("Test Shee 1", 0);
-
+            formatTitle.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
             //查询数据库中所有的数据
 
-            //要插入到的Excel表格的行号，默认从0开始
-            Label friendlyName = new Label(0, 0, "局点",formatTitle);//表示第
+            //插入表头。行号，默认从0开始，列号从0开始，
+            Label friendlyName = new Label(0, 0, "局点",formatTitle);
             Label typeId = new Label(1, 0, "OLT设备类型",formatTitle);
             Label address = new Label(2, 0, "OLT设备IP地址",formatTitle);
             Label smc = new Label(3, 0, "SMC",formatTitle);
@@ -82,10 +89,9 @@ public class Main {
             Label olt_power = new Label(15, 0, "主控电压",formatTitle);
             Label port_is_solate = new Label(16, 0, "PON口隔离",formatTitle);
             Label onu_count_info = new Label(17, 0, "ONU数量统计",formatTitle);
-            //ws.setColumnView(0,500,formatTitle); //设置col显示样式
-            //ws.setRowView(0, 1600, false); //设置行高
 
 
+            //将Label 添加到工作表
             ws.addCell(friendlyName);
             ws.addCell(typeId);
             ws.addCell(address);
@@ -105,26 +111,52 @@ public class Main {
             ws.addCell(port_is_solate);
             ws.addCell(onu_count_info);
 
-            navCellView.setFormat(formatTitle);
-            for(int i = 0; i < 18 ;i++){
-                ws.setColumnView(i,navCellView);
-            }
+            //将数据库数据加入工作表
 
+            WritableCellFormat formatTitle1 = new WritableCellFormat(fontTitle);
 
+            formatTitle1.setWrap(true);
+            formatTitle1.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle1.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
             for (int i = 0; i < list.size(); i++) {
 
-                Label friendlyName_i = new Label(0, i+1, list.get(i).getFriendly_name()+"",formatTitle);
-                Label typeId_i = new Label(1, i+1, list.get(i).getIrcnetypeid(),formatTitle);
-                Label address_i = new Label(2, i+1, list.get(i).getIpaddress(),formatTitle);
-                Label smc_i = new Label(3, i+1,list.get(i).getSmc(),formatTitle);
-                Label ram_i = new Label(4, i+1,list.get(i).getRam(),formatTitle);
-                Label cpu_i = new Label(5, i+1,list.get(i).getCpu(),formatTitle);
+                Label friendlyName_i = new Label(0, i+1, list.get(i).getFriendly_name(),formatTitle1);
+                Label typeId_i = new Label(1, i+1, list.get(i).getIrcnetypeid(),formatTitle1);
+                Label address_i = new Label(2, i+1, list.get(i).getIpaddress(),formatTitle1);
+                Label smc_i = new Label(3, i+1,list.get(i).getSmc(),formatTitle1);
+                Label ram_i = new Label(4, i+1,list.get(i).getRam(),formatTitle1);
+                Label cpu_i = new Label(5, i+1,list.get(i).getCpu(),formatTitle1);
+                Label temperature_i = new Label(6, i+1,list.get(i).getTemperature(),formatTitle1);
+                Label power_i = new Label(7, i+1,list.get(i).getPower(),formatTitle1);
+                Label fan_i = new Label(8, i+1,list.get(i).getFan(),formatTitle1);
+                Label software_ver_i = new Label(9, i+1,list.get(i).getSoftware_ver(),formatTitle1);
+                Label bussiness_card_amount_i = new Label(10, i+1,list.get(i).getBussiness_card_amount(),formatTitle1);
+                Label vlan_optimize_i = new Label(11, i+1,list.get(i).getVlan_optimize(),formatTitle1);
+                Label sys_uptime_i = new Label(12, i+1,list.get(i).getSys_uptime(),formatTitle1);
+                Label switched_count_i = new Label(13, i+1,list.get(i).getSwitched_count().toString(),formatTitle1);
+                Label reboot_count_i = new Label(14, i+1,list.get(i).getReboot_count().toString(),formatTitle1);
+                Label olt_power_i = new Label(15, i+1,list.get(i).getOlt_power(),formatTitle1);
+                Label port_is_solate_i = new Label(16, i+1,list.get(i).getPort_is_solate(),formatTitle1);
+                Label onu_count_info_i = new Label(17, i+1,list.get(i).getOnu_count_info(),formatTitle1);
                 ws.addCell(friendlyName_i);
                 ws.addCell(typeId_i);
                 ws.addCell(address_i);
                 ws.addCell(smc_i);
                 ws.addCell(ram_i);
                 ws.addCell(cpu_i);
+                ws.addCell(temperature_i);
+                ws.addCell(power_i);
+                ws.addCell(fan_i);
+                ws.addCell(software_ver_i);
+                ws.addCell(bussiness_card_amount_i);
+                ws.addCell(vlan_optimize_i);
+                ws.addCell(sys_uptime_i);
+                ws.addCell(switched_count_i);
+                ws.addCell(reboot_count_i);
+                ws.addCell(olt_power_i);
+                ws.addCell(port_is_solate_i);
+                ws.addCell(onu_count_info_i);
+
             }
 
 
