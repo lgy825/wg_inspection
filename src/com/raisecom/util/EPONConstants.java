@@ -17,7 +17,7 @@ public class EPONConstants implements FrameworkConstants {
 
     public static Logger         Trap_Operator_logger = LogFactory.getLogger("EPON_Trap_Operator");
 
-    public static ResourceBundle EPON_RB              = ResourceManager.getResourceBundle("com.raisecom.ems.epon.client.resource.Resource");
+    public static ResourceBundle EPON_RB              = ResourceManager.getResourceBundle("config/Resource");
 
     public static ResourceBundle EPON_CFM             = ResourceManager.getResourceBundle("com/raisecom/ems/xpon/packetswitch/resource/Resource");
 

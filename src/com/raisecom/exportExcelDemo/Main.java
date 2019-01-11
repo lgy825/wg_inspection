@@ -5,7 +5,8 @@ import com.raisecom.bean.OLTInfo;
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
-import com.raisecom.util.ExportExcel;
+import com.raisecom.nms.platform.client.ResourceManager;
+import com.raisecom.util.EPONConstants;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.write.*;
@@ -14,9 +15,8 @@ import jxl.write.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 /**
@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class Main {
     private static final Logger logger = LogFactory.getLogger("selfm");
+    private static ResourceBundle bundle = EPONConstants.EPON_RB;
     public static void main(String[] args){
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
@@ -33,6 +34,7 @@ public class Main {
             logger.log(300,"数据库初始化失败");
         }
     }
+    //从数据库导出Excel
     public static void FromDbToExcel() {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
@@ -73,24 +75,24 @@ public class Main {
             //查询数据库中所有的数据
 
             //插入表头。行号，默认从0开始，列号从0开始，
-            Label friendlyName = new Label(0, 0, "局点",formatTitle);
-            Label typeId = new Label(1, 0, "OLT设备类型",formatTitle);
-            Label address = new Label(2, 0, "OLT设备IP地址",formatTitle);
-            Label smc = new Label(3, 0, "SMC",formatTitle);
-            Label ram = new Label(4, 0, "内存(%)",formatTitle);
-            Label cpu = new Label(5, 0, "CPU(%)",formatTitle);
-            Label temperature = new Label(6, 0, "温度(℃)",formatTitle);
-            Label power = new Label(7, 0, "电源",formatTitle);
-            Label fan = new Label(8, 0, "风扇",formatTitle);
-            Label ver = new Label(9, 0, "OLT版本信息",formatTitle);
-            Label businessCardAccount = new Label(10, 0, "OLT业务板卡类型和数量统计",formatTitle);
-            Label vlan_optimize = new Label(11, 0, "VLAN广播域是否能优化缩小",formatTitle);
-            Label sys_uptime = new Label(12, 0, "系统运行时间",formatTitle);
-            Label switched_count = new Label(13, 0, "主备倒换次数",formatTitle);
-            Label reboot_count = new Label(14, 0, "主控异常重启次数",formatTitle);
-            Label olt_power = new Label(15, 0, "主控电压",formatTitle);
-            Label port_is_solate = new Label(16, 0, "PON口隔离",formatTitle);
-            Label onu_count_info = new Label(17, 0, "ONU数量统计",formatTitle);
+            Label friendlyName = new Label(0, 0, ResourceManager.getString(bundle,"Friendly_Name"),formatTitle);
+            Label typeId = new Label(1, 0, ResourceManager.getString(bundle,"type_Id"),formatTitle);
+            Label address = new Label(2, 0, ResourceManager.getString(bundle,"Address"),formatTitle);
+            Label smc = new Label(3, 0, ResourceManager.getString(bundle,"SMC"),formatTitle);
+            Label ram = new Label(4, 0, ResourceManager.getString(bundle,"RAM"),formatTitle);
+            Label cpu = new Label(5, 0, ResourceManager.getString(bundle,"CPU"),formatTitle);
+            Label temperature = new Label(6, 0, ResourceManager.getString(bundle,"Temperature"),formatTitle);
+            Label power = new Label(7, 0, ResourceManager.getString(bundle,"Power"),formatTitle);
+            Label fan = new Label(8, 0, ResourceManager.getString(bundle,"Fan"),formatTitle);
+            Label ver = new Label(9, 0, ResourceManager.getString(bundle,"Ver"),formatTitle);
+            Label businessCardAccount = new Label(10, 0, ResourceManager.getString(bundle,"BusinessCardAccount"),formatTitle);
+            Label vlan_optimize = new Label(11, 0, ResourceManager.getString(bundle,"vlan_optimize"),formatTitle);
+            Label sys_uptime = new Label(12, 0, ResourceManager.getString(bundle,"sys_uptime"),formatTitle);
+            Label switched_count = new Label(13, 0, ResourceManager.getString(bundle,"switched_count"),formatTitle);
+            Label reboot_count = new Label(14, 0, ResourceManager.getString(bundle,"reboot_count"),formatTitle);
+            Label olt_power = new Label(15, 0, ResourceManager.getString(bundle,"olt_power"),formatTitle);
+            Label port_is_solate = new Label(16, 0, ResourceManager.getString(bundle,"port_is_solate"),formatTitle);
+            Label onu_count_info = new Label(17, 0, ResourceManager.getString(bundle,"onu_count_info"),formatTitle);
 
 
             //将Label 添加到工作表
