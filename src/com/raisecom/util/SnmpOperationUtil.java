@@ -179,15 +179,13 @@ public class SnmpOperationUtil {
      * @param index
      * @return
      */
-    private static ObjService getMibNodesFromOLT(String table, String index,ObjService objService) {
+    private static ObjService getMibNodesFromOLT(String table, String index,ObjService options) {
         // TODO Auto-generated method stub
         try{
-            ObjService snmpParams =objService;
+            ObjService snmpParams =options.clone();
             String tableName = table;
-            String configFile=objService.getStringValue("configFile");
-            snmpParams.setValue("TableName", tableName);
-            snmpParams.setValue("ConfigFile", configFile);
-            snmpParams.setValue("ValueOnly", "true");
+            options.setValue("TableName", tableName);
+            options.setValue("ValueOnly", "true");
             if(!"".equals(index)){
                 snmpParams.setValue("Instance", index);
             }
@@ -236,7 +234,7 @@ public class SnmpOperationUtil {
      */
     public static ObjService getOneCardOltCpuRam(ObjService objService) {
         // TODO Auto-generated method stub
-        ObjService smnpParamters = objService;
+        ObjService smnpParamters = objService.clone();
         ObjService result_para = new ObjService();
         String configFile = "com/raisecom/ems/gpon/server/modules/cfgmgt/profile/2.30/5508GpSwitch.xml";
         String tableName = "raisecomShelfTable2";
@@ -424,7 +422,7 @@ public class SnmpOperationUtil {
      * @param smnpParamters
      */
     public static ObjService getEponOlt2xCpuRam(ObjService objService) {
-        ObjService smnpParamters = objService;
+        ObjService smnpParamters = objService.clone();
         ObjService result_para = new ObjService();
         String configFile = "com/raisecom/ems/eponcommon/server/modules/cfgmgt/profile/2.20/6800Common.xml";
         String tableName = "rcCardProtectTable";
@@ -617,7 +615,7 @@ public class SnmpOperationUtil {
     public static  String  getSwitchedCount(ObjService objService) {
 
         String count = "";
-        ObjService snmpParams = objService;
+        ObjService snmpParams = objService.clone();
         String configFile=objService.getStringValue("configFile");
         snmpParams.setValue("TableName", "rcHighAvailabilityTable");
         snmpParams.setValue("ConfigFile", configFile);
