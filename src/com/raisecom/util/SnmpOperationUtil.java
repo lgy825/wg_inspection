@@ -184,7 +184,7 @@ public class SnmpOperationUtil {
         try{
             ObjService snmpParams =objService;
             String tableName = table;
-            //String configFile=objService.get
+            String configFile=objService.getStringValue("configFile");
             snmpParams.setValue("TableName", tableName);
             snmpParams.setValue("ConfigFile", configFile);
             snmpParams.setValue("ValueOnly", "true");
