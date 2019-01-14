@@ -30,7 +30,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
         OLTInfo oltInfo=new OLTInfo();
 
         try{
-            String oltname = objService.getStringValue("FRIENDLY_NAME");
+            String oltname = objService.getStringValue("Friendly_Name");
             String hostname = objService.getStringValue("HOSTNAME");
             String oltid=objService.getStringValue("IRCNETNODEID");
             String netype=objService.getStringValue("IRCNETYPEID");
