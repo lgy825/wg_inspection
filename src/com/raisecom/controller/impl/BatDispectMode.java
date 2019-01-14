@@ -1,24 +1,19 @@
 package com.raisecom.controller.impl;
 
-import com.raisecom.common.logging.LogFactory;
-import com.raisecom.common.logging.Logger;
 import com.raisecom.controller.DeviceTask;
 import com.raisecom.controller.DispectMode;
 import com.raisecom.db.InitSelfmDBPoolTask;
-import com.raisecom.db.JdbcUtils_DBCP;
 import com.raisecom.exportExcelDemo.Main;
-import com.raisecom.nms.platform.client.ResourceManager;
+import com.raisecom.nms.platform.client.LogManager;
+import com.raisecom.nms.platform.client.Logger;
 import com.raisecom.nms.platform.cnet.ObjService;
-import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.util.EPONCommonDBUtil;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.util.*;
 
 
@@ -27,19 +22,16 @@ import java.util.*;
  */
 public class BatDispectMode implements DispectMode {
 
-
-
-    private static final Logger logger = LogFactory.getLogger("selfm");
+    Logger log = LogManager.getLogger("BatDispectMode");
     public static void main(String[] args) {
         DispectMode dispectMode=new BatDispectMode();
         boolean isCon=InitSelfmDBPoolTask.execute();
         if(isCon){
             dispectMode.processDispect(null);
-            logger.log(300,"数据库初始化成功");
+            //log.info(300,"数据库初始化成功");
         }else{
-            logger.log(300,"数据库初始化失败");
+           // logger.log(300,"数据库初始化失败");
         }
-
     }
 
     @Override
@@ -71,7 +63,6 @@ public class BatDispectMode implements DispectMode {
             boolean isSuccessful=deviceTask.processStatistics(list);
             if(isSuccessful){
                 Main.FromDbToExcel();
-                System.out.print("导出成功");
             }else{
                 System.out.print("巡检失败");
             }
