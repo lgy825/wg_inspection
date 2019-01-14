@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class SnmpOperationUtil {
 
-    private ObjService options = null;
-    private static  String   configFile = "com/raisecom/profile/";
+    //private ObjService options = null;
+    //private static  String   configFile = "com/raisecom/profile/";
     private static String controlCardID = "";
     /**
      * 查询OLT温度
@@ -184,6 +184,7 @@ public class SnmpOperationUtil {
         try{
             ObjService snmpParams =objService;
             String tableName = table;
+            //String configFile=objService.get
             snmpParams.setValue("TableName", tableName);
             snmpParams.setValue("ConfigFile", configFile);
             snmpParams.setValue("ValueOnly", "true");
@@ -617,6 +618,7 @@ public class SnmpOperationUtil {
 
         String count = "";
         ObjService snmpParams = objService;
+        String configFile=objService.getStringValue("configFile");
         snmpParams.setValue("TableName", "rcHighAvailabilityTable");
         snmpParams.setValue("ConfigFile", configFile);
         snmpParams.setValue("ValueOnly", "true");
