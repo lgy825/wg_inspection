@@ -52,19 +52,19 @@ public class ONUDeviceController implements DeviceTask {
         List<ObjService> vobj = new ArrayList<>();
         String condition = SecurityManagerCenter.getInstance().getDomainAllNEIDString();
         try {
-            if (condition.equals(SecurityUtils.ALL))
-            {
-                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeId(neID);
-            } else if (condition.equals(SecurityUtils.NONE))
-            {
-                return null;
-            } else
-            {
-                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeIdAndAuthority(neID,condition);
-            }
+//            if (condition.equals(SecurityUtils.ALL))
+//            {
+//                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeId(neID);
+//            } else if (condition.equals(SecurityUtils.NONE))
+//            {
+//                return null;
+//            } else
+//            {
+//                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeIdAndAuthority(neID,condition);
+//            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            EPONConstants.logger.error("DeviceInspectTDataTreeBuilder getONUInstanceFromDBByOltNeID for neid " + neID+" error "+e);
+            //EPONConstants.logger.error("DeviceInspectTDataTreeBuilder getONUInstanceFromDBByOltNeID for neid " + neID+" error "+e);
         }
         for(int i = 0; i < vobj.size(); i++){
             onuInstance.add(vobj.get(i).getStringValue("INDEX_IN_MIB"));

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="poi-ooxml-schemas-3.16">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/poi-ooxml-schemas-3.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-2.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xmlbeans.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

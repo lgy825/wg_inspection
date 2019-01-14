@@ -184,8 +184,8 @@ public class SnmpOperationUtil {
         try{
             ObjService snmpParams =options.clone();
             String tableName = table;
-            options.setValue("TableName", tableName);
-            options.setValue("ValueOnly", "true");
+            snmpParams.setValue("TableName", tableName);
+            snmpParams.setValue("ValueOnly", "true");
             if(!"".equals(index)){
                 snmpParams.setValue("Instance", index);
             }

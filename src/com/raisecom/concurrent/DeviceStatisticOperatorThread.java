@@ -34,9 +34,9 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String netype=objService.getStringValue("IRCNETYPEID");
             String ip=objService.getStringValue("IPADDRESS");
             String version = objService.getStringValue("SOFTWARE_VER");
-            String configFile=objService.getStringValue("configFile");
+            String configFile=objService.getStringValue("ConfigFile");
             ObjService options = SnmpParamsHelper.getOption(oltid);
-            options.setValue("configFile",configFile);
+            options.setValue("ConfigFile",configFile);
             //2. 查询OLT 是否在线
             boolean oltOnlineFlag = SnmpOperationUtil.isOltOnline(options);
             if(!oltOnlineFlag){
