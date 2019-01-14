@@ -624,7 +624,23 @@ public class SnmpOperationUtil {
         return null;
     }
 
+    //主控电压
+    public static  String getControlVoltage(ObjService objService){
 
+        return null;
+    }
+
+    //PON口隔离
+    public static  String getPonPortIsolation(ObjService objService){
+
+        return null;
+    }
+
+    //ONU数量统计
+    public static  String getONUCount(ObjService objService){
+
+        return null;
+    }
 }
 
 

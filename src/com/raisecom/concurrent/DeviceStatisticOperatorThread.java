@@ -100,6 +100,18 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(objService);
             oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
 
+            //主控电压
+            String controlVoltage = SnmpOperationUtil.getControlVoltage(objService);
+            oltInfo.setOlt_power(processResult(controlVoltage));
+
+            //PON口隔离
+            String ponPortIsolation = SnmpOperationUtil.getPonPortIsolation(objService);
+            oltInfo.setPort_is_solate(processResult(ponPortIsolation));
+
+            //ONU数量统计
+            String onuCount = SnmpOperationUtil.getONUCount(objService);
+            oltInfo.setOnu_count_info(processResult(onuCount));
+
             //入库
             SqlMappingUtil.insertDevice(oltInfo);
         }catch(Exception e){

@@ -1,10 +1,7 @@
 package com.raisecom.exportExcelDemo;
 
 import com.raisecom.bean.OLTInfo;
-import com.raisecom.db.JdbcUtils_DBCP;
-import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
-import com.raisecom.nms.util.ErrorObjService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,7 +30,7 @@ public class OLTInfoService {
 
                 OLTInfo oltInfo = new OLTInfo();
                 oltInfo.setIrcnetnodeid(result.getInt("IRCNETNODEID"));
-                oltInfo.setFriendly_name(result.getString("FRIENDLY_NAME"));
+                oltInfo.setFriendly_name(result.getString("Friendly_Name"));
                 oltInfo.setIrcnetypeid(result.getString("iRCNETypeID"));
                 oltInfo.setIpaddress(result.getString("IPADDRESS"));
                 oltInfo.setHostname(result.getString("HOSTNAME"));
