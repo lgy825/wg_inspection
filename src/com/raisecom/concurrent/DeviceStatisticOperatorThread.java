@@ -6,6 +6,7 @@ import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.EPONCommonDBUtil;
 import com.raisecom.util.EPONConstants;
 import com.raisecom.util.SnmpOperationUtil;
+import com.raisecom.util.SqlMappingUtil;
 
 import java.util.concurrent.Callable;
 
@@ -110,6 +111,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(objService);
             oltInfo.setOnu_count_info(processResult(onuCount));
+            SqlMappingUtil.insertDevice(oltInfo);
         }catch(Exception e){
 
         }

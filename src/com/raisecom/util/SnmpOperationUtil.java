@@ -613,10 +613,25 @@ public class SnmpOperationUtil {
     }
 
     //主备倒换次数
-    public static  String  getSwitchedCount(ObjService objService){
+    public static  String  getSwitchedCount(ObjService objService) {
 
-        return null;
+        String count = "";
+        ObjService snmpParams = objService;
+        snmpParams.setValue("TableName", "rcHighAvailabilityTable");
+        snmpParams.setValue("ConfigFile", configFile);
+        snmpParams.setValue("ValueOnly", "true");
+        Driver driver = Driver.getDriver(snmpParams);
+        ObjService res = driver.getValue(snmpParams);
+        if (res == null) {
+            return null;
+        } else {
+            for (int i = 0; i < res.objectSize("RowSet"); i++) {
+                count = res.objectAt("RowSet", i).getStringValue("rcHighAvailabilitySwitchedCount");
+            }
+            return count;
+        }
     }
+
 
     //主控异常重启次数
     public static String getSysRebCountCount(ObjService objService){
