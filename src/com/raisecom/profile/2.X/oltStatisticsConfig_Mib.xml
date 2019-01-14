@@ -135,4 +135,7 @@
 		</MibNode>
 	</MibTable>
 	
+	<MibTable Name="rcHighAvailabilityTable">
+		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
+	</MibTable>
 </MIB>
