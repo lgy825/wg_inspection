@@ -9,6 +9,7 @@ import com.raisecom.db.JdbcUtils_DBCP;
 import com.raisecom.ems.templet.server.driver.*;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
+import com.raisecom.util.EPONCommonDBUtil;
 import com.raisecom.util.EPONConstants;
 
 import java.sql.*;
@@ -72,9 +73,7 @@ public class OLTDeviceContrller implements DeviceTask {
     }
 
     public static List<ObjService> getOLTInfoByIP(List<String> addres){
-        Connection conn = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
+
         List<ObjService> list=new ArrayList<>();
         for(String addr:addres){
             String sql="SELECT rn.iRCNETypeID, rn.READCOM, rn.WRITECOM, rn.IRCNETNODEID, rn.VERS, rn.TIMEOUT, rn.PORT, rn.IPADDRESS, rn.RETRY,rn.SOFTWARE_VER,rn.FRIENDLY_NAME,rn.HOSTNAME" +
@@ -82,26 +81,8 @@ public class OLTDeviceContrller implements DeviceTask {
                     " AND rn.managed_mode = '1'" +
                     " AND rn.iRCNETypeID = rt.iRCNETypeID" +
                     " AND rt.NE_CATEGORY_ID = 1;";
-            try {
-                conn = DBConnectionManager.getConnection();
-                st = conn.prepareStatement(sql);
-                rs=st.executeQuery();
-                ResultSetMetaData meta = rs.getMetaData();
-                while (rs.next()) {
-                    ObjService row = new ObjService();
-                    int size = meta.getColumnCount();
-                    for (int i = 1; i <= size; i++) {
-                        String columnName = meta.getColumnName(i);
-                        row.setValue(columnName.toUpperCase(), rs.getString(columnName));
-                    }
-                    list.add(row);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }finally {
-                //释放资源
-                JdbcUtils_DBCP.release(conn, st, rs);
-            }
+            ObjService objService=EPONCommonDBUtil.selectDataByParam(sql);
+            list.add(objService);
         }
         return list;
     }

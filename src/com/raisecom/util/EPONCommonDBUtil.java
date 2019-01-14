@@ -4,7 +4,6 @@ import com.raisecom.boot.EponGlobalVariablesInit;
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.DBStore;
-import com.raisecom.db.JdbcUtils_DBCP;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.nms.util.ErrorObjService;
@@ -294,7 +293,7 @@ public class EPONCommonDBUtil {
         ResultSet rs = null;
         List list=new ArrayList<>();
         try {
-            conn = JdbcUtils_DBCP.getConnection();
+            conn = DBConnectionManager.getConnection();
             st = conn.prepareStatement(sql);
             rs=st.executeQuery();
             ResultSetMetaData resultSetMetaData=rs.getMetaData();
@@ -309,11 +308,31 @@ public class EPONCommonDBUtil {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            //释放资源
-            JdbcUtils_DBCP.release(conn, st, rs);
         }
         return list;
 
+    }
+
+    public static  ObjService selectDataByParam(String sql){
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        ObjService row=new ObjService();
+        try {
+            conn = DBConnectionManager.getConnection();
+            st = conn.prepareStatement(sql);
+            rs=st.executeQuery();
+            ResultSetMetaData meta = rs.getMetaData();
+            while (rs.next()) {
+                int size = meta.getColumnCount();
+                for (int i = 1; i <= size; i++) {
+                    String columnName = meta.getColumnName(i);
+                    row.setValue(columnName.toUpperCase(), rs.getString(columnName));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return row;
     }
 }

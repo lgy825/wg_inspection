@@ -31,7 +31,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
         OLTInfo oltInfo=new OLTInfo();
 
         try{
-            String oltname = objService.getStringValue("Friendly_Name");
+            String oltname = objService.getStringValue("FRIENDLY_NAME");
             String hostname = objService.getStringValue("HOSTNAME");
             String oltid=objService.getStringValue("IRCNETNODEID");
             String netype=objService.getStringValue("IRCNETYPEID");
@@ -111,6 +111,9 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(objService);
             oltInfo.setOnu_count_info(processResult(onuCount));
+            SqlMappingUtil.insertDevice(oltInfo);
+
+            //入库
             SqlMappingUtil.insertDevice(oltInfo);
         }catch(Exception e){
 
