@@ -30,5 +30,9 @@
     <orderEntry type="library" name="ehcache-core-2.4.2" level="project" />
     <orderEntry type="library" name="slf4j-api-1.6.1" level="project" />
     <orderEntry type="library" name="rmp_2.20_epon" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.7" level="project" />
+    <orderEntry type="library" name="poi-3.16" level="project" />
+    <orderEntry type="library" name="xbean-2.3.0" level="project" />
+    <orderEntry type="library" name="res_security_component" level="project" />
   </component>
 </module>
