@@ -39,7 +39,7 @@ public class SnmpOperationUtil {
         // TODO Auto-generated method stub
         String state = "";
         String slot = "";
-        String version = objService.getStringValue("SOFTWARE_VER");
+        String version = objService.getStringValue("version");
         Map<String, String> powerMap = new HashMap<String, String>();
         int normal = 0;
         ObjService res = getMibNodesFromOLT("raisecomPowerOutputTable","",objService);
@@ -210,9 +210,11 @@ public class SnmpOperationUtil {
         ObjService result_para = new ObjService();
         try {
             String netype=objService.getStringValue("IRCNETYPEID");
-            String version = objService.getStringValue("SOFTWARE_VER");
+            String version = objService.getStringValue("version");
             float verF = Float.valueOf(version);
-            if(netype.startsWith("ISCOM6820")||netype.startsWith("ISCOM5508")||netype.startsWith("ISCOM5504")){
+            if(netype.startsWith("ISCOM6820")||netype.startsWith("ISCOM5" +
+                    "" +
+                    "508")||netype.startsWith("ISCOM5504")){
                 result_para = getOneCardOltCpuRam(objService);//不区分GPON、EPON
             }else if(verF < new Float(2.0)){
                 result_para = getEponOlt1xCpuRam(objService);
@@ -534,7 +536,7 @@ public class SnmpOperationUtil {
         String cardDesc = "";
         String controlCardId = "";
         int controlCardNormal = 0;
-        String version = objService.getStringValue("SOFTWARE_VER");
+        String version = objService.getStringValue("version");
         ObjService res = getMibNodesFromOLT("raisecomSlotTable","",objService);
         if(res.objectSize("RowSet") == 0){
             return result;
