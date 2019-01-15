@@ -16,6 +16,7 @@ public class SnmpOperationUtil {
     //private ObjService options = null;
     //private static  String   configFile = "com/raisecom/profile/";
     private static String controlCardID = "";
+
     /**
      * 查询OLT温度
      * @return
@@ -524,10 +525,9 @@ public class SnmpOperationUtil {
      */
     public static String[] getCardAmount4OLT(ObjService objService) {
         // TODO Auto-generated method stub
-
-        Map<String, String> bCardTypeMap = new HashMap();
-        Map<String, String> cCardTypeMap = new HashMap();
         Map<String, Integer> cardTypeCount = new HashMap();
+        Map<String,String> bCardTypeMap=cacheBussinessCardType();
+        Map<String,String> cCardTypeMap=cacheControlCardType();
         String typeId = "";
         String state = "";
         String typeName = "";
@@ -658,6 +658,50 @@ public class SnmpOperationUtil {
 
         return null;
     }
+
+    /**
+     * 将数据库中的业务板卡类型对应关系缓存起来
+     */
+    private static Map<String,String> cacheBussinessCardType() {
+       Map<String,String> bCardTypeMap=new HashMap<>();
+        String sql = "select CARD_TYPE_ID,CARD_TYPE_NAME  from card_type where CARD_BUSINESS_TYPE_ID in (2,5,6,7,8)";
+        String card_id = "";
+        String card_name = "";
+        try {
+            ObjService objcard = EPONCommonDBUtil.getInstance().selectObject(sql, null);
+            for (int i = 0; i < objcard.objectSize("RowObj"); i++) {
+                card_id = objcard.objectAt("RowObj", i).getStringValue("CARD_TYPE_ID");
+                card_name = objcard.objectAt("RowObj", i).getStringValue("CARD_TYPE_NAME");
+                bCardTypeMap.put(card_id,card_name);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+        }
+        return  bCardTypeMap;
+    }
+    /**
+     * 将数据库中的主控板卡类型对应关系缓存起来
+     */
+    private static Map<String,String> cacheControlCardType() {
+        // TODO Auto-generated method stub
+        String sql = "select CARD_TYPE_ID,CARD_TYPE_NAME  from card_type where CARD_BUSINESS_TYPE_ID = 9";
+        String card_id = "";
+        String card_name = "";
+        Map<String,String> cCardTypeMap=new HashMap<>();
+        try {
+            ObjService objcard = EPONCommonDBUtil.getInstance().selectObject(sql, null);
+            for (int i = 0; i < objcard.objectSize("RowObj"); i++) {
+                card_id = objcard.objectAt("RowObj", i).getStringValue("CARD_TYPE_ID");
+                card_name = objcard.objectAt("RowObj", i).getStringValue("CARD_TYPE_NAME");
+                cCardTypeMap.put(card_id,card_name);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+        }
+
+        return cCardTypeMap;
+    }
+
 }
 
 
