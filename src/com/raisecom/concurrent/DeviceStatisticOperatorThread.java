@@ -33,10 +33,11 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String oltid=objService.getStringValue("IRCNETNODEID");
             String netype=objService.getStringValue("IRCNETYPEID");
             String ip=objService.getStringValue("IPADDRESS");
-            String version = objService.getStringValue("SOFTWARE_VER");
+            String version  = VersionUtil.getOltVersionByNeID(oltid);
             String configFile=objService.getStringValue("ConfigFile");
             ObjService options = SnmpParamsHelper.getOption(oltid);
             options.setValue("ConfigFile",configFile);
+            options.setValue("version",version);
             //2. 查询OLT 是否在线
             boolean oltOnlineFlag = SnmpOperationUtil.isOltOnline(options);
             if(!oltOnlineFlag){
@@ -75,11 +76,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String vlanOptimize = SnmpOperationUtil.getVlanOptimize(options);
             oltInfo.setVlan_optimize(processResult(vlanOptimize));
 
-            //查看风扇的状态
-            //查询OLT 风扇状态
-            String fanStatus = SnmpOperationUtil.getFanStatus4OLT(options);
-            oltInfo.setFan(processResult(fanStatus));
-
             //查询OLT 业务板卡与主控板卡数量
             String[] cardAmount = SnmpOperationUtil.getCardAmount4OLT(options);
             String bussinessCardDesc = cardAmount[0];
@@ -87,6 +83,13 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             oltInfo.setBussiness_card_amount(processResult(bussinessCardDesc));
             String smcDesc = cardAmount[1];
             oltInfo.setSmc(processResult(smcDesc));
+
+            //查看风扇的状态
+            //查询OLT 风扇状态
+            String fanStatus = SnmpOperationUtil.getFanStatus4OLT(options);
+            oltInfo.setFan(processResult(fanStatus));
+
+
 
             //当前主控运行时间
             String sysUpTime=SnmpOperationUtil.getsysUpTime(options);
