@@ -1,7 +1,6 @@
 package com.raisecom.concurrent;
 
 import com.raisecom.bean.OLTInfo;
-import com.raisecom.nms.platform.client.ResourceManager;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.*;
 
@@ -52,6 +51,8 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             }
             oltInfo.setIrcnetnodeid(Integer.parseInt(oltid));
             oltInfo.setIrcnetypeid(netype);
+            oltInfo.setFriendly_name(oltname);
+            oltInfo.setHostname(hostname);
             oltInfo.setIpaddress(ip);
             //查询温度
             String tmpt=SnmpOperationUtil.getTemperature4OLT(options);
@@ -99,17 +100,17 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String switchedCount=SnmpOperationUtil.getSwitchedCount(options);
             oltInfo.setSwitched_count(Integer.parseInt(processResult(switchedCount)));
 
-            //主控异常重启次数
-            String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
-            oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
+//            //主控异常重启次数
+//            String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
+//            oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
 
-            //主控电压
-            String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
-            oltInfo.setOlt_power(processResult(controlVoltage));
+//            //主控电压
+//            String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
+//            oltInfo.setOlt_power(processResult(controlVoltage));
 
-            //PON口隔离
-            String ponPortIsolation = SnmpOperationUtil.getPonPortIsolation(options);
-            oltInfo.setPort_is_solate(processResult(ponPortIsolation));
+//            //PON口隔离
+//            String ponPortIsolation = SnmpOperationUtil.getPonPortIsolation(options);
+//            oltInfo.setPort_is_solate(processResult(ponPortIsolation));
 
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(options);
@@ -126,7 +127,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
 
     public  String processResult(String s) {
         if(s==null||"".equals(s)||"null".equalsIgnoreCase(s)){
-            return ResourceManager.getString(EPONConstants.EPON_STATISTICS_RB, "NONE");
+            return "NONE";
         }else{
             return s;
         }
