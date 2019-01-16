@@ -18,7 +18,7 @@ import java.util.List;
 public class EPONCommonDBUtil {
 
     private static EPONCommonDBUtil util = null;
-    private Logger logger = LogFactory.getLogger("EPON");
+    private static Logger logger = LogFactory.getLogger("EPON");
     public synchronized static EPONCommonDBUtil getInstance() {
         if (util == null)
             util = new EPONCommonDBUtil();
@@ -334,5 +334,46 @@ public class EPONCommonDBUtil {
             e.printStackTrace();
         }
         return row;
+    }
+
+    public static ErrorObjService executeQuery(String sql, String[] params) {
+        ErrorObjService errResult = new ErrorObjService();
+        if (sql != null && !"".equals(sql) &&  params != null) {
+            Connection conn = null;
+            ResultSet result = null;
+            PreparedStatement pstmt = null;
+            ResultSetMetaData data = null;
+            try {
+                conn = DBConnectionManager.getConnection();
+                pstmt = conn.prepareStatement(sql);
+                for (int i = 0; i < params.length; i++) {
+                    pstmt.setString(i + 1, params[i]);
+                }
+                result = pstmt.executeQuery();
+                data = result.getMetaData();
+                int columns = data.getColumnCount();
+                while (result.next()) {
+                    ObjService row = new ObjService("row");
+                    for (int i = 1; i <= columns; i++) {
+                        String value = result.getString(i).trim();
+                        row.setValue(data.getColumnName(i), value);
+                    }
+                    errResult.addContainedObject(row);
+                }
+            } catch (SQLException e) {
+                errResult.setErrCode("-1");
+                errResult.setErrDesc(e.toString());
+                logger.error("[PONProtectUtil] executeQuery:" + errResult + "\n");
+                logger.error("[PONProtectUtil] SQL:" + sql + "#" + params);
+            } finally {
+                DBConnectionManager.getInstance().free(conn, pstmt, result);
+            }
+        } else {
+            errResult.setErrCode("-1");
+            errResult.setErrDesc("SQL or Parameters error.");
+            logger.error("[PONProtectUtil] executeQuery:" + errResult + "\n");
+            logger.error("[PONProtectUtil] SQL:" + sql + "#" + params);
+        }
+        return errResult;
     }
 }
