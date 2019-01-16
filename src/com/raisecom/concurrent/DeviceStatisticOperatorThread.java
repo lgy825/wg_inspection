@@ -102,17 +102,17 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String switchedCount=SnmpOperationUtil.getSwitchedCount(options);
             oltInfo.setSwitched_count(Integer.parseInt(processResult(switchedCount)));
 
-//            //主控异常重启次数
+            //主控异常重启次数
 //            String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
 //            oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
 
-//            //主控电压
-//            String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
-//            oltInfo.setOlt_power(processResult(controlVoltage));
+            //主控电压
+            String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
+            oltInfo.setOlt_power(processResult(controlVoltage));
 
-//            //PON口隔离
-//            String ponPortIsolation = SnmpOperationUtil.getPonPortIsolation(options);
-//            oltInfo.setPort_is_solate(processResult(ponPortIsolation));
+            //PON口隔离
+            String ponPortIsolation = SnmpOperationUtil.getPonPortIsolation(options);
+            oltInfo.setPort_is_solate(processResult(ponPortIsolation));
 
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(options);
