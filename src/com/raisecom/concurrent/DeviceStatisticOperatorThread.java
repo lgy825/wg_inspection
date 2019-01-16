@@ -38,6 +38,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             ObjService options = SnmpParamsHelper.getOption(oltid);
             options.setValue("ConfigFile",configFile);
             options.setValue("version",version);
+            options.setValue("oltId",oltid);
             //2. 查询OLT 是否在线
             boolean oltOnlineFlag = SnmpOperationUtil.isOltOnline(options);
             if(!oltOnlineFlag){
@@ -89,8 +90,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String fanStatus = SnmpOperationUtil.getFanStatus4OLT(options);
             oltInfo.setFan(processResult(fanStatus));
 
-
-
             //当前主控运行时间
             String sysUpTime=SnmpOperationUtil.getsysUpTime(options);
             oltInfo.setSys_uptime(processResult(sysUpTime));
@@ -100,8 +99,8 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             oltInfo.setSwitched_count(Integer.parseInt(processResult(switchedCount)));
 
             //主控异常重启次数
-            String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
-            oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
+            //String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
+            //oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
 
             //主控电压
             String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
@@ -114,7 +113,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(options);
             oltInfo.setOnu_count_info(processResult(onuCount));
-
 
             //入库
             SqlMappingUtil.insertDevice(oltInfo);

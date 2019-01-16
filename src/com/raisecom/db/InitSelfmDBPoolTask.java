@@ -25,7 +25,7 @@ public class InitSelfmDBPoolTask  {
             DBConnectionManager.getInstance().init(dbConn);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.log(300,"数据库连接异常");
+            //logger.log(300,"数据库连接异常");
         }
         return true;
     }

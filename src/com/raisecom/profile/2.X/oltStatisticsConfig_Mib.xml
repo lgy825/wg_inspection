@@ -135,15 +135,41 @@
 		</MibNode>
 	</MibTable>
 	
-	<MibTable Name="rcHighAvailabilityTable">
+	<MibTable Name="rcHighAvailabilityTable" Type = "Table">
 		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
 	</MibTable>
-	<MibTable Name="rcPortIsolateTable">
+	<MibTable Name="rcPortIsolateTable" Type = "Table">
 		<MibNode Logic="rcPortIsolateGroupId" Physics="rcPortIsolateGroupId"></MibNode>
 		<MibNode Logic="rcPortIsolateGroupPortList" Physics="rcPortIsolateGroupPortList">
 			<ValueAdapter Class = "com.raisecom.adapter.TrunkGroupPortListValueAdapter" SlotMax = "22" SlotMin = "1" PortMax = "16" PortMin = "1"/>
 			<MibNodeAdapter Class = "com.raisecom.adapter.TrunkPortListMibNodeAdapter" />
 		</MibNode>
+	</MibTable>
+	<MibTable Name = "raisecomShelfTable2" Type="List" ModifyRefresh = "true">
+		<MibNode Logic = "raisecomShelfPrimaryNMSSlotId" 	Physics = "raisecomShelfPrimaryNMSSlotId"/>
+		<MibNode Logic = "raisecomShelfSecondaryNMSSlotId" 	Physics = "raisecomShelfSecondaryNMSSlotId"/>
+	</MibTable>
+	<MibTable Name = "raisecomCardPowerTable" Type = "Table">
+		<MibNode Logic = "raisecomCardPowerSlotId" 				Physics = "raisecomCardPowerSlotId"  />
+		<MibNode Logic = "raisecomCardPowerType" 		        Physics = "raisecomCardPowerType" >
+			<EnumValue Value = "1" Label = "0.75v" />
+			<EnumValue Value = "2" Label = "0.9v" />
+			<EnumValue Value = "3" Label = "1v" />
+			<EnumValue Value = "4" Label = "1.2v" />
+			<EnumValue Value = "5" Label = "1.5v" />
+			<EnumValue Value = "6" Label = "1.8v" />
+			<EnumValue Value = "7" Label = "2.5v" />
+			<EnumValue Value = "8" Label = "3.3v" />
+			<EnumValue Value = "9" Label = "4.8v" />
+			<EnumValue Value = "10" Label = "5v" />
+			<EnumValue Value = "11" Label = "5.2v" />
+			<EnumValue Value = "12" Label = "12v" />
+			<EnumValue Value = "13" Label = "unkown" />
+			<EnumValue Value = "14" Label = "null" />
+			<EnumValue Value = "15" Label = "1.25v" />
+			<EnumValue Value = "16" Label = "2.9v" />
+		</MibNode>
+		<MibNode Logic = "raisecomCardPowerVolValue" 			Physics = "raisecomCardPowerVolValue" Unit = "0.001v"/>
 	</MibTable>
 
 </MIB>
