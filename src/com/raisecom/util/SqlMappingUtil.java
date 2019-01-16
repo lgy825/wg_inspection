@@ -86,6 +86,11 @@ public class SqlMappingUtil {
                 midStr+="','"+oltInfo.getOlt_power();
                 lastStr+="',OLT_POWER = '" +oltInfo.getOlt_power();
             }
+            if(oltInfo.getPort_is_solate()!=null){
+                firstStr+=",PORT_IS_SOLATE";
+                midStr+="','"+oltInfo.getPort_is_solate();
+                lastStr+="',PORT_IS_SOLATE = '" +oltInfo.getPort_is_solate();
+            }
             if(oltInfo.getOnu_count_info()!=null){
                 firstStr+=",ONU_COUNT_INFO";
                 midStr+="','"+oltInfo.getOnu_count_info();
