@@ -115,7 +115,7 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(options);
             oltInfo.setOnu_count_info(processResult(onuCount));
-            SqlMappingUtil.insertDevice(oltInfo);
+
 
             //入库
             SqlMappingUtil.insertDevice(oltInfo);

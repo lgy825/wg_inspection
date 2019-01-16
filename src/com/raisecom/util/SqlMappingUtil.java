@@ -54,6 +54,26 @@ public class SqlMappingUtil {
                 firstStr+=",VLAN_OPTIMIZE";
                 lastStr+="VLAN_OPTIMIZE = '" +oltInfo.getVlan_optimize();
             }
+            if(oltInfo.getSys_uptime()!=null){
+                firstStr+=",SYS_UPTIME";
+                lastStr+="SYS_UPTIME = '" +oltInfo.getSys_uptime();
+            }
+            if(oltInfo.getSwitched_count()!=null){
+                firstStr+=",SWITCHED_COUNT";
+                lastStr+="SWITCHED_COUNT = '" +oltInfo.getSwitched_count();
+            }
+            if(oltInfo.getReboot_count()!=null){
+                firstStr+=",REBOOT_COUNT";
+                lastStr+="REBOOT_COUNT = '" +oltInfo.getReboot_count();
+            }
+            if(oltInfo.getOlt_power()!=null){
+                firstStr+=",OLT_POWER";
+                lastStr+="OLT_POWER = '" +oltInfo.getOlt_power();
+            }
+            if(oltInfo.getPort_is_solate()!=null){
+                firstStr+=",PORT_IS_SOLATE";
+                lastStr+="PORT_IS_SOLATE = '" +oltInfo.getPort_is_solate();
+            }
             sql+=firstStr+lastStr;
         }
         try {
