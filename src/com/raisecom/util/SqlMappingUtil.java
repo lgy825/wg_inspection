@@ -9,72 +9,89 @@ public class SqlMappingUtil {
 
     public static void insertDevice(OLTInfo oltInfo){
         String firstStr="insert into OLT_STATISTICS_INFO(";
-        String lastStr=")ON DUPLICATE KEY UPDATE FRIENDLY_NAME = '";
+        String midStr=")values (";
+        String lastStr=")ON DUPLICATE KEY UPDATE ";
         String sql="";
         if(oltInfo!=null && oltInfo.getIrcnetnodeid()!=null){
             firstStr+="IRCNETNODEID";
-            lastStr+="FRIENDLY_NAME="+oltInfo.getIrcnetnodeid();
+            midStr+=oltInfo.getIrcnetnodeid();
             if(oltInfo.getFriendly_name()!=null){
                 firstStr+=",FRIENDLY_NAME";
+                midStr+=",'"+oltInfo.getFriendly_name();
                 lastStr+="FRIENDLY_NAME = '" +oltInfo.getFriendly_name();
             }
             if(oltInfo.getIrcnetypeid()!=null){
                 firstStr+=",iRCNETypeID";
-                lastStr+="iRCNETypeID = '" +oltInfo.getIrcnetypeid();
+                midStr+="','"+oltInfo.getIrcnetypeid();
+                lastStr+="',iRCNETypeID = '" +oltInfo.getIrcnetypeid();
             }
             if(oltInfo.getIpaddress()!=null){
                 firstStr+=",IPADDRESS";
-                lastStr+="IPADDRESS = '" +oltInfo.getIpaddress();
+                midStr+="','"+oltInfo.getIpaddress();
+                lastStr+="',IPADDRESS = '" +oltInfo.getIpaddress();
             }
             if(oltInfo.getHostname()!=null){
                 firstStr+=",HOSTNAME";
-                lastStr+="HOSTNAME = '" +oltInfo.getHostname();
+                midStr+="','"+oltInfo.getHostname();
+                lastStr+="',HOSTNAME = '" +oltInfo.getHostname();
             }
             if(oltInfo.getCpu()!=null){
                 firstStr+=",CPU";
-                lastStr+="CPU = '" +oltInfo.getCpu();
+                midStr+="','"+oltInfo.getCpu();
+                lastStr+="',CPU = '" +oltInfo.getCpu();
             }
             if(oltInfo.getRam()!=null){
                 firstStr+=",RAM";
-                lastStr+="RAM = '" +oltInfo.getRam();
+                midStr+="','"+oltInfo.getRam();
+                lastStr+="',RAM = '" +oltInfo.getRam();
             }
             if(oltInfo.getTemperature()!=null){
                 firstStr+=",TEMPERATURE";
-                lastStr+="TEMPERATURE = '" +oltInfo.getTemperature();
+                midStr+="','"+oltInfo.getTemperature();
+                lastStr+="',TEMPERATURE = '" +oltInfo.getTemperature();
             }
             if(oltInfo.getPower()!=null){
                 firstStr+=",POWER";
-                lastStr+="POWER = '" +oltInfo.getPower();
+                midStr+="','"+oltInfo.getPower();
+                lastStr+="',POWER = '" +oltInfo.getPower();
             }
             if(oltInfo.getSoftware_ver()!=null){
                 firstStr+=",SOFTWARE_VER";
-                lastStr+="SOFTWARE_VER = '" +oltInfo.getSoftware_ver();
+                midStr+="','"+oltInfo.getSoftware_ver();
+                lastStr+="',SOFTWARE_VER = '" +oltInfo.getSoftware_ver();
             }
             if(oltInfo.getVlan_optimize()!=null){
                 firstStr+=",VLAN_OPTIMIZE";
-                lastStr+="VLAN_OPTIMIZE = '" +oltInfo.getVlan_optimize();
+                midStr+="','"+oltInfo.getVlan_optimize();
+                lastStr+="',VLAN_OPTIMIZE = '" +oltInfo.getVlan_optimize();
             }
+
             if(oltInfo.getSys_uptime()!=null){
                 firstStr+=",SYS_UPTIME";
-                lastStr+="SYS_UPTIME = '" +oltInfo.getSys_uptime();
+                midStr+="','"+oltInfo.getSys_uptime();
+                lastStr+="',SYS_UPTIME = '" +oltInfo.getSys_uptime();
             }
             if(oltInfo.getSwitched_count()!=null){
                 firstStr+=",SWITCHED_COUNT";
-                lastStr+="SWITCHED_COUNT = '" +oltInfo.getSwitched_count();
+                midStr+="','"+oltInfo.getSwitched_count();
+                lastStr+="',SWITCHED_COUNT = '" +oltInfo.getSwitched_count();
             }
             if(oltInfo.getReboot_count()!=null){
                 firstStr+=",REBOOT_COUNT";
-                lastStr+="REBOOT_COUNT = '" +oltInfo.getReboot_count();
+                midStr+="','"+oltInfo.getReboot_count();
+                lastStr+="',REBOOT_COUNT = '" +oltInfo.getReboot_count();
             }
             if(oltInfo.getOlt_power()!=null){
                 firstStr+=",OLT_POWER";
-                lastStr+="OLT_POWER = '" +oltInfo.getOlt_power();
+                midStr+="','"+oltInfo.getOlt_power();
+                lastStr+="',OLT_POWER = '" +oltInfo.getOlt_power();
             }
-            if(oltInfo.getPort_is_solate()!=null){
-                firstStr+=",PORT_IS_SOLATE";
-                lastStr+="PORT_IS_SOLATE = '" +oltInfo.getPort_is_solate();
+            if(oltInfo.getOnu_count_info()!=null){
+                firstStr+=",ONU_COUNT_INFO";
+                midStr+="','"+oltInfo.getOnu_count_info();
+                lastStr+="',ONU_COUNT_INFO = '" +oltInfo.getOnu_count_info();
             }
-            sql+=firstStr+lastStr;
+            sql+=firstStr+midStr+"'"+lastStr+"'";
         }
         try {
             EPONCommonDBUtil.getInstance().executeSql(sql,null);

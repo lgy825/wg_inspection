@@ -38,7 +38,7 @@ public class OLTDeviceContrller implements DeviceTask {
         //ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
         XPONThreadPool xponPool = XPONThreadPool.getNewPool("DeviceStatistic", 5);
         String configFile = "";
-        Map<String,Future<Boolean>> results = new HashMap<String,Future<Boolean>>();
+        Map<String,Future<Boolean>> results = new HashMap();
         if(addres!=null){
              for(ObjService rcnetnode:rcnetnodes){
                  String softVer=rcnetnode.getStringValue("SOFTWARE_VER");
