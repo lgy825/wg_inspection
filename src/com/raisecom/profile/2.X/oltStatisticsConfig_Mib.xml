@@ -138,4 +138,12 @@
 	<MibTable Name="rcHighAvailabilityTable">
 		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
 	</MibTable>
+	<MibTable Name="rcPortIsolateTable">
+		<MibNode Logic="rcPortIsolateGroupId" Physics="rcPortIsolateGroupId"></MibNode>
+		<MibNode Logic="rcPortIsolateGroupPortList" Physics="rcPortIsolateGroupPortList">
+			<ValueAdapter Class = "com.raisecom.adapter.TrunkGroupPortListValueAdapter" SlotMax = "22" SlotMin = "1" PortMax = "16" PortMin = "1"/>
+			<MibNodeAdapter Class = "com.raisecom.adapter.TrunkPortListMibNodeAdapter" />
+		</MibNode>
+	</MibTable>
+
 </MIB>
