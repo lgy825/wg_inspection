@@ -5,12 +5,16 @@ import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.DBStore;
 import com.raisecom.nms.platform.cnet.ObjService;
+import com.raisecom.nms.securitymgt.client.util.SecurityManagerCenter;
+import com.raisecom.nms.securitymgt.client.util.SecurityUtils;
 import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.nms.util.ErrorObjService;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by ligy-008494 on 2018/11/13.
@@ -18,7 +22,7 @@ import java.util.List;
 public class EPONCommonDBUtil {
 
     private static EPONCommonDBUtil util = null;
-    private static Logger logger = LogFactory.getLogger("EPON");
+    private Logger logger = LogFactory.getLogger("EPON");
     public synchronized static EPONCommonDBUtil getInstance() {
         if (util == null)
             util = new EPONCommonDBUtil();
@@ -336,6 +340,105 @@ public class EPONCommonDBUtil {
         return row;
     }
 
+    /**
+     * 查询OLT下ONU的在线的状态
+     * @param oltNeId
+     * @param onuInstances
+     * @return
+     * @throws Exception
+     */
+    public  HashMap<String,String>  getOnuOnlineStatusByOltIdAndOnuList(String oltNeId, List<String> onuInstances)throws Exception {
+        HashMap<String,String> map = new HashMap<String, String>();
+        if(onuInstances == null || onuInstances.size() == 0){
+            return map;
+        }
+
+        StringBuilder condition = new StringBuilder("");
+        for(String instance:onuInstances){
+            condition.append("'").append(instance).append("',");
+        }
+        condition = condition.replace(condition.length()-1, condition.length(), ")");
+        String sql = "SELECT ispingok,INDEX_IN_MIB from rcnetnode where managed_url = '/ne="+ oltNeId+"' and INDEX_IN_MIB in ("  +condition;
+        ObjService obj = selectObject(sql, null);
+        for(int i = 0;i <obj.objectSize("RowObj");i++){
+            map.put(obj.objectAt("RowObj", i).getStringValue("INDEX_IN_MIB"), obj.objectAt("RowObj", i).getStringValue("ispingok"));
+        }
+        return map;
+    }
+
+    public Vector<String> getONUInstanceFromDBByOltNeID(String neID){
+        Vector<String> onuInstance = new Vector<String>();
+        List<ObjService> vobj = new Vector<ObjService>();
+        String condition = SecurityManagerCenter.getInstance().getDomainAllNEIDString();
+        try {
+            if (condition.equals(SecurityUtils.ALL))
+            {
+                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeId(neID);
+            } else if (condition.equals(SecurityUtils.NONE))
+            {
+                return null;
+            } else
+            {
+                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeIdAndAuthority(neID,condition);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            EPONConstants.logger.error("DeviceInspectTDataTreeBuilder getONUInstanceFromDBByOltNeID for neid " + neID+" error "+e);
+        }
+        for(int i = 0; i < vobj.size(); i++){
+            onuInstance.add(vobj.get(i).getStringValue("INDEX_IN_MIB"));
+        }
+        return onuInstance;
+    }
+
+    /**
+     * 根据oltNeId获取下挂所有ONU的index_in_mib
+     * @param neID
+     * @return
+     * @throws Exception
+     */
+    public List<ObjService> getONUInstanceFromDBByOltNeId(String neID) throws Exception {
+        String sql = "SELECT rcnetnode.INDEX_IN_MIB from rcnetnode ,rcnetype where rcnetype.NE_CATEGORY_ID = '3' and rcnetnode.iRCNETypeID = rcnetype.iRCNETypeID and rcnetnode.MANAGED_URL = '/ne=" + neID + "'";
+        return objServiceToList(selectObject(sql, null), "ONU");
+    }
+
+    /**
+     *  根据oltNeId过滤当前选中的OLT在当前用户管理域下可管的ONU的index_in_mib
+     * @param neID
+     * @param condition
+     * @return
+     * @throws Exception
+     */
+    public List<ObjService> getONUInstanceFromDBByOltNeIdAndAuthority(String neID,String condition) throws Exception {
+        String sql = "SELECT rcnetnode.INDEX_IN_MIB from rcnetnode ,rcnetype where rcnetype.NE_CATEGORY_ID = '3'" +"and managed_url = '/ne=" +neID +"' and rcnetnode.iRCNETypeID = rcnetype.iRCNETypeID and rcnetnode.ircnetnodeid in (" + condition + ")";
+        return objServiceToList(selectObject(sql, null), "ONU");
+    }
+
+    public Vector<String> getONUInstanceFromDBByOltNeIDs(String neID){
+        Vector<String> onuInstance = new Vector<String>();
+        List<ObjService> vobj = new Vector<ObjService>();
+        String condition = SecurityManagerCenter.getInstance().getDomainAllNEIDString();
+        try {
+            if (condition.equals(SecurityUtils.ALL))
+            {
+                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeId(neID);
+            } else if (condition.equals(SecurityUtils.NONE))
+            {
+                return null;
+            } else
+            {
+                vobj = EPONCommonDBUtil.getInstance().getONUInstanceFromDBByOltNeIdAndAuthority(neID,condition);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+        }
+        for(int i = 0; i < vobj.size(); i++){
+            onuInstance.add(vobj.get(i).getStringValue("INDEX_IN_MIB"));
+        }
+        return onuInstance;
+    }
+
+
     public static ErrorObjService executeQuery(String sql, String[] params) {
         ErrorObjService errResult = new ErrorObjService();
         if (sql != null && !"".equals(sql) &&  params != null) {
@@ -363,16 +466,12 @@ public class EPONCommonDBUtil {
             } catch (SQLException e) {
                 errResult.setErrCode("-1");
                 errResult.setErrDesc(e.toString());
-                logger.error("[PONProtectUtil] executeQuery:" + errResult + "\n");
-                logger.error("[PONProtectUtil] SQL:" + sql + "#" + params);
             } finally {
                 DBConnectionManager.getInstance().free(conn, pstmt, result);
             }
         } else {
             errResult.setErrCode("-1");
             errResult.setErrDesc("SQL or Parameters error.");
-            logger.error("[PONProtectUtil] executeQuery:" + errResult + "\n");
-            logger.error("[PONProtectUtil] SQL:" + sql + "#" + params);
         }
         return errResult;
     }
