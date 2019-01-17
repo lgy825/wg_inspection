@@ -95,8 +95,8 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
 
 
             //当前主控运行时间
-            String sysUpTime=SnmpOperationUtil.getsysUpTime(options);
-            oltInfo.setSys_uptime(processResult(sysUpTime));
+//            String sysUpTime=SnmpOperationUtil.getsysUpTime(options);
+//            oltInfo.setSys_uptime(processResult(sysUpTime));
 
             //主备倒换次数
             String switchedCount=SnmpOperationUtil.getSwitchedCount(options);

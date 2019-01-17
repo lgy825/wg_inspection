@@ -28,20 +28,20 @@ public class Main {
     public static void main(String[] args){
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
-            FromDbToExcel();
+            FromDbToExcel("2070");
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");
         }
     }
     //从数据库导出Excel
-    public static void FromDbToExcel() {
+    public static void FromDbToExcel(String str) {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
 
 
         try {
-            List<OLTInfo> list = OLTInfoService.getAllByDb();
+            List<OLTInfo> list = OLTInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿
             WritableWorkbook wwb = null;
 
@@ -62,6 +62,11 @@ public class Main {
             WritableSheet ws = wwb.createSheet("Test Sheet 1", 0);
             //设置列宽默认宽度
             ws.getSettings().setDefaultColumnWidth(15);
+            //设置指定列的宽度
+            ws.setColumnView(9,35);
+            ws.setColumnView(15,35);
+            ws.setColumnView(16,40);
+            ws.setColumnView(17,65);
             //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
             WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
             //定义格式
@@ -70,7 +75,7 @@ public class Main {
             formatTitle.setBackground(Colour.GRAY_25);
             //自动换行
             formatTitle.setWrap(true);
-            formatTitle.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            //formatTitle.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
             formatTitle.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
             //查询数据库中所有的数据
 
@@ -120,7 +125,7 @@ public class Main {
             WritableCellFormat formatTitle1 = new WritableCellFormat(fontTitle);
 
             formatTitle1.setWrap(true);
-            formatTitle1.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            //formatTitle1.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
             formatTitle1.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
             for (int i = 0; i < list.size(); i++) {
 
