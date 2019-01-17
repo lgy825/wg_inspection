@@ -475,6 +475,39 @@ public class EPONCommonDBUtil {
         }
         return errResult;
     }
+    public static ErrorObjService executeQuery(String sql) {
+        ErrorObjService errResult = new ErrorObjService();
+        if (sql != null && !"".equals(sql)) {
+            Connection conn = null;
+            ResultSet result = null;
+            PreparedStatement pstmt = null;
+            ResultSetMetaData data = null;
+            try {
+                conn = DBConnectionManager.getConnection();
+                pstmt = conn.prepareStatement(sql);
+                result = pstmt.executeQuery();
+                data = result.getMetaData();
+                int columns = data.getColumnCount();
+                while (result.next()) {
+                    ObjService row = new ObjService("row");
+                    for (int i = 1; i <= columns; i++) {
+                        String value = result.getString(i).trim();
+                        row.setValue(data.getColumnName(i), value);
+                    }
+                    errResult.addContainedObject(row);
+                }
+            } catch (SQLException e) {
+                errResult.setErrCode("-1");
+                errResult.setErrDesc(e.toString());
+
+                DBConnectionManager.getInstance().free(conn, pstmt, result);
+            }
+        } else {
+            errResult.setErrCode("-1");
+            errResult.setErrDesc("SQL or Parameters error.");
+        }
+        return errResult;
+    }
 
     public  List<ObjService> getONUInstanceOnlineFromDBByOltNeId(String neID) throws Exception {
         String sql = "SELECT rcnetnode.INDEX_IN_MIB,rcnetype.iRCNETypeID from rcnetnode ,rcnetype " +
