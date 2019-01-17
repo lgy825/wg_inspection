@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface DeviceTask {
 
-    public boolean  processStatistics(List<String> addres);
+    public boolean  processStatistics(List<String> addres,String deviceType);
 
 }

@@ -48,6 +48,7 @@ public class OLTInfoService {
                 oltInfo.setReboot_count(result.getInt("REBOOT_COUNT"));
                 oltInfo.setOlt_power(result.getString("OLT_POWER"));
                 oltInfo.setPort_is_solate(result.getString("PORT_IS_SOLATE"));
+
                 oltInfo.setOnu_count_info(result.getString("ONU_COUNT_INFO"));
                 list.add(oltInfo);
             }

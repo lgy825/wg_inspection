@@ -60,7 +60,8 @@ public class BatDispectMode implements DispectMode {
                 list.add(btn.get("ip").toString());
             }
             DeviceTask deviceTask=new OLTDeviceContrller();
-            boolean isSuccessful=deviceTask.processStatistics(list);
+
+            boolean isSuccessful=deviceTask.processStatistics(list,"OLT");
             if(isSuccessful){
                 //Main.FromDbToExcel();
             }else{

@@ -2,6 +2,7 @@ package com.raisecom.controller.impl;
 
 import com.raisecom.bean.Rcnetnode;
 import com.raisecom.concurrent.DeviceStatisticOperatorThread;
+import com.raisecom.concurrent.ONUDeviceStatisticOperatorThread;
 import com.raisecom.concurrent.XPONThreadPool;
 import com.raisecom.controller.DeviceTask;
 import com.raisecom.db.InitSelfmDBPoolTask;
@@ -11,6 +12,7 @@ import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.util.EPONCommonDBUtil;
 import com.raisecom.util.EPONConstants;
+import com.raisecom.util.ParseAdapterUtil;
 
 import java.sql.*;
 import java.sql.Driver;
@@ -29,7 +31,7 @@ import java.util.concurrent.Future;
 public class OLTDeviceContrller implements DeviceTask {
 
     @Override
-    public boolean processStatistics(List<String> addres) {
+    public boolean processStatistics(List<String> addres,String deviceType) {
         if(addres==null){
             return false;
         }
@@ -42,7 +44,7 @@ public class OLTDeviceContrller implements DeviceTask {
         if(addres!=null){
              for(ObjService rcnetnode:rcnetnodes){
                  String softVer=rcnetnode.getStringValue("SOFTWARE_VER");
-                 String ver=getVersBySoftVer(softVer);
+                 String ver= ParseAdapterUtil.getVersBySoftVer(softVer);
                  String ip=rcnetnode.getStringValue("IPADDRESS");
                  if(ver.startsWith("2.") || ver.startsWith("3.")){
                      configFile= "com/raisecom/profile/2.X/oltStatisticsConfig_Mib.xml";
@@ -50,7 +52,13 @@ public class OLTDeviceContrller implements DeviceTask {
                      configFile= "com/raisecom/profile/1.X/oltStatisticsConfig_Mib.xml";
                  }
                  rcnetnode.setValue("configFile",configFile);
-                 Future<Boolean> fs = xponPool.submitTask(new DeviceStatisticOperatorThread(rcnetnode));
+                 Future<Boolean> fs=null;
+                 if("OLT".equals(deviceType)){
+                     fs = xponPool.submitTask(new DeviceStatisticOperatorThread(rcnetnode));
+                 }else if("ONU".equals(deviceType)){
+                     fs = xponPool.submitTask(new ONUDeviceStatisticOperatorThread(rcnetnode));
+                 }
+
                  results.put(ip,fs);
              }
         }
@@ -88,13 +96,6 @@ public class OLTDeviceContrller implements DeviceTask {
     }
 
 
-    public static String  getVersBySoftVer(String softVer){
-        String ver="";
-        if(softVer!=null){
-            String[] temp=softVer.split("ROAP_");
-            ver=temp[1];
-        }
-        return ver;
-    }
+
 
 }

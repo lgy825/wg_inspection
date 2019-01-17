@@ -29,4 +29,13 @@ public class ParseAdapterUtil {
         return result.substring(0, (result.length()-1));
     }
 
+    public static String  getVersBySoftVer(String softVer){
+        String ver="";
+        if(softVer!=null){
+            String[] temp=softVer.split("ROAP_");
+            ver=temp[1];
+        }
+        return ver;
+    }
+
 }

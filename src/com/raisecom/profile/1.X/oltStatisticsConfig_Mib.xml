@@ -106,5 +106,9 @@
       <ValueAdapter Class="com.raisecom.ems.templet.client.adapter.VlansetValueAdapter" />
     </MibNode>
   </MibTable>
+	<MibTable Name="rcEponONUTable" Type="Table">
+		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
+		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
+	</MibTable>
 	
 </MIB>

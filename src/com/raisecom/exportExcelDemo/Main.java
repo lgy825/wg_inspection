@@ -6,6 +6,7 @@ import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
 import com.raisecom.nms.platform.client.ResourceManager;
+import com.raisecom.nms.snmp.SnmpVar;
 import com.raisecom.util.EPONConstants;
 import jxl.Workbook;
 import jxl.format.Alignment;
@@ -26,13 +27,15 @@ public class Main {
     private static final Logger logger = LogFactory.getLogger("selfm");
     private static ResourceBundle bundle = EPONConstants.EPON_RB;
     public static void main(String[] args){
-        boolean isCon= InitSelfmDBPoolTask.execute();
-        if(isCon){
-            FromDbToExcel();
-            logger.log(300,"数据库初始化成功");
-        }else{
-            logger.log(300,"数据库初始化失败");
-        }
+//        boolean isCon= InitSelfmDBPoolTask.execute();
+//        if(isCon){
+//            FromDbToExcel();
+//            logger.log(300,"数据库初始化成功");
+//        }else{
+//            logger.log(300,"数据库初始化失败");
+//        }
+
+
     }
     //从数据库导出Excel
     public static void FromDbToExcel() {
