@@ -35,6 +35,21 @@ public class SqlMappingUtil {
                 midStr+="','"+oltInfo.getHostname();
                 lastStr+="',HOSTNAME = '" +oltInfo.getHostname();
             }
+            if(oltInfo.getSmc()!=null){
+                firstStr+=",SMC";
+                midStr+="','"+oltInfo.getSmc();
+                lastStr+="',SMC = '" +oltInfo.getSmc();
+            }
+            if(oltInfo.getFan()!=null){
+                firstStr+=",FAN";
+                midStr+="','"+oltInfo.getFan();
+                lastStr+="',FAN = '" +oltInfo.getFan();
+            }
+            if(oltInfo.getBussiness_card_amount()!=null){
+                firstStr+=",BUSSINESS_CARD_AMOUNT";
+                midStr+="','"+oltInfo.getBussiness_card_amount();
+                lastStr+="',BUSSINESS_CARD_AMOUNT = '" +oltInfo.getBussiness_card_amount();
+            }
             if(oltInfo.getCpu()!=null){
                 firstStr+=",CPU";
                 midStr+="','"+oltInfo.getCpu();

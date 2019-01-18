@@ -64,9 +64,9 @@ public class Main {
             ws.getSettings().setDefaultColumnWidth(15);
             //设置指定列的宽度
             ws.setColumnView(9,35);
-            ws.setColumnView(15,35);
-            ws.setColumnView(16,40);
-            ws.setColumnView(17,65);
+            ws.setColumnView(13,35);
+            ws.setColumnView(14,40);
+            ws.setColumnView(15,65);
             //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
             WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
             //定义格式
@@ -92,12 +92,12 @@ public class Main {
             Label ver = new Label(9, 0, ResourceManager.getString(bundle,"Ver"),formatTitle);
             Label businessCardAccount = new Label(10, 0, ResourceManager.getString(bundle,"BusinessCardAccount"),formatTitle);
             Label vlan_optimize = new Label(11, 0, ResourceManager.getString(bundle,"vlan_optimize"),formatTitle);
-            Label sys_uptime = new Label(12, 0, ResourceManager.getString(bundle,"sys_uptime"),formatTitle);
-            Label switched_count = new Label(13, 0, ResourceManager.getString(bundle,"switched_count"),formatTitle);
-            Label reboot_count = new Label(14, 0, ResourceManager.getString(bundle,"reboot_count"),formatTitle);
-            Label olt_power = new Label(15, 0, ResourceManager.getString(bundle,"olt_power"),formatTitle);
-            Label port_is_solate = new Label(16, 0, ResourceManager.getString(bundle,"port_is_solate"),formatTitle);
-            Label onu_count_info = new Label(17, 0, ResourceManager.getString(bundle,"onu_count_info"),formatTitle);
+            //Label sys_uptime = new Label(12, 0, ResourceManager.getString(bundle,"sys_uptime"),formatTitle);
+            Label switched_count = new Label(12, 0, ResourceManager.getString(bundle,"switched_count"),formatTitle);
+            //Label reboot_count = new Label(14, 0, ResourceManager.getString(bundle,"reboot_count"),formatTitle);
+            Label olt_power = new Label(13, 0, ResourceManager.getString(bundle,"olt_power"),formatTitle);
+            Label port_is_solate = new Label(14, 0, ResourceManager.getString(bundle,"port_is_solate"),formatTitle);
+            Label onu_count_info = new Label(15, 0, ResourceManager.getString(bundle,"onu_count_info"),formatTitle);
 
 
             //将Label 添加到工作表
@@ -113,9 +113,9 @@ public class Main {
             ws.addCell(ver);
             ws.addCell(businessCardAccount);
             ws.addCell(vlan_optimize);
-            ws.addCell(sys_uptime);
+            //ws.addCell(sys_uptime);
             ws.addCell(switched_count);
-            ws.addCell(reboot_count);
+            //ws.addCell(reboot_count);
             ws.addCell(olt_power);
             ws.addCell(port_is_solate);
             ws.addCell(onu_count_info);
@@ -141,12 +141,12 @@ public class Main {
                 Label software_ver_i = new Label(9, i+1,list.get(i).getSoftware_ver(),formatTitle1);
                 Label bussiness_card_amount_i = new Label(10, i+1,list.get(i).getBussiness_card_amount(),formatTitle1);
                 Label vlan_optimize_i = new Label(11, i+1,list.get(i).getVlan_optimize(),formatTitle1);
-                Label sys_uptime_i = new Label(12, i+1,list.get(i).getSys_uptime(),formatTitle1);
-                Label switched_count_i = new Label(13, i+1,list.get(i).getSwitched_count().toString(),formatTitle1);
-                Label reboot_count_i = new Label(14, i+1,list.get(i).getReboot_count().toString(),formatTitle1);
-                Label olt_power_i = new Label(15, i+1,list.get(i).getOlt_power(),formatTitle1);
-                Label port_is_solate_i = new Label(16, i+1,list.get(i).getPort_is_solate(),formatTitle1);
-                Label onu_count_info_i = new Label(17, i+1,list.get(i).getOnu_count_info(),formatTitle1);
+                //Label sys_uptime_i = new Label(12, i+1,list.get(i).getSys_uptime(),formatTitle1);
+                Label switched_count_i = new Label(12, i+1,list.get(i).getSwitched_count().toString(),formatTitle1);
+                //Label reboot_count_i = new Label(14, i+1,list.get(i).getReboot_count().toString(),formatTitle1);
+                Label olt_power_i = new Label(13, i+1,list.get(i).getOlt_power(),formatTitle1);
+                Label port_is_solate_i = new Label(14, i+1,list.get(i).getPort_is_solate(),formatTitle1);
+                Label onu_count_info_i = new Label(15, i+1,list.get(i).getOnu_count_info(),formatTitle1);
                 ws.addCell(friendlyName_i);
                 ws.addCell(typeId_i);
                 ws.addCell(address_i);
@@ -159,9 +159,9 @@ public class Main {
                 ws.addCell(software_ver_i);
                 ws.addCell(bussiness_card_amount_i);
                 ws.addCell(vlan_optimize_i);
-                ws.addCell(sys_uptime_i);
+                //ws.addCell(sys_uptime_i);
                 ws.addCell(switched_count_i);
-                ws.addCell(reboot_count_i);
+                //ws.addCell(reboot_count_i);
                 ws.addCell(olt_power_i);
                 ws.addCell(port_is_solate_i);
                 ws.addCell(onu_count_info_i);
