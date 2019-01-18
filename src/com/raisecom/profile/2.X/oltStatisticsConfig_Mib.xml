@@ -177,4 +177,28 @@
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
 	</MibTable>
 
+	<MibTable Name = "rcCardProtectTable" Type = "Table">
+		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcHighAvailabilityIndex"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	                  Physics = "rcHighAvailabilityMajorSlot" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardState" 	          Physics = "rcHighAvailabilityMajorSlotState" />
+		<MibNode Logic = "rcCardProtectGroupMinorCardSlotIndex"                    Physics = "rcHighAvailabilityMinorSlot" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMinorCardState" 	          Physics = "rcHighAvailabilityMinorSlotState" />
+		<MibNode Logic = "rcCardProtectGroupOperState" 	                  Physics = "rcHighAvailabilityOperState" />
+		<MibNode Logic = "rcCardProtectGroupForcedSwitch"                 Physics = "rcHighAvailabilityForcedSwitch" AddDisp = "false" ModifyDisp = "false" IsHide="true" />
+		<MibNode Logic = "rcCardProtectGroupSwitchResult" 	              Physics = "rcHighAvailabilitySwitchResult">
+			<EnumValue Value="0" Label="enum.default"/>
+			<EnumValue Value="1" Label="enum.succeeded"/>
+			<EnumValue Value="2" Label="enum.destFailure"/>
+		</MibNode>
+		<MibNode Logic = "rcCardProtectGroupSwitchTime" 	              Physics = "rcHighAvailabilitySwitchTime"/>
+		<MibNode Logic = "rcHighAvailabilitySwitchReason"                 Physics = "rcHighAvailabilitySwitchReason"/>
+		<MibNode Logic = "rcHighAvailabilitySwitchedCount"                Physics = "rcHighAvailabilitySwitchedCount"/>
+	</MibTable>
+
+	<MibTable Name = "raisecomCpuV2Table" Type = "Table">
+		<MibNode Logic = "raisecomCpuUsage1SecondV2" 	                      Physics = "rcCpuUtilizationTotal" Unit="%" />
+		<MibNode Logic = "raisecomTotalMemoryV2" 	                      Physics = "rcMemoryTotoalMemory" Unit="B"/>
+		<MibNode Logic = "raisecomAvailableMemoryV2" 	                      Physics = "rcMemoryAvailableMemory" Unit="B"/>
+	</MibTable>
+
 </MIB>

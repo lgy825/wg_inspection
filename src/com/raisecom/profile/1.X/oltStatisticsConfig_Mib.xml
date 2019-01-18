@@ -110,5 +110,25 @@
 		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
 	</MibTable>
-	
+
+	<MibTable Name = "rcCardProtectTable" Type = "Table">
+		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcCardProtectGroupIndex"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	      Physics = "rcCardProtectGroupMajorCardSlotIndex" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardState" 	          Physics = "rcCardProtectGroupMajorCardState" />
+		<MibNode Logic = "rcCardProtectGroupMinorCardSlotIndex"           Physics = "rcCardProtectGroupMinorCardSlotIndex" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMinorCardState" 	          Physics = "rcCardProtectGroupMinorCardState" />
+		<MibNode Logic = "rcCardProtectGroupOperState" 	                  Physics = "rcCardProtectGroupOperState" />
+		<MibNode Logic = "rcCardProtectGroupForcedSwitch"                 Physics = "rcCardProtectGroupForcedSwitch" AddDisp = "false" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupSwitchResult" 	              Physics = "rcCardProtectGroupSwitchResult"/>
+		<MibNode Logic = "rcCardProtectGroupSwitchTime" 	              Physics = "rcCardProtectGroupSwitchTime"/>
+	</MibTable>
+
+	<MibTable Name="raisecomCpuV2Table" Type="Table" LabelWidth="130" ValueWidth="180" Column="2">
+		<MibNode Logic="raisecomSystemDeviceIdV2"				Physics="raisecomSystemDeviceIdV2" />
+		<MibNode Logic = "raisecomSystemCpuIdV2" 					Physics = "raisecomSystemCpuIdV2" />
+		<MibNode Logic = "raisecomCpuUsage1SecondV2" 					Physics = "raisecomCpuUsage1SecondV2" />
+		<MibNode Logic = "raisecomAvailableMemoryV2" 					Physics = "raisecomAvailableMemoryV2" />
+		<MibNode Logic = "raisecomTotalMemoryV2" 					Physics = "raisecomTotalMemoryV2" />
+	</MibTable>
+
 </MIB>
