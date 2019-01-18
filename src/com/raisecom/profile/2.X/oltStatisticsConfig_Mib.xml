@@ -103,16 +103,12 @@
   </MibTable>
 	
 	<MibTable Name="rcVlanCfgPortTable" Type = "Table" PageSize = "25" ModifyRefresh = "true" >
-	    <MibNode Logic = "rcPortIndex"                                  Physics = "roapPortIndex" Access = "noaccess" IsIndex="true">
-			<ValueAdapter Class = "com.raisecom.ems.eponcommon.client.olt.devicemgt.adapter.IfIndexAdapter2" />	
-		</MibNode>
 	    <MibNode Logic = "rcPortMode"                                   Physics = "roapPortMode">
 		    <EnumValue Value = "1" Label = "access" />
 		    <EnumValue Value = "2" Label = "trunk" />
 	    </MibNode>
 	    <MibNode Logic = "rcPortTrunkAllowVlanList"                     Physics = "roapPortTrunkAllowVlanList">
-			<MibNodeAdapter Class = "com.raisecom.ems.eponcommon.client.olt.devicemgt.adapter.VlansetAdapter" />
-	    	<ValueAdapter Class = "com.raisecom.ems.templet.client.adapter.VlansetValueAdapter" />	
+			<MibNodeAdapter Class = "com.raisecom.adapter.VlansetAdapter" />
 	    </MibNode>
     </MibTable>
 	<!--niyb add 2016.05.02 软件提供新mib用于巡检onu状态及数量-->
