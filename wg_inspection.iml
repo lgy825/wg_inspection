@@ -34,5 +34,6 @@
     <orderEntry type="library" name="poi-3.16" level="project" />
     <orderEntry type="library" name="xbean-2.3.0" level="project" />
     <orderEntry type="library" name="res_security_component" level="project" />
+    <orderEntry type="library" name="viewworks" level="project" />
   </component>
 </module>

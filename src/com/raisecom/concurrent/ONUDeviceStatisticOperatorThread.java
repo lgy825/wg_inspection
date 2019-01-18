@@ -42,6 +42,11 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 //ONU的在线状态
                 String status= SnmpOperationForONU.getONUStatusForParam(instance,options);
 
+                //上一次离线原因
+
+
+
+
             }
 
         } catch (Exception e) {

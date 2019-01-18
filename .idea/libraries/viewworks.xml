@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="viewworks">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/viewworks.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
