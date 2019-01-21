@@ -202,7 +202,16 @@
 		<MibNode Logic="rcGponONUWorkStatus" Physics="rcGponONUWorkStatus"/>
 		<MibNode Logic="rcGponONUOfflineReason" Physics="rcGponONUOfflineReason"/>
 	</MibTable>
+	
+	<MibTable Name="rcGponOnuLoopbackDetectionPortTable" Type="Table">
+		<MibNode Logic="rcGponOnuLoopbackDetectionPortIndex" Physics="rcGponOnuLoopbackDetectionPortIndex" />
+		<MibNode Logic = "rcGponOnuLoopbackDetectionPortEnable" 	    Physics = "rcGponOnuLoopbackDetectionPortEnable" />
+	</MibTable>
 
+	<MibTable Name = "rcEponOnuCtcLoopDetectPortTable" Type = "Table">
+		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex"  Access = "NOACCESS" OrderType = "Integer" MibNodeAdapter ="com.raisecom.ems.epon.server.adapter.EthUniAdapter" isHide = "tru" />
+		<MibNode Logic = "rcEponOnuCtcLoopDetectPortEnable" 	    Physics = "rcEponOnuCtcLoopDetectPortEnable" />
+	</MibTable>
 
 
 	<!--liujs add end-->

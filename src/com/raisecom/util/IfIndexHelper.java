@@ -75,5 +75,19 @@ public class IfIndexHelper {
         return "" + onuId;
     }
 
+    /**
+     * 远端ONU端口
+     * @param onuInstance
+     * @param portId
+     * @return
+     */
+    public static String getPortInstance(String onuInstance, String portId)//zyx add
+    {
+        int onuIndex = Integer.parseInt(onuInstance);
+        int onuId = Integer.parseInt(IfIndexHelper.getOnuId(onuInstance));
+        int uniIndex = (onuIndex - onuId) + onuId * 1000 + Integer.parseInt(portId);
+        return "" + uniIndex;
+
+    }
 
 }

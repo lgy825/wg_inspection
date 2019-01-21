@@ -139,18 +139,38 @@ public class SnmpOperationForONU {
         return null;
     }
 
-    public static String getONULoopPort(String instance, String iRCNETypeID, ObjService options) {
-
+    public static String getONULoopPort(String onuInstance, String iRCNETypeID, ObjService options) {
+        ObjService snmpParams = options.clone();
+        String tableName = "";
+        String loopPort="";
+        if ("EPON_ONU".equals(iRCNETypeID) || "UNKNOWN(E)".equals(iRCNETypeID)) {
+            tableName = "rcEponOnuCtcLoopDetectPortTable";
+        } else if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+            tableName = " rcGponOnuLoopbackDetectionPortTable";
+        }
+        snmpParams.setValue("ValueOnly", true);
+        //ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
+        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
+        snmpParams.setValue("TableName", tableName);
+        snmpParams.setValue("ValueOnly", "true");
+        snmpParams.setValue("Instance", instance);
+        ObjService objService=null;
+        while(true){
+            objService=SnmpUtilities.GeneralSnmpOperation(snmpParams, "snmpGetNext");
+            if (!objService.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+                break;
+            }
+        }
         return null;
+
     }
 
     public static String getONUPortStatus(String instance, String iRCNETypeID, ObjService options) {
-
         return null;
     }
 
     public static String eponOffnlineReason(String lastDownCause) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap();
         String templastDownCause = "";
 
         map.put("1", "unknown");
