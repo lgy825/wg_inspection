@@ -7,7 +7,7 @@ import com.raisecom.bean.ONUInfo;
  */
 public class SqlMappingONUUtil {
 
-    public void insertDispectONUInfo(ONUInfo onuInfo){
+    public static void insertDispectONUInfo(ONUInfo onuInfo){
         String firstStr="insert into onu_statistics_info(";
         String midStr=")values (";
         String lastStr=")ON DUPLICATE KEY UPDATE ";
@@ -17,9 +17,9 @@ public class SqlMappingONUUtil {
             firstStr+="IRCNETNODEID";
             midStr+=onuInfo.getIrcnetnodeid();
             if(onuInfo.getStatus()!=null){
-                firstStr+=",STAYUS";
+                firstStr+=",STATUS";
                 midStr+=",'"+onuInfo.getStatus();
-                lastStr+="STAYUS = '" +onuInfo.getStatus();
+                lastStr+="STATUS = '" +onuInfo.getStatus();
             }
             if(onuInfo.getLastDownCause()!=null){
                 firstStr+=",LAST_DOWN_CAUSE";
@@ -27,9 +27,9 @@ public class SqlMappingONUUtil {
                 lastStr+="LAST_DOWN_CAUSE = '" +onuInfo.getLastDownCause();
             }
             if(onuInfo.getDistance()!=null){
-                firstStr+=",DISTANSE";
+                firstStr+=",DISTANCE";
                 midStr+=",'"+onuInfo.getDistance();
-                lastStr+="DISTANSE = '" +onuInfo.getDistance();
+                lastStr+="DISTANCE = '" +onuInfo.getDistance();
             }
             if(onuInfo.getReceivedPower()!=null){
                 firstStr+=",RECEIVED_POWER";

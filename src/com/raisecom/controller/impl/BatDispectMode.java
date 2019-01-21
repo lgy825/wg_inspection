@@ -61,7 +61,7 @@ public class BatDispectMode implements DispectMode {
             }
             DeviceTask deviceTask=new OLTDeviceContrller();
 
-            boolean isSuccessful=deviceTask.processStatistics(list,"OLT");
+            boolean isSuccessful=deviceTask.processStatistics(list,"ONU");
             if(isSuccessful){
                 Main.FromDbToExcel("2070");
             }else{

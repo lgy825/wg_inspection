@@ -102,33 +102,81 @@
       <EnumValue Value="2" Label="trunk" />
     </MibNode>
     <MibNode Logic="rcPortTrunkAllowVlanList" Physics="rcPortTrunkAllowVlanList" Unit="" Checker="" MibNodeAdapter="">
-      <MibNodeAdapter Class="com.raisecom.ems.eponcommon.client.olt.devicemgt.adapter.VlansetAdapter" />
-      <ValueAdapter Class="com.raisecom.ems.templet.client.adapter.VlansetValueAdapter" />
+      <MibNodeAdapter Class="com.raisecom.adapter.VlansetAdapter" />
     </MibNode>
   </MibTable>
+
+	<!--liujs add -->
+	<MibTable Name="rcHighAvailabilityTable" Type = "Table">
+		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
+	</MibTable>
+	<MibTable Name="rcPortIsolateTable" Type = "Table">
+		<MibNode Logic="rcPortIsolateGroupId" Physics="rcPortIsolateGroupId"></MibNode>
+		<MibNode Logic="rcPortIsolateGroupPortList" Physics="rcPortIsolateGroupPortList">
+			<ValueAdapter Class = "com.raisecom.adapter.TrunkGroupPortListValueAdapter" SlotMax = "22" SlotMin = "1" PortMax = "16" PortMin = "1"/>
+			<MibNodeAdapter Class = "com.raisecom.adapter.TrunkPortListMibNodeAdapter" />
+		</MibNode>
+	</MibTable>
+	<MibTable Name = "raisecomShelfTable2" Type="List" ModifyRefresh = "true">
+		<MibNode Logic = "raisecomShelfPrimaryNMSSlotId" 	Physics = "raisecomShelfPrimaryNMSSlotId"/>
+		<MibNode Logic = "raisecomShelfSecondaryNMSSlotId" 	Physics = "raisecomShelfSecondaryNMSSlotId"/>
+	</MibTable>
+	<MibTable Name = "raisecomCardPowerTable" Type = "Table">
+		<MibNode Logic = "raisecomCardPowerSlotId" 				Physics = "raisecomCardPowerSlotId"  />
+		<MibNode Logic = "raisecomCardPowerType" 		        Physics = "raisecomCardPowerType" >
+			<EnumValue Value = "1" Label = "0.75v" />
+			<EnumValue Value = "2" Label = "0.9v" />
+			<EnumValue Value = "3" Label = "1v" />
+			<EnumValue Value = "4" Label = "1.2v" />
+			<EnumValue Value = "5" Label = "1.5v" />
+			<EnumValue Value = "6" Label = "1.8v" />
+			<EnumValue Value = "7" Label = "2.5v" />
+			<EnumValue Value = "8" Label = "3.3v" />
+			<EnumValue Value = "9" Label = "4.8v" />
+			<EnumValue Value = "10" Label = "5v" />
+			<EnumValue Value = "11" Label = "5.2v" />
+			<EnumValue Value = "12" Label = "12v" />
+			<EnumValue Value = "13" Label = "unkown" />
+			<EnumValue Value = "14" Label = "null" />
+			<EnumValue Value = "15" Label = "1.25v" />
+			<EnumValue Value = "16" Label = "2.9v" />
+		</MibNode>
+		<MibNode Logic = "raisecomCardPowerVolValue" 			Physics = "raisecomCardPowerVolValue" Unit = "0.001v"/>
+	</MibTable>
+
+	<!--ONU在线状态、上一次掉电原因-->
 	<MibTable Name="rcEponONUTable" Type="Table">
 		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
+		<MibNode Logic="rcEponONUOfflineReason" Physics="rcEponONUOfflineReason"/>
 	</MibTable>
-
 	<MibTable Name = "rcCardProtectTable" Type = "Table">
-		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcCardProtectGroupIndex"/>
-		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	      Physics = "rcCardProtectGroupMajorCardSlotIndex" ModifyDisp = "false"/>
-		<MibNode Logic = "rcCardProtectGroupMajorCardState" 	          Physics = "rcCardProtectGroupMajorCardState" />
-		<MibNode Logic = "rcCardProtectGroupMinorCardSlotIndex"           Physics = "rcCardProtectGroupMinorCardSlotIndex" ModifyDisp = "false"/>
-		<MibNode Logic = "rcCardProtectGroupMinorCardState" 	          Physics = "rcCardProtectGroupMinorCardState" />
-		<MibNode Logic = "rcCardProtectGroupOperState" 	                  Physics = "rcCardProtectGroupOperState" />
-		<MibNode Logic = "rcCardProtectGroupForcedSwitch"                 Physics = "rcCardProtectGroupForcedSwitch" AddDisp = "false" ModifyDisp = "false"/>
-		<MibNode Logic = "rcCardProtectGroupSwitchResult" 	              Physics = "rcCardProtectGroupSwitchResult"/>
-		<MibNode Logic = "rcCardProtectGroupSwitchTime" 	              Physics = "rcCardProtectGroupSwitchTime"/>
+		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcHighAvailabilityIndex"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	                  Physics = "rcHighAvailabilityMajorSlot" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMajorCardState" 	          Physics = "rcHighAvailabilityMajorSlotState" />
+		<MibNode Logic = "rcCardProtectGroupMinorCardSlotIndex"                    Physics = "rcHighAvailabilityMinorSlot" ModifyDisp = "false"/>
+		<MibNode Logic = "rcCardProtectGroupMinorCardState" 	          Physics = "rcHighAvailabilityMinorSlotState" />
+		<MibNode Logic = "rcCardProtectGroupOperState" 	                  Physics = "rcHighAvailabilityOperState" />
+		<MibNode Logic = "rcCardProtectGroupForcedSwitch"                 Physics = "rcHighAvailabilityForcedSwitch" AddDisp = "false" ModifyDisp = "false" IsHide="true" />
+		<MibNode Logic = "rcCardProtectGroupSwitchResult" 	              Physics = "rcHighAvailabilitySwitchResult">
+			<EnumValue Value="0" Label="enum.default"/>
+			<EnumValue Value="1" Label="enum.succeeded"/>
+			<EnumValue Value="2" Label="enum.destFailure"/>
+		</MibNode>
+		<MibNode Logic = "rcCardProtectGroupSwitchTime" 	              Physics = "rcHighAvailabilitySwitchTime"/>
+		<MibNode Logic = "rcHighAvailabilitySwitchReason"                 Physics = "rcHighAvailabilitySwitchReason"/>
+		<MibNode Logic = "rcHighAvailabilitySwitchedCount"                Physics = "rcHighAvailabilitySwitchedCount"/>
 	</MibTable>
 
-	<MibTable Name="raisecomCpuV2Table" Type="Table" LabelWidth="130" ValueWidth="180" Column="2">
-		<MibNode Logic="raisecomSystemDeviceIdV2"				Physics="raisecomSystemDeviceIdV2" />
-		<MibNode Logic = "raisecomSystemCpuIdV2" 					Physics = "raisecomSystemCpuIdV2" />
-		<MibNode Logic = "raisecomCpuUsage1SecondV2" 					Physics = "raisecomCpuUsage1SecondV2" />
-		<MibNode Logic = "raisecomAvailableMemoryV2" 					Physics = "raisecomAvailableMemoryV2" />
-		<MibNode Logic = "raisecomTotalMemoryV2" 					Physics = "raisecomTotalMemoryV2" />
+	<MibTable Name = "raisecomCpuV2Table" Type = "Table">
+		<MibNode Logic = "raisecomCpuUsage1SecondV2" 	                      Physics = "rcCpuUtilizationTotal" Unit="%" />
+		<MibNode Logic = "raisecomTotalMemoryV2" 	                      Physics = "rcMemoryTotoalMemory" Unit="B"/>
+		<MibNode Logic = "raisecomAvailableMemoryV2" 	                      Physics = "rcMemoryAvailableMemory" Unit="B"/>
 	</MibTable>
-
+	<MibTable Name="rcGponONUTable">
+		<MibNode Logic="rcGponONUIndex" Physics="rcGponONUIndex"/>
+		<MibNode Logic="rcGponONUWorkStatus" Physics="rcGponONUWorkStatus"/>
+		<MibNode Logic="rcGponONUOfflineReason" Physics="rcGponONUOfflineReason"/>
+	</MibTable>
+	<!--liujs add end-->
 </MIB>

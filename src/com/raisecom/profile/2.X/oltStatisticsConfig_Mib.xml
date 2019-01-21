@@ -130,7 +130,7 @@
 			<MibNodeAdapter Class="com.raisecom.ems.epon.server.adapter.RcPonOnuDevTotalListMibNodeAdapter"/>
 		</MibNode>
 	</MibTable>
-	
+	<!--liujs add -->
 	<MibTable Name="rcHighAvailabilityTable" Type = "Table">
 		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
 	</MibTable>
@@ -167,10 +167,11 @@
 		</MibNode>
 		<MibNode Logic = "raisecomCardPowerVolValue" 			Physics = "raisecomCardPowerVolValue" Unit = "0.001v"/>
 	</MibTable>
-	
+	<!--EPON ONU在线状态、上一次掉电原因-->
 	<MibTable Name="rcEponONUTable" Type="Table">
 		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
+		<MibNode Logic="rcEponONUOfflineReason" Physics="rcEponONUOfflineReason"/>
 	</MibTable>
 
 	<MibTable Name = "rcCardProtectTable" Type = "Table">
@@ -196,5 +197,13 @@
 		<MibNode Logic = "raisecomTotalMemoryV2" 	                      Physics = "rcMemoryTotoalMemory" Unit="B"/>
 		<MibNode Logic = "raisecomAvailableMemoryV2" 	                      Physics = "rcMemoryAvailableMemory" Unit="B"/>
 	</MibTable>
+	<MibTable Name="rcGponONUTable">
+		<MibNode Logic="rcGponONUIndex" Physics="rcGponONUIndex"/>
+		<MibNode Logic="rcGponONUWorkStatus" Physics="rcGponONUWorkStatus"/>
+		<MibNode Logic="rcGponONUOfflineReason" Physics="rcGponONUOfflineReason"/>
+	</MibTable>
 
+
+
+	<!--liujs add end-->
 </MIB>
