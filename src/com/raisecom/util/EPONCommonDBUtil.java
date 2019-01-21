@@ -511,7 +511,7 @@ public class EPONCommonDBUtil {
 
     public  List<ObjService> getONUInstanceOnlineFromDBByOltNeId(String neID) throws Exception {
         String sql = "SELECT rcnetnode.INDEX_IN_MIB,rcnetype.iRCNETypeID,rcnetnode.IRCNETNODEID from rcnetnode ,rcnetype " +
-                "where rcnetype.NE_CATEGORY_ID = '3' and rcnetnode.iRCNETypeID = rcnetype.iRCNETypeID and rcnetnode.MANAGED_URL = '/ne=" + neID + "'AND rcnetnode.ISPINGOK=1";
+                "where rcnetype.NE_CATEGORY_ID = '3' and rcnetnode.iRCNETypeID = rcnetype.iRCNETypeID and rcnetnode.MANAGED_URL = '/ne=" + neID+"'";
         List<ObjService> objServices=objServiceToList(selectObject(sql, null), "ONU");
 
         return objServices;

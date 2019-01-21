@@ -29,6 +29,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
             //取出OLTSNMP操作参数
             ObjService options = SnmpParamsHelper.getOption(oltId);
             options.setValue("ConfigFile",configFile);
+            options.setValue("ver",ver);
             //取出在线的ONU的信息
 
 
@@ -40,9 +41,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 //Boolean aBoolean = IfIndexHelperV2.isNewOnuIndex(instance);
 
                 onuInfo.setIrcnetnodeid(IRCNETNODEID);
-                if(ver.startsWith("2.") || ver.startsWith("3.")){
-                    instance = IfIndexHelperV2.OnuIndexOld2New(instance);
-                }
+
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
                 if(status == null || "NULL".equals(status)){
@@ -72,7 +71,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 //4.ONU接收光功率
                 String receivedPower = SnmpOperationForONU.getONUReceivedPower(instance,iRCNETypeID,options);
                 onuInfo.setReceivedPower(processResult(receivedPower));
-                //5.ONU下挂mac地址数
+                //5.ONU下挂 mac地址数
                 String onuHangMacCount = SnmpOperationForONU.getONUHangMacConut(instance,iRCNETypeID,options);
                 onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
                 //6.环路端口

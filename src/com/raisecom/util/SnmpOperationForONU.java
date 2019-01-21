@@ -1,10 +1,13 @@
 package com.raisecom.util;
 
+import com.raisecom.adapter.IfIndexHelperGp;
 import com.raisecom.ems.templet.client.util.SnmpUtilities;
 import com.raisecom.ems.templet.server.driver.Driver;
 import com.raisecom.nms.platform.cnet.ObjService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,13 +18,17 @@ public class SnmpOperationForONU {
 
     //获取ONU的在线状态
     public static String getONUStatusForParam(String instance, String iRCNETypeID, ObjService options) {
+        String ver = options.getStringValue("ver");
+        if(ver.startsWith("2.") || ver.startsWith("3.")){
+            instance = IfIndexHelperV2.OnuIndexOld2New(instance);
+        }
         ObjService snmpParams = options.clone();
         String tableName = "";
         String status = "";
-        if ("EPON_ONU".equals(iRCNETypeID) || "UNKNOWN(E)".equals(iRCNETypeID)) {
-            tableName = "rcEponONUTable";
-        } else if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+        if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
             tableName = "rcGponONUTable";
+        } else {
+            tableName = "rcEponONUTable";
         }
         snmpParams.setValue("ValueOnly", true);
         ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
@@ -29,10 +36,10 @@ public class SnmpOperationForONU {
             return "";
         } else {
             for (int i = 0; i < result.objectSize("RowSet"); i++) {
-                if (tableName.equals("rcEponONUTable")) {
-                    status = result.objectAt("RowSet", i).getStringValue("rcEponONUWorkStatus");
-                } else {
+                if (tableName.equals("rcGponONUTable")) {
                     status = result.objectAt("RowSet", i).getStringValue("rcGponONUWorkStatus");
+                } else {
+                    status = result.objectAt("RowSet", i).getStringValue("rcEponONUWorkStatus");
                 }
             }
             return status;
@@ -49,6 +56,7 @@ public class SnmpOperationForONU {
      */
     private static ObjService getMibNodesFromONU(String table, String index, ObjService options) {
         // TODO Auto-generated method stub
+
         try {
             ObjService snmpParams = options.clone();
 
@@ -76,14 +84,17 @@ public class SnmpOperationForONU {
 
     //获取ONU上一次掉线原因
     public static String getONULastDownCause(String instance, String iRCNETypeID, ObjService options) {
-
+        String ver = options.getStringValue("ver");
+        if(ver.startsWith("2.") || ver.startsWith("3.")){
+            instance = IfIndexHelperV2.OnuIndexOld2New(instance);
+        }
         ObjService snmpParams = options.clone();
         String tableName = "";
         String lastDownCause = "";
-        if ("EPON_ONU".equals(iRCNETypeID) || "UNKNOWN(E)".equals(iRCNETypeID)) {
-            tableName = "rcEponONUTable";
-        } else if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+        if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
             tableName = "rcGponONUTable";
+        } else {
+            tableName = "rcEponONUTable";
         }
         snmpParams.setValue("ValueOnly", true);
         ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
@@ -91,11 +102,10 @@ public class SnmpOperationForONU {
             return "";
         } else {
             for (int i = 0; i < result.objectSize("RowSet"); i++) {
-                if (tableName.equals("rcEponONUTable")) {
-                    lastDownCause = eponOffnlineReason(result.objectAt("RowSet", i).getStringValue("rcEponONUOfflineReason"));
-
-                } else {
+                if (tableName.equals("rcGponONUTable")) {
                     lastDownCause = gponOffnlineReason(result.objectAt("RowSet", i).getStringValue("rcGponONUOfflineReason"));
+                } else {
+                    lastDownCause = eponOffnlineReason(result.objectAt("RowSet", i).getStringValue("rcEponONUOfflineReason"));
                 }
             }
             return lastDownCause;
@@ -104,30 +114,45 @@ public class SnmpOperationForONU {
 
     public static String getONUDistance(String instance, String iRCNETypeID, ObjService options) {
 
-        return null;
+        return null ;
     }
-
+    //ONU接收到的光功率
     public static String getONUReceivedPower(String instance, String iRCNETypeID, ObjService options) {
 
         ObjService snmpParams = options.clone();
         String tableName = "";
         String receivedPower = "";
-        if ("EPON_ONU".equals(iRCNETypeID) || "UNKNOWN(E)".equals(iRCNETypeID)) {
-            tableName = "rcEponONUTable";
-        } else if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
-            tableName = "rcGponONUTable";
+        if ("GPON_ONU".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+            tableName = "rcGponOnuPonMngTable";
+            List<String> list = getDeviceInstance(snmpParams, IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
+            for(int i = 0; i < list.size(); i++){
+                snmpParams.setValue("ValueOnly", true);
+                snmpParams.setValue("Instance", list.get(i));
+                ObjService result = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+                if (result == null) {
+                    return "";
+                } else {
+                    for (int j = 0; j < result.objectSize("RowSet"); j++) {
+                        receivedPower = result.objectAt("RowSet", j).getStringValue("rcGponOnuPonRxPower");
+                    }
+                    return receivedPower;
+                }
+            }
+
+        } else {
+            tableName = "rcEponTransceiverMonitorTable";
         }
-        snmpParams.setValue("ValueOnly", true);
+
         ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
         if (result == null) {
             return "";
         } else {
             for (int i = 0; i < result.objectSize("RowSet"); i++) {
-                if (tableName.equals("rcEponONUTable")) {
-                    receivedPower = eponOffnlineReason(result.objectAt("RowSet", i).getStringValue("rcEponONUOfflineReason"));
+                if (tableName.equals("rcEponTransceiverMonitorTable")) {
+                    receivedPower = result.objectAt("RowSet", i).getStringValue("rcEponTransceiverMonitorValue");
 
                 } else {
-                    receivedPower = gponOffnlineReason(result.objectAt("RowSet", i).getStringValue("rcGponOnuPonRxPower"));
+                    receivedPower = result.objectAt("RowSet", i).getStringValue("rcGponOnuPonRxPower");
                 }
             }
             return receivedPower;
@@ -135,6 +160,7 @@ public class SnmpOperationForONU {
     }
 
     public static String getONUHangMacConut(String instance, String iRCNETypeID, ObjService options) {
+
 
         return null;
     }
@@ -167,6 +193,38 @@ public class SnmpOperationForONU {
 
     public static String getONUPortStatus(String instance, String iRCNETypeID, ObjService options) {
         return null;
+    }
+    public static List<String> getDeviceInstance(ObjService params, String onuInstance, String oid){
+
+        ArrayList<String> list = new ArrayList<String>();
+        boolean flag = true;
+
+        ObjService result = new ObjService();
+        String instance = onuInstance;
+
+        while(flag){
+            params.remove("RowSet");
+            ObjService rowset = new ObjService("RowSet");
+            rowset.setValue(oid + "." + instance, "");
+            params.addContainedObject(rowset);
+            result = SnmpUtilities.GeneralSnmpOperation(params, "snmpGetNext");
+            if(!result.getStringValue("ErrCode").equalsIgnoreCase("0")){
+                break;
+            }
+            ObjService obj = result.objectAt("RowSet", 0);
+            String key = obj.getCurrentHashtable().keySet().toArray()[0].toString();
+            if(!key.substring(0, key.lastIndexOf(".")).equalsIgnoreCase(oid)){
+                break;
+            }
+            String compareInstance = onuInstance.substring(0,onuInstance.length()-3);
+            String keyInstance = obj.getStringValue(key);
+            if(keyInstance.substring(0, keyInstance.length()-3).equalsIgnoreCase(compareInstance)){
+                list.add(obj.getStringValue(key));
+                instance = obj.getStringValue(key);
+            }else
+                break;
+        }
+        return list;
     }
 
     public static String eponOffnlineReason(String lastDownCause) {
