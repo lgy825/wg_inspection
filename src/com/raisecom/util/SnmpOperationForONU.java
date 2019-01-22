@@ -110,10 +110,6 @@ public class SnmpOperationForONU {
         }
     }
 
-    public static String getONUDistance(String instance, String iRCNETypeID, ObjService options) {
-
-        return null ;
-    }
     //ONU接收到的光功率
     public static String getONUReceivedPower(String instance, String iRCNETypeID, ObjService options) {
 
@@ -204,32 +200,43 @@ public class SnmpOperationForONU {
         }else{
             tableName = "rcEponOnuCtcLoopDetectPortTable";
         }
-        //String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
+        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
         snmpParams.setValue("TableName", tableName);
         snmpParams.setValue("ValueOnly", "true");
         List<String> list=new ArrayList<>();
         String baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
-        String ins = "0";
-        while(true){
-            snmpParams.remove("RowSet");
-            ObjService rowSet = new ObjService("RowSet");
-            rowSet.setValue(baseOID + "." + ins,"");
-            snmpParams.addContainedObject(rowSet);
-            ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
-            if (!res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
-                ObjService objService1=res.objectAt("RowSet",0);
-                String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
-                String index=objService1.getStringValue(key);
-                ins=index;
-                if(!key.startsWith(baseOID)){
-                    break;
-                }
-                if(index==null || "NULL".equalsIgnoreCase(index)){
-                    break;
+        //StringBuilder sb = new StringBuilder(instance);
+        String ins = instance;
+        try {
+            while(true){
+                snmpParams.remove("RowSet");
+                ObjService rowSet = new ObjService("RowSet");
+                rowSet.setValue(baseOID + "." + ins,"");
+                snmpParams.addContainedObject(rowSet);
+                ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
+                if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+                    ObjService objService1=res.objectAt("RowSet",0);
+                    String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
+                    String index=objService1.getStringValue(key);
+                    ins=index;
+                    if(!key.startsWith(baseOID)){
+                        break;
+                    }
+                    if(instance.startsWith(index.substring(0,3))){
+                        break;
+                    }
+                    if(index==null || "NULL".equalsIgnoreCase(index)){
+                        break;
+                    }else{
+                        String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
+                        list.add(retStr);
+                    }
                 }else{
-                    list.add(index);
+                    break;
                 }
             }
+        } catch (Exception e) {
+           e.printStackTrace();
         }
         if(list==null){
             return "--";

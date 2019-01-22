@@ -36,9 +36,11 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 String instance = objServices.get(i).getStringValue("INDEX_IN_MIB");
                 String IRCNETNODEID=objServices.get(i).getStringValue("IRCNETNODEID");
                 String iRCNETypeID = objServices.get(i).getStringValue("iRCNETypeID");
+                String distance=objServices.get(i).getStringValue("DISTANCE");
                 //Boolean aBoolean = IfIndexHelperV2.isNewOnuIndex(instance);
 
                 onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
+                onuInfo.setDistance(distance);
 
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
@@ -64,9 +66,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 //2.上一次离线原因
                 String lastDownCause = SnmpOperationForONU.getONULastDownCause(instance,iRCNETypeID,options);
                 onuInfo.setLastDownCause(processResult(lastDownCause));
-                //3.距离
-                String distance = SnmpOperationForONU.getONUDistance(instance,iRCNETypeID,options);
-                onuInfo.setDistance(processResult(distance));
+
                 //4.ONU接收光功率
                 String receivedPower = SnmpOperationForONU.getONUReceivedPower(instance,iRCNETypeID,options);
                 if(receivedPower == null || "NULL".equals(receivedPower)){

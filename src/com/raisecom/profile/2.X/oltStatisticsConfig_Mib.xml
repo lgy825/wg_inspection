@@ -232,7 +232,7 @@
 	</MibTable>
 
 	<MibTable Name = "rcEponOnuCtcLoopDetectPortTable" Type = "Table">
-		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex"  />
+		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex" />
 		<MibNode Logic = "rcEponOnuCtcLoopDetectPortEnable" 	    Physics = "rcEponOnuCtcLoopDetectPortEnable" />
 	</MibTable>
 
