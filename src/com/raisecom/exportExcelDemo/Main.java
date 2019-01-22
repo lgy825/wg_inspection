@@ -30,7 +30,7 @@ public class Main {
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
             //FromDbToExcel("2070");
-            FromDBToONUExcel("2007");
+            FromDBToONUExcel("2108");
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");

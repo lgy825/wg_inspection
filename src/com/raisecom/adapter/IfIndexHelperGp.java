@@ -1,93 +1,90 @@
-/**
- * 
- */
 package com.raisecom.adapter;
 
 /**
- * 
- * 
- * 
- * ONU²ã´Î,onu ID ÒÔÁ½Î»ÏÔÊ¾ 0-99£¬ ´óÓÚ99ÊÇĞèÓÃµ½Ç°ÖÃÂë£º
- *   100=<ONU id <=199   ĞèÔÚË÷ÒıÉÏ¼ÓÇ°ÖÃÂë 28 bit ~31 bit ¶ş½øÖÆ£º 110000000000000000000000000000  Ê®½øÖÆ 805306368
- *   200=<ONU id <=299   ĞèÔÚË÷ÒıÉÏ¼ÓÇ°ÖÃÂë 28 bit ~31 bit ¶ş½øÖÆ£º1000000000000000000000000000000  Ê®½øÖÆ 1073741824
- *      
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ * ONUå±‚æ¬¡,onu ID ä»¥ä¸¤ä½æ˜¾ç¤º 0-99ï¼Œ å¤§äº99æ˜¯éœ€ç”¨åˆ°å‰ç½®ç ï¼š
+ *   100=<ONU id <=199   éœ€åœ¨ç´¢å¼•ä¸ŠåŠ å‰ç½®ç  28 bit ~31 bit äºŒè¿›åˆ¶ï¼š 110000000000000000000000000000  åè¿›åˆ¶ 805306368
+ *   200=<ONU id <=299   éœ€åœ¨ç´¢å¼•ä¸ŠåŠ å‰ç½®ç  28 bit ~31 bit äºŒè¿›åˆ¶ï¼š1000000000000000000000000000000  åè¿›åˆ¶ 1073741824
+ *
+ *
+ *
+ *
+ *
+ *
  * @author kangzj-1550
  * @since  2014-1-20
  */
 public class IfIndexHelperGp {
-	
+
 	public static final int LAYERTYPE = 0XFFFFFFF;
 	public static final int PREFIX_3 = 805306368;
 	public static final int PREFIX_4 = 1073741824;
-	
+
 	/**
 	 * ONU
-	 * 
-	 * 
-	10201001    100110111010011110101001
-	
-	10200001
-	10200100
-	  100000
+	 *
+	 *
+	 10201001    100110111010011110101001
 
-	815507369   110000100110111010011110101001   
-	ONU PORT 815508369   ONU Instance 10200102
+	 10200001
+	 10200100
+	 100000
+
+	 815507369   110000100110111010011110101001
+	 ONU PORT 815508369   ONU Instance 10200102
 	 */
 	public static void main(String args[])
 	{
 //		String index = "815508369";//"815507369";
 //		String index = "10201001";
 		String onu = "10200002";
-		
+
 		System.out.println(getOnuIdFromOnuIndex(onu));
 		System.out.println(getPortInstance(onu, 1));
-		
+
 		//getPortDisplayName("PON", index);
 	}
-	
-	
+
+
 	public static String getPortDisplayName(String preFix, String index)
 	{
 		return preFix + " " + getSlotId(index) + "/" + getPonId(index) + "/" + getOnuIdFromPortIndex(index) + "/" + getPortId(index);
 	}
-	
-	
-	
+
+
+
 	public static String getOnuPortIdFromPortIndex(String index)
 	{
-		
+
 		return Integer.parseInt(getFormatIndex(index)) % 1000 + "";
 	}
-	
+
 	/**
-	 * 
-	 * @param onuInstancde  ONUË÷Òı
-	 * @param portId  µÚ¼¸¸ö¶Ë¿Ú
+	 *
+	 * @param onuInstancde  ONUç´¢å¼•
+	 * @param portId  ç¬¬å‡ ä¸ªç«¯å£
 	 * @return
 	 */
 	public static String getPortInstance(String onuInstance, int portId)
 	{
 		return getOnuPortPrefixIndex(onuInstance) + portId + "";
 	}
-	
-	
+
+
 	public static String getOnuInstanceByPort(String index)
 	{
 		return (Integer.parseInt(getFormatIndex(index)) / 100000 ) * 100000 + Integer.parseInt(getOnuIdFromPortIndex(index)) + "";
 	}
-	
+
 	public static String getSlotId(String index)
 	{
 		return Integer.parseInt(getFormatIndex(index)) / 10000000 + "";
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param index: ONU index
 	 * @return
 	 */
@@ -95,10 +92,10 @@ public class IfIndexHelperGp {
 	{
 		return (Integer.parseInt(getFormatIndex(index)) / 100000) % 100 + "";
 	}
-	
+
 	/**
-	 * 
-	 * @param index   onu ¶Ë¿Ú instance
+	 *
+	 * @param index   onu ç«¯å£ instance
 	 * @return
 	 */
 	public static String getOnuIdFromPortIndex(String index)
@@ -120,9 +117,9 @@ public class IfIndexHelperGp {
 		}
 		return "--";
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param index: port index
 	 * @return
 	 */
@@ -130,29 +127,29 @@ public class IfIndexHelperGp {
 	{
 		return Integer.parseInt(getFormatIndex(index)) % 1000 + "";
 	}
-	
+
 	/**
-	 * 
-	 * @param index ONUµÄË÷Òı
+	 *
+	 * @param index ONUçš„ç´¢å¼•
 	 * @return
 	 */
 	public static int getOnuIdFromOnuIndex(String index)
 	{
 		return Integer.parseInt(index) % 100000 ;
 	}
-	
-	
-	
-	
-	/** -------------------Ë½ÓĞ·½·¨-------------------------------*/
-	
+
+
+
+
+	/** -------------------ç§æœ‰æ–¹æ³•-------------------------------*/
+
 	private static int getOnuIdByFormatPortIndex(String index)
 	{
 		return (Integer.parseInt(index) / 1000) % 100;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param onuId
 	 * @return
 	 */
@@ -167,19 +164,19 @@ public class IfIndexHelperGp {
 		}
 		return 0;
 	}
-	
-	
+
+
 	private static int getSlotAndPonPort(String index)
 	{
-		
+
 		return Integer.parseInt(index) / 100000;
 	}
-	
+
 	private static String getFormatIndex(String index)
 	{
 		return (Integer.parseInt(index) & LAYERTYPE) + "";
 	}
-	
+
 	private static int getLayer(String index)
 	{
 		return Integer.parseInt(index) >> 28;
