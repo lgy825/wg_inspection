@@ -50,6 +50,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                     onuInfo.setOnuHangMacCount("--");
                     onuInfo.setLoopPort("--");
                     onuInfo.setPortStatus("--");
+                    SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
                     continue;
                 }
                 if("1".equals(status)){
