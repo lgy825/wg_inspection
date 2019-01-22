@@ -110,10 +110,6 @@ public class SnmpOperationForONU {
         }
     }
 
-    public static String getONUDistance(String instance, String iRCNETypeID, ObjService options) {
-
-        return null ;
-    }
     //ONU接收到的光功率
     public static String getONUReceivedPower(String instance, String iRCNETypeID, ObjService options) {
 
@@ -172,31 +168,36 @@ public class SnmpOperationForONU {
         }else{
             tableName = "rcEponOnuCtcLoopDetectPortTable";
         }
-        //String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
+        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
         snmpParams.setValue("TableName", tableName);
         snmpParams.setValue("ValueOnly", "true");
         List<String> list=new ArrayList<>();
         String baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
-        String ins = "0";
+        StringBuilder sb = new StringBuilder(instance);
+        String ins = sb.replace(5,7,"000").toString();
         while(true){
             snmpParams.remove("RowSet");
             ObjService rowSet = new ObjService("RowSet");
             rowSet.setValue(baseOID + "." + ins,"");
             snmpParams.addContainedObject(rowSet);
             ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
-            if (!res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+            if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
                 ObjService objService1=res.objectAt("RowSet",0);
                 String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
                 String index=objService1.getStringValue(key);
                 ins=index;
+                if(instance.startsWith(index.substring(0,3))){}
                 if(!key.startsWith(baseOID)){
                     break;
                 }
                 if(index==null || "NULL".equalsIgnoreCase(index)){
                     break;
                 }else{
-                    list.add(index);
+                    String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
+                    list.add(retStr);
                 }
+            }else{
+                break;
             }
         }
         if(list==null){

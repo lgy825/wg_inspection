@@ -90,4 +90,16 @@ public class IfIndexHelper {
 
     }
 
+    /**
+     *
+     * @param portIndex UNI口索引
+     * @return 得到ONU的端口编号
+     */
+    public static String getPortIdFromPortIndex(String portIndex)//zyx add
+    {
+        int uniIndex = Integer.parseInt(portIndex);
+        int portId = uniIndex % 1000;
+        return "" + portId;
+    }
+
 }

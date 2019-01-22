@@ -510,10 +510,16 @@ public class EPONCommonDBUtil {
     }
 
     public  List<ObjService> getONUInstanceOnlineFromDBByOltNeId(String neID) throws Exception {
-        String sql = "SELECT rcnetnode.INDEX_IN_MIB,rcnetype.iRCNETypeID,rcnetnode.IRCNETNODEID from rcnetnode ,rcnetype " +
+        String sql = "SELECT rcnetnode.INDEX_IN_MIB,rcnetype.iRCNETypeID,rcnetnode.IRCNETNODEID,rcnetnode.DISTANCE from rcnetnode ,rcnetype " +
                 "where rcnetype.NE_CATEGORY_ID = '3' and rcnetnode.iRCNETypeID = rcnetype.iRCNETypeID and rcnetnode.MANAGED_URL = '/ne=" + neID+"'";
         List<ObjService> objServices=objServiceToList(selectObject(sql, null), "ONU");
 
+        return objServices;
+    }
+
+    public  List<ObjService> getCardInfoFromDBByOltNeId(String neID) throws Exception {
+        String sql = "SELECT card_id as cardId,INDEX_IN_MIB as inMib from card where IRCNETNODEID==" + neID+"'";
+        List<ObjService> objServices=objServiceToList(selectObject(sql, null), "ONU");
         return objServices;
     }
 
