@@ -205,32 +205,38 @@ public class SnmpOperationForONU {
         snmpParams.setValue("ValueOnly", "true");
         List<String> list=new ArrayList<>();
         String baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
-        StringBuilder sb = new StringBuilder(instance);
-        String ins = sb.replace(5,7,"000").toString();
-        while(true){
-            snmpParams.remove("RowSet");
-            ObjService rowSet = new ObjService("RowSet");
-            rowSet.setValue(baseOID + "." + ins,"");
-            snmpParams.addContainedObject(rowSet);
-            ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
-            if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
-                ObjService objService1=res.objectAt("RowSet",0);
-                String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
-                String index=objService1.getStringValue(key);
-                ins=index;
-                if(instance.startsWith(index.substring(0,3))){}
-                if(!key.startsWith(baseOID)){
-                    break;
-                }
-                if(index==null || "NULL".equalsIgnoreCase(index)){
-                    break;
+        //StringBuilder sb = new StringBuilder(instance);
+        String ins = instance;
+        try {
+            while(true){
+                snmpParams.remove("RowSet");
+                ObjService rowSet = new ObjService("RowSet");
+                rowSet.setValue(baseOID + "." + ins,"");
+                snmpParams.addContainedObject(rowSet);
+                ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
+                if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+                    ObjService objService1=res.objectAt("RowSet",0);
+                    String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
+                    String index=objService1.getStringValue(key);
+                    ins=index;
+                    if(!key.startsWith(baseOID)){
+                        break;
+                    }
+                    if(instance.startsWith(index.substring(0,3))){
+                        break;
+                    }
+                    if(index==null || "NULL".equalsIgnoreCase(index)){
+                        break;
+                    }else{
+                        String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
+                        list.add(retStr);
+                    }
                 }else{
-                    String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
-                    list.add(retStr);
+                    break;
                 }
-            }else{
-                break;
             }
+        } catch (Exception e) {
+           e.printStackTrace();
         }
         if(list==null){
             return "--";
