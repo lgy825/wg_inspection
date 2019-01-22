@@ -39,9 +39,8 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 String distance=objServices.get(i).getStringValue("DISTANCE");
                 //Boolean aBoolean = IfIndexHelperV2.isNewOnuIndex(instance);
 
-                onuInfo.setIrcnetnodeid(IRCNETNODEID);
-                onuInfo.setDistance(distance);
                 onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
+                onuInfo.setDistance(distance);
 
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
