@@ -5,7 +5,7 @@ package com.raisecom.bean;
  */
 public class ONUInfo {
 
-    private String Ircnetnodeid;//网元id
+    private Integer Ircnetnodeid;//网元id
     private String status;//状态
     private String lastDownCause;//上一次离线原因
     private String distance;//距离
@@ -28,11 +28,11 @@ public class ONUInfo {
                 '}';
     }
 
-    public String getIrcnetnodeid() {
+    public Integer getIrcnetnodeid() {
         return Ircnetnodeid;
     }
 
-    public void setIrcnetnodeid(String ircnetnodeid) {
+    public void setIrcnetnodeid(Integer ircnetnodeid) {
         Ircnetnodeid = ircnetnodeid;
     }
 

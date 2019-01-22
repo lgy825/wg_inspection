@@ -3,6 +3,7 @@ package com.raisecom.util;
 import com.raisecom.adapter.IfIndexHelperGp;
 import com.raisecom.ems.templet.client.util.SnmpUtilities;
 import com.raisecom.ems.templet.server.driver.Driver;
+import com.raisecom.ems.templet.server.snmp.GeneralSnmpOperator;
 import com.raisecom.nms.platform.cnet.ObjService;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class SnmpOperationForONU {
         ObjService snmpParams = options.clone();
         String tableName = "";
         String status = "";
-        if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+        if ("GPON_ONU".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
             tableName = "rcGponONUTable";
         } else {
             tableName = "rcEponONUTable";
@@ -122,47 +123,79 @@ public class SnmpOperationForONU {
         ObjService snmpParams = options.clone();
         String tableName = "";
         String receivedPower = "";
+        ObjService gponresult = new ObjService();
+        //ObjService eponResult = new ObjService();
         if ("GPON_ONU".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+
             tableName = "rcGponOnuPonMngTable";
-            List<String> list = getDeviceInstance(snmpParams, IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
-            for(int i = 0; i < list.size(); i++){
+            List<String> list = getDeviceInstance((ObjService) options.clone(), IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
+            for (int i = 0; i < list.size(); i++) {
                 snmpParams.setValue("ValueOnly", true);
                 snmpParams.setValue("Instance", list.get(i));
-                ObjService result = getMibNodesFromONU(tableName, list.get(i), snmpParams);
-                if (result == null) {
-                    return "";
-                } else {
-                    for (int j = 0; j < result.objectSize("RowSet"); j++) {
-                        receivedPower = result.objectAt("RowSet", j).getStringValue("rcGponOnuPonRxPower");
-                    }
-                    return receivedPower;
+                gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+            }
+            if (gponresult == null) {
+                return "";
+            } else {
+                for (int j = 0; j < gponresult.objectSize("RowSet"); j++) {
+                    receivedPower = gponresult.objectAt("RowSet", j).getStringValue("rcGponOnuPonRxPower");
                 }
+                return receivedPower;
             }
 
         } else {
             tableName = "rcEponTransceiverMonitorTable";
-        }
-
-        ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
-        if (result == null) {
-            return "";
-        } else {
-            for (int i = 0; i < result.objectSize("RowSet"); i++) {
-                if (tableName.equals("rcEponTransceiverMonitorTable")) {
-                    receivedPower = result.objectAt("RowSet", i).getStringValue("rcEponTransceiverMonitorValue");
-
-                } else {
-                    receivedPower = result.objectAt("RowSet", i).getStringValue("rcGponOnuPonRxPower");
+            instance = "5"+"."+instance;
+            ObjService eponResult = getMibNodesFromONU(tableName, instance, snmpParams);
+            if (eponResult == null) {
+                return "";
+            } else {
+                for (int i = 0; i < eponResult.objectSize("RowSet"); i++) {
+                    receivedPower = eponResult.objectAt("RowSet", i).getStringValue("rcEponTransceiverMonitorValue");
                 }
+                return receivedPower;
             }
-            return receivedPower;
         }
-    }
 
+}
+    //ONU下挂MAC 地址数
     public static String getONUHangMacConut(String instance, String iRCNETypeID, ObjService options) {
+        ObjService snmpParams = options.clone();
+        String tableName = "";
+        String hangCount = "";
+        ObjService gponresult = new ObjService();
+        //ObjService eponResult = new ObjService();
+        if ("GPON_ONU".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+            tableName = "rcGponOnuMacAddrTable";
+            List<String> list = getDeviceInstance((ObjService) options.clone(), IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
+            for (int i = 0; i < list.size(); i++) {
+                snmpParams.setValue("ValueOnly", true);
+                snmpParams.setValue("Instance", list.get(i));
+                gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+            }
+            if (gponresult == null) {
+                return "";
+            } else {
+                for (int j = 0; j < gponresult.objectSize("RowSet"); j++) {
+                    hangCount = gponresult.objectAt("RowSet", j).getStringValue("rcGponOnuMacAddrCount");
+                }
+                return hangCount;
+            }
+
+        } else {
+            tableName = "rcEponOnuMacStatTable";
+            ObjService eponResult = getMibNodesFromONU(tableName, instance, snmpParams);
+            if (eponResult == null) {
+                return "";
+            } else {
+                for (int i = 0; i < eponResult.objectSize("RowSet"); i++) {
+                    hangCount = eponResult.objectAt("RowSet", i).getStringValue("rcEponOnuMacNum");
+                }
+                return hangCount;
+            }
+        }
 
 
-        return null;
     }
 
     public static String getONULoopPort(String instance, String iRCNETypeID, ObjService options) {
@@ -186,6 +219,8 @@ public class SnmpOperationForONU {
             params.remove("RowSet");
             ObjService rowset = new ObjService("RowSet");
             rowset.setValue(oid + "." + instance, "");
+
+
             params.addContainedObject(rowset);
             result = SnmpUtilities.GeneralSnmpOperation(params, "snmpGetNext");
             if(!result.getStringValue("ErrCode").equalsIgnoreCase("0")){

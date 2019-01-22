@@ -131,9 +131,11 @@
 		</MibNode>
 	</MibTable>
 	<!--liujs add -->
+	<!--OLT 主备倒换次数-->
 	<MibTable Name="rcHighAvailabilityTable" Type = "Table">
 		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
 	</MibTable>
+
 	<MibTable Name="rcPortIsolateTable" Type = "Table">
 		<MibNode Logic="rcPortIsolateGroupId" Physics="rcPortIsolateGroupId"></MibNode>
 		<MibNode Logic="rcPortIsolateGroupPortList" Physics="rcPortIsolateGroupPortList">
@@ -172,8 +174,9 @@
 		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
 		<MibNode Logic="rcEponONUOfflineReason" Physics="rcEponONUOfflineReason"/>
-	</MibTable>
 
+	</MibTable>
+	<!--上次掉线原因-->
 	<MibTable Name = "rcCardProtectTable" Type = "Table">
 		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcHighAvailabilityIndex"/>
 		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	                  Physics = "rcHighAvailabilityMajorSlot" ModifyDisp = "false"/>
@@ -197,13 +200,34 @@
 		<MibNode Logic = "raisecomTotalMemoryV2" 	                      Physics = "rcMemoryTotoalMemory" Unit="B"/>
 		<MibNode Logic = "raisecomAvailableMemoryV2" 	                      Physics = "rcMemoryAvailableMemory" Unit="B"/>
 	</MibTable>
+	<!--GPON ONU 工作状态、离线原因-->
 	<MibTable Name="rcGponONUTable">
 		<MibNode Logic="rcGponONUIndex" Physics="rcGponONUIndex"/>
 		<MibNode Logic="rcGponONUWorkStatus" Physics="rcGponONUWorkStatus"/>
 		<MibNode Logic="rcGponONUOfflineReason" Physics="rcGponONUOfflineReason"/>
+		<MibNode Logic="rcGponONURegisterDistance" Physics="rcGponONURegisterDistance"/>
 	</MibTable>
 
-
+	<!--ONU下挂 Mac地址数-->
+	<MibTable Name="rcGponOnuMacAddrTable">
+		<MibNode Logic="rcGponOnuEthPortIndex"        Physics="rcGponOnuEthPortIndex" />
+		<MibNode Logic="rcGponOnuMacAddrList"         Physics="rcGponOnuMacAddrList"/>
+		<MibNode Logic="rcGponOnuMacAddrCount"        Physics="rcGponOnuMacAddrCount"/>
+	</MibTable>
+	<MibTable Name = "rcEponOnuMacStatTable" Type = "Table">
+		<MibNode Logic = "rcEponOnuDevIndex" 		  Physics = "rcEponOnuDevIndex" />
+		<MibNode Logic = "rcEponOnuMacNum" 	          Physics = "rcEponOnuMacNum"  />
+	</MibTable>
+	<!--ONU接收到的光功率-->
+	<MibTable Name = "rcGponOnuPonMngTable" Type = "Table"   LabelWidth="350" >
+		<MibNode Logic="rcGponOnuPonPortIndex"                 Physics="rcGponOnuPonPortIndex">
+		</MibNode>
+		<MibNode Logic = "rcGponOnuPonRxPower"			Physics = "rcGponOnuPonRxPower" />
+	</MibTable>
+	<MibTable Name="rcEponTransceiverMonitorTable">
+		<MibNode Logic="rcEponTransceiverIndex" Physics="rcEponTransceiverIndex"/>
+		<MibNode Logic="rcEponTransceiverMonitorValue" Physics="rcEponTransceiverMonitorValue"/>
+	</MibTable>
 
 	<!--liujs add end-->
 </MIB>

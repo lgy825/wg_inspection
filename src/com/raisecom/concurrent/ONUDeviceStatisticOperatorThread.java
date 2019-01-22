@@ -70,10 +70,18 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 onuInfo.setDistance(processResult(distance));
                 //4.ONU接收光功率
                 String receivedPower = SnmpOperationForONU.getONUReceivedPower(instance,iRCNETypeID,options);
-                onuInfo.setReceivedPower(processResult(receivedPower));
+                if(receivedPower == null || "NULL".equals(receivedPower)){
+                    onuInfo.setReceivedPower("--");
+                }else {
+                    onuInfo.setReceivedPower(processResult(receivedPower));
+                }
                 //5.ONU下挂 mac地址数
                 String onuHangMacCount = SnmpOperationForONU.getONUHangMacConut(instance,iRCNETypeID,options);
-                onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
+                if(onuHangMacCount == null || "NULL".equals(onuHangMacCount)){
+                    onuInfo.setOnuHangMacCount("--");
+                }else {
+                    onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
+                }
                 //6.环路端口
                 String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
                 onuInfo.setLoopPort(processResult(loopPort));

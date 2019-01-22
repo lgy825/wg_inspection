@@ -2,6 +2,7 @@ package com.raisecom.exportExcelDemo;
 
 
 import com.raisecom.bean.OLTInfo;
+import com.raisecom.bean.ONUInfo;
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
@@ -29,12 +30,137 @@ public class Main {
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
             FromDbToExcel("2070");
+            FromDBToONUExcel("2007");
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");
         }
     }
-    //从数据库导出Excel
+    //ONU到处Excel
+    public static void FromDBToONUExcel(String str){
+        try {
+            List<ONUInfo> list = ONUInfoService.getAllByDb(str);
+            // 创建可写入的Excel工作簿
+            WritableWorkbook wwb = null;
+
+            //文件名为时间精确到秒
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+            String dataStr = sdf.format(new Date());
+
+            String fileName = "D://" + dataStr + ".xls";
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            //以fileName为文件名来创建一个Workbook
+            wwb = Workbook.createWorkbook(file);
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+
+            WritableSheet ws = wwb.createSheet("Test Sheet 1", 0);
+            //设置列宽默认宽度
+            ws.getSettings().setDefaultColumnWidth(15);
+            //设置指定列的宽度
+            ws.setColumnView(9,35);
+            ws.setColumnView(13,35);
+            ws.setColumnView(14,40);
+            ws.setColumnView(15,65);
+            //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
+            WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
+            //定义格式
+            WritableCellFormat formatTitle = new WritableCellFormat(fontTitle);
+            //表头设置背景为灰色
+            formatTitle.setBackground(Colour.GRAY_25);
+            //自动换行
+            formatTitle.setWrap(true);
+            //formatTitle.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
+            //查询数据库中所有的数据
+
+            //插入表头。行号，默认从0开始，列号从0开始，
+            Label friendlyName = new Label(0, 0, ResourceManager.getString(bundle,"Friendly_Name"),formatTitle);
+            Label typeId = new Label(1, 0, ResourceManager.getString(bundle,"type_Id"),formatTitle);
+            Label address = new Label(2, 0, ResourceManager.getString(bundle,"Address"),formatTitle);
+            Label smc = new Label(3, 0, ResourceManager.getString(bundle,"SMC"),formatTitle);
+            Label ram = new Label(4, 0, ResourceManager.getString(bundle,"RAM"),formatTitle);
+            Label cpu = new Label(5, 0, ResourceManager.getString(bundle,"CPU"),formatTitle);
+            Label status = new Label(6, 0, ResourceManager.getString(bundle,"status"),formatTitle);
+            Label last_down_cause = new Label(7, 0, ResourceManager.getString(bundle,"last_down_cause"),formatTitle);
+            Label distance = new Label(8, 0, ResourceManager.getString(bundle,"distance"),formatTitle);
+            Label received_power = new Label(9, 0, ResourceManager.getString(bundle,"received_power"),formatTitle);
+            Label hang_mac_count = new Label(10, 0, ResourceManager.getString(bundle,"hang_mac_count"),formatTitle);
+            Label loop_port = new Label(11, 0, ResourceManager.getString(bundle,"loop_port"),formatTitle);
+            Label port_status = new Label(12, 0, ResourceManager.getString(bundle,"port_status"),formatTitle);
+
+
+
+            //将Label 添加到工作表
+            ws.addCell(friendlyName);
+            ws.addCell(typeId);
+            ws.addCell(address);
+            ws.addCell(smc);
+            ws.addCell(ram);
+            ws.addCell(cpu);
+            ws.addCell(status);
+            ws.addCell(last_down_cause);
+            ws.addCell(distance);
+            ws.addCell(received_power);
+            ws.addCell(hang_mac_count);
+            ws.addCell(loop_port);
+            ws.addCell(port_status);
+
+
+            //将数据库数据加入工作表
+
+            WritableCellFormat formatTitle1 = new WritableCellFormat(fontTitle);
+
+            formatTitle1.setWrap(true);
+            //formatTitle1.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle1.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
+            for (int i = 0; i < list.size(); i++) {
+
+//                Label friendlyName_i = new Label(0, i+1, list.get(i).getFriendly_name(),formatTitle1);
+//                Label typeId_i = new Label(1, i+1, list.get(i).getIrcnetypeid(),formatTitle1);
+//                Label address_i = new Label(2, i+1, list.get(i).getIpaddress(),formatTitle1);
+//                Label smc_i = new Label(3, i+1,list.get(i).getSmc(),formatTitle1);
+//                Label ram_i = new Label(4, i+1,list.get(i).getRam(),formatTitle1);
+//                Label cpu_i = new Label(5, i+1,list.get(i).getCpu(),formatTitle1);
+                Label status_i = new Label(6, i+1,list.get(i).getStatus(),formatTitle1);
+                Label last_down_cause_i = new Label(7, i+1,list.get(i).getLastDownCause(),formatTitle1);
+                Label distance_i = new Label(8, i+1,list.get(i).getDistance(),formatTitle1);
+                Label received_power_i = new Label(9, i+1,list.get(i).getReceivedPower(),formatTitle1);
+                Label hang_mac_count_i = new Label(10, i+1,list.get(i).getOnuHangMacCount(),formatTitle1);
+                Label loop_port_i = new Label(11, i+1,list.get(i).getLoopPort(),formatTitle1);
+                Label port_status_i = new Label(12, i+1,list.get(i).getPortStatus(),formatTitle1);
+
+//                ws.addCell(friendlyName_i);
+//                ws.addCell(typeId_i);
+//                ws.addCell(address_i);
+//                ws.addCell(smc_i);
+//                ws.addCell(ram_i);
+//                ws.addCell(cpu_i);
+                ws.addCell(status_i);
+                ws.addCell(last_down_cause_i);
+                ws.addCell(distance_i);
+                ws.addCell(received_power_i);
+                ws.addCell(hang_mac_count_i);
+                ws.addCell(loop_port_i);
+                ws.addCell(port_status_i);
+
+
+            }
+
+
+            //写进文档
+            wwb.write();
+            // 关闭Excel工作簿对象
+            System.out.println("数据导出成功!");
+            wwb.close();
+        }catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+        }
+    }
+    //从数据库导出OLT Excel
     public static void FromDbToExcel(String str) {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
