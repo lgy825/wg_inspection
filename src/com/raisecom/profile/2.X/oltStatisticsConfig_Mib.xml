@@ -209,10 +209,15 @@
 	</MibTable>
 
 	<MibTable Name = "rcEponOnuCtcLoopDetectPortTable" Type = "Table">
-		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex"  Access = "NOACCESS" OrderType = "Integer" MibNodeAdapter ="com.raisecom.ems.epon.server.adapter.EthUniAdapter" isHide = "tru" />
+		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex"  />
 		<MibNode Logic = "rcEponOnuCtcLoopDetectPortEnable" 	    Physics = "rcEponOnuCtcLoopDetectPortEnable" />
 	</MibTable>
 
+	<MibTable Name="rcEponOnuCtcEthPortTable" Type="Table">
+		<MibNode Logic="rcEponOnuEthPortIndex" Physics="rcEponOnuEthPortIndex"/>
+		<MibNode Logic="rcEponOnuCtcEthPortAdminState" Physics="rcEponOnuCtcEthPortAdminState"/>
+		<MibNode Logic="rcEponOnuEthPortDuplexSpeedSet" Physics="rcEponOnuEthPortDuplexSpeedSet"/>
+	</MibTable>
 
 	<!--liujs add end-->
 </MIB>

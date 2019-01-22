@@ -3,12 +3,10 @@ package com.raisecom.util;
 import com.raisecom.adapter.IfIndexHelperGp;
 import com.raisecom.ems.templet.client.util.SnmpUtilities;
 import com.raisecom.ems.templet.server.driver.Driver;
+import com.raisecom.ems.templet.server.snmp.GeneralSnmpOperator;
 import com.raisecom.nms.platform.cnet.ObjService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ligy-008494 on 2019/1/17.
@@ -169,26 +167,50 @@ public class SnmpOperationForONU {
         ObjService snmpParams = options.clone();
         String tableName = "";
         String loopPort="";
-        if ("EPON_ONU".equals(iRCNETypeID) || "UNKNOWN(E)".equals(iRCNETypeID)) {
-            tableName = "rcEponOnuCtcLoopDetectPortTable";
-        } else if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+       if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
             tableName = " rcGponOnuLoopbackDetectionPortTable";
+        }else{
+            tableName = "rcEponOnuCtcLoopDetectPortTable";
         }
-        snmpParams.setValue("ValueOnly", true);
-        //ObjService result = getMibNodesFromONU(tableName, instance, snmpParams);
-        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
+        //String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
         snmpParams.setValue("TableName", tableName);
         snmpParams.setValue("ValueOnly", "true");
-        snmpParams.setValue("Instance", instance);
-        ObjService objService=null;
+        List<String> list=new ArrayList<>();
+        String baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
+        String ins = "0";
         while(true){
-            objService=SnmpUtilities.GeneralSnmpOperation(snmpParams, "snmpGetNext");
-            if (!objService.getStringValue("ErrCode").equalsIgnoreCase("0")) {
-                break;
+            snmpParams.remove("RowSet");
+            ObjService rowSet = new ObjService("RowSet");
+            rowSet.setValue(baseOID + "." + ins,"");
+            snmpParams.addContainedObject(rowSet);
+            ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
+            if (!res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+                ObjService objService1=res.objectAt("RowSet",0);
+                String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
+                String index=objService1.getStringValue(key);
+                ins=index;
+                if(!key.startsWith(baseOID)){
+                    break;
+                }
+                if(index==null || "NULL".equalsIgnoreCase(index)){
+                    break;
+                }else{
+                    list.add(index);
+                }
             }
         }
-        return null;
-
+        if(list==null){
+            return "--";
+        }else{
+            String str="";
+            for(int i=0;i<list.size();i++){
+                str+=list.get(i);
+                if(i<list.size()-1){
+                    str+=",";
+                }
+            }
+            return str;
+        }
     }
 
     public static String getONUPortStatus(String instance, String iRCNETypeID, ObjService options) {
