@@ -2,6 +2,9 @@ package com.raisecom.util;
 
 import com.raisecom.ems.platform.util.ResourceUrlParser;
 
+import static com.raisecom.adapter.IfIndexHelperGp.getOnuIdFromPortIndex;
+import static com.raisecom.adapter.IfIndexHelperGp.getPonId;
+
 /**
  * Created by ligy-008494 on 2018/11/13.
  */
@@ -100,6 +103,37 @@ public class IfIndexHelper {
         int uniIndex = Integer.parseInt(portIndex);
         int portId = uniIndex % 1000;
         return "" + portId;
+    }
+
+    public static String getPortDisplayName(String index)
+    {
+        String displayName = "";
+        String onuInstance = getOnuInstanceFromPortIndex(index);
+        String slotId = getSlotId(onuInstance);
+        String ponPortId = getPortId(onuInstance);
+        String onuId = getOnuId(onuInstance);
+        String portId = getPortIdFromPortIndex(index);
+        displayName += slotId + "/" + ponPortId + "/" + onuId + "/" + portId;
+
+        return displayName;
+    }
+
+    public static String getOnuInstanceFromPortIndex(String portIndex)//zyx add
+    {
+
+        int uniIndex = Integer.parseInt(portIndex);
+        int uniId = Integer.parseInt(IfIndexHelper.getPortIdFromPortIndex(portIndex));
+        int onuId = Integer.parseInt(IfIndexHelper.getOnuIdFromPortIndex(portIndex));
+        int onuIndex = (uniIndex - uniId) - onuId * 1000 + onuId;
+        return onuIndex + "";
+
+    }
+    public static String getOnuIdFromPortIndex(String portIndex)//zyx add
+    {
+        int uniIndex = Integer.parseInt(portIndex);
+        int onuId = uniIndex % 100000;
+        onuId = onuId / 1000;
+        return "" + onuId;
     }
 
 }
