@@ -63,7 +63,7 @@ public class BatDispectMode implements DispectMode {
 
             boolean isSuccessful=deviceTask.processStatistics(list,"ONU");
             if(isSuccessful){
-                Main.FromDbToExcel("2070");
+                Main.FromDbToExcel("2007");
             }else{
                 System.out.print("巡检失败");
             }

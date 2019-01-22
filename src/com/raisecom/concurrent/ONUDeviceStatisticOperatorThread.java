@@ -41,6 +41,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
 
                 onuInfo.setIrcnetnodeid(IRCNETNODEID);
                 onuInfo.setDistance(distance);
+                onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
 
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
@@ -68,10 +69,18 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
 
                 //4.ONU接收光功率
                 String receivedPower = SnmpOperationForONU.getONUReceivedPower(instance,iRCNETypeID,options);
-                onuInfo.setReceivedPower(processResult(receivedPower));
+                if(receivedPower == null || "NULL".equals(receivedPower)){
+                    onuInfo.setReceivedPower("--");
+                }else {
+                    onuInfo.setReceivedPower(processResult(receivedPower));
+                }
                 //5.ONU下挂 mac地址数
                 String onuHangMacCount = SnmpOperationForONU.getONUHangMacConut(instance,iRCNETypeID,options);
-                onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
+                if(onuHangMacCount == null || "NULL".equals(onuHangMacCount)){
+                    onuInfo.setOnuHangMacCount("--");
+                }else {
+                    onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
+                }
                 //6.环路端口
                 String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
                 onuInfo.setLoopPort(processResult(loopPort));
@@ -91,7 +100,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
         return null;
     }
     public  String processResult(String s) {
-        if(s==null||"".equals(s)||"null".equalsIgnoreCase(s)){
+        if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){
             return "NONE";
         }else{
             return s;
