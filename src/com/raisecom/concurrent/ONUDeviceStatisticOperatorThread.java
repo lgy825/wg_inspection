@@ -38,7 +38,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 String iRCNETypeID = objServices.get(i).getStringValue("iRCNETypeID");
                 //Boolean aBoolean = IfIndexHelperV2.isNewOnuIndex(instance);
 
-                onuInfo.setIrcnetnodeid(IRCNETNODEID);
+                onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
 
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
@@ -99,7 +99,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
         return null;
     }
     public  String processResult(String s) {
-        if(s==null||"".equals(s)||"null".equalsIgnoreCase(s)){
+        if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){
             return "NONE";
         }else{
             return s;

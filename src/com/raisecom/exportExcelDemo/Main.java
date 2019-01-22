@@ -29,14 +29,21 @@ public class Main {
     public static void main(String[] args){
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
-            FromDbToExcel("2070");
+            //FromDbToExcel("2070");
             FromDBToONUExcel("2007");
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");
         }
     }
-    //ONU到处Excel
+
+    //板卡导出Excel
+    public static void FromDBToCardExcel(String str){
+
+    }
+
+
+    //ONU导出Excel
     public static void FromDBToONUExcel(String str){
         try {
             List<ONUInfo> list = ONUInfoService.getAllByDb(str);
@@ -77,12 +84,13 @@ public class Main {
             //查询数据库中所有的数据
 
             //插入表头。行号，默认从0开始，列号从0开始，
-            Label friendlyName = new Label(0, 0, ResourceManager.getString(bundle,"Friendly_Name"),formatTitle);
-            Label typeId = new Label(1, 0, ResourceManager.getString(bundle,"type_Id"),formatTitle);
-            Label address = new Label(2, 0, ResourceManager.getString(bundle,"Address"),formatTitle);
-            Label smc = new Label(3, 0, ResourceManager.getString(bundle,"SMC"),formatTitle);
-            Label ram = new Label(4, 0, ResourceManager.getString(bundle,"RAM"),formatTitle);
-            Label cpu = new Label(5, 0, ResourceManager.getString(bundle,"CPU"),formatTitle);
+            Label ircnetnode = new Label(0, 0, ResourceManager.getString(bundle,"Friendly_Name"),formatTitle);
+            Label ipaddress = new Label(1, 0, ResourceManager.getString(bundle,"Address"),formatTitle);
+            Label friendly_name = new Label(2, 0, ResourceManager.getString(bundle,"FRIENDLY_NAME"),formatTitle);
+            Label subnetype = new Label(3, 0, ResourceManager.getString(bundle,"Model"),formatTitle);
+            Label ver = new Label(4, 0, ResourceManager.getString(bundle,"Ver"),formatTitle);
+            Label macaddress = new Label(5, 0, ResourceManager.getString(bundle,"MACAddress"),formatTitle);
+
             Label status = new Label(6, 0, ResourceManager.getString(bundle,"status"),formatTitle);
             Label last_down_cause = new Label(7, 0, ResourceManager.getString(bundle,"last_down_cause"),formatTitle);
             Label distance = new Label(8, 0, ResourceManager.getString(bundle,"distance"),formatTitle);
@@ -94,12 +102,12 @@ public class Main {
 
 
             //将Label 添加到工作表
-            ws.addCell(friendlyName);
-            ws.addCell(typeId);
-            ws.addCell(address);
-            ws.addCell(smc);
-            ws.addCell(ram);
-            ws.addCell(cpu);
+            ws.addCell(ircnetnode);
+            ws.addCell(ipaddress);
+            ws.addCell(friendly_name);
+            ws.addCell(subnetype);
+            ws.addCell(ver);
+            ws.addCell(macaddress);
             ws.addCell(status);
             ws.addCell(last_down_cause);
             ws.addCell(distance);
@@ -118,12 +126,12 @@ public class Main {
             formatTitle1.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
             for (int i = 0; i < list.size(); i++) {
 
-//                Label friendlyName_i = new Label(0, i+1, list.get(i).getFriendly_name(),formatTitle1);
-//                Label typeId_i = new Label(1, i+1, list.get(i).getIrcnetypeid(),formatTitle1);
-//                Label address_i = new Label(2, i+1, list.get(i).getIpaddress(),formatTitle1);
-//                Label smc_i = new Label(3, i+1,list.get(i).getSmc(),formatTitle1);
-//                Label ram_i = new Label(4, i+1,list.get(i).getRam(),formatTitle1);
-//                Label cpu_i = new Label(5, i+1,list.get(i).getCpu(),formatTitle1);
+                Label ircnetnode_i = new Label(0, i+1, list.get(i).getIrcnetnodeid().toString(),formatTitle1);
+                Label ipaddress_i = new Label(1, i+1, list.get(i).getIpaddress(),formatTitle1);
+                Label friendly_name_i = new Label(2, i+1, list.get(i).getFriendlyName(),formatTitle1);
+                Label subnetype_i = new Label(3, i+1,list.get(i).getSubnetype(),formatTitle1);
+                Label ver_i = new Label(4, i+1,list.get(i).getSoftware(),formatTitle1);
+                Label macaddress_i = new Label(5, i+1,list.get(i).getMacaddress(),formatTitle1);
                 Label status_i = new Label(6, i+1,list.get(i).getStatus(),formatTitle1);
                 Label last_down_cause_i = new Label(7, i+1,list.get(i).getLastDownCause(),formatTitle1);
                 Label distance_i = new Label(8, i+1,list.get(i).getDistance(),formatTitle1);
@@ -132,12 +140,12 @@ public class Main {
                 Label loop_port_i = new Label(11, i+1,list.get(i).getLoopPort(),formatTitle1);
                 Label port_status_i = new Label(12, i+1,list.get(i).getPortStatus(),formatTitle1);
 
-//                ws.addCell(friendlyName_i);
-//                ws.addCell(typeId_i);
-//                ws.addCell(address_i);
-//                ws.addCell(smc_i);
-//                ws.addCell(ram_i);
-//                ws.addCell(cpu_i);
+                ws.addCell(ircnetnode_i);
+                ws.addCell(ipaddress_i);
+                ws.addCell(friendly_name_i);
+                ws.addCell(subnetype_i);
+                ws.addCell(ver_i);
+                ws.addCell(macaddress_i);
                 ws.addCell(status_i);
                 ws.addCell(last_down_cause_i);
                 ws.addCell(distance_i);

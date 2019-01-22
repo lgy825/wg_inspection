@@ -41,11 +41,6 @@ public class OLTInfoService {
         ResultSet result = pstmt.executeQuery();
         ObjService countResult = EPONCommonDBUtil.executeQuery(onuCountsql);
         ObjService onlineResult = EPONCommonDBUtil.executeQuery(onlineCountsql);
-        ObjService offlineResult = EPONCommonDBUtil.executeQuery(offlineCountsql);
-        Vector<ObjService> countlist = countResult.getAllChildObjects();
-        Vector<ObjService> onlinelist = onlineResult.getAllChildObjects();
-        Vector<ObjService> offlinelist = offlineResult.getAllChildObjects();
-
 
         //连接数据库 将数据放入List中
         try {
@@ -70,41 +65,41 @@ public class OLTInfoService {
                 oltInfo.setReboot_count(result.getInt("REBOOT_COUNT"));
                 oltInfo.setOlt_power(result.getString("OLT_POWER"));
                 oltInfo.setPort_is_solate(result.getString("PORT_IS_SOLATE"));
-                String eponOnCount="0";
-                String gponOnCount="0";
-                String ungOnCount="0";
-                String uneOnCount="0";
-                String eponOnuCount="0";
-                String gponOnuCount="0";
-                String gUnknown="0";
-                String eUnKnown="0";
-                for(int i=0;i<countResult.objectSize("row");i++){
+                String eponOnCount = "0";
+                String gponOnCount = "0";
+                String ungOnCount = "0";
+                String uneOnCount = "0";
+                String eponOnuCount = "0";
+                String gponOnuCount = "0";
+                String gUnknown = "0";
+                String eUnKnown = "0";
+                for(int i = 0;i < countResult.objectSize("row");i ++){
 
-                    ObjService objService=countResult.objectAt("row",i);
-                    String iRCNETypeID=objService.getStringValue("iRCNETypeID");
+                    ObjService objService = countResult.objectAt("row",i);
+                    String iRCNETypeID = objService.getStringValue("iRCNETypeID");
                     if("EPON_ONU".equals(iRCNETypeID)){
-                        eponOnuCount=objService.getStringValue("Device_Number");
+                        eponOnuCount = objService.getStringValue("Device_Number");
                     }else if("GPON_ONU".equals(iRCNETypeID)){
-                        gponOnuCount=objService.getStringValue("Device_Number");
+                        gponOnuCount = objService.getStringValue("Device_Number");
                     }else if("UNKNOWN".equals(iRCNETypeID)){
-                        gUnknown=objService.getStringValue("Device_Number");
+                        gUnknown = objService.getStringValue("Device_Number");
                     }else{
-                        eUnKnown=objService.getStringValue("Device_Number");
+                        eUnKnown = objService.getStringValue("Device_Number");
                     }
 
-                    int count=onlineResult.objectSize("row");
+                    int count = onlineResult.objectSize("row");
 
                     if(i<count){
-                        ObjService onlineOBj=onlineResult.objectAt("row",i);
-                        String deviceType=onlineOBj.getStringValue("iRCNETypeID");
+                        ObjService onlineOBj = onlineResult.objectAt("row",i);
+                        String deviceType = onlineOBj.getStringValue("iRCNETypeID");
                         if("EPON_ONU".equals(deviceType)){
-                            eponOnCount=onlineOBj.getStringValue("Online_Number");
+                            eponOnCount = onlineOBj.getStringValue("Online_Number");
                         }else if("GPON_ONU".equals(deviceType)){
-                            gponOnCount=onlineOBj.getStringValue("Online_Number");
+                            gponOnCount = onlineOBj.getStringValue("Online_Number");
                         }else if("UNKNOWN".equals(deviceType)){
-                            ungOnCount=onlineOBj.getStringValue("Online_Number");
+                            ungOnCount = onlineOBj.getStringValue("Online_Number");
                         }else{
-                            uneOnCount=onlineOBj.getStringValue("Online_Number");
+                            uneOnCount = onlineOBj.getStringValue("Online_Number");
                         }
                     }
                 }
