@@ -31,8 +31,6 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
             options.setValue("ConfigFile",configFile);
             options.setValue("ver",ver);
             //取出在线的ONU的信息
-
-
             List<ObjService> objServices = EPONCommonDBUtil.getInstance().getONUInstanceOnlineFromDBByOltNeId(oltId);
             for(int i = 0;i < objServices.size();i ++){
                 String instance = objServices.get(i).getStringValue("INDEX_IN_MIB");

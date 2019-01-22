@@ -131,11 +131,9 @@
 		</MibNode>
 	</MibTable>
 	<!--liujs add -->
-	<!--OLT 主备倒换次数-->
 	<MibTable Name="rcHighAvailabilityTable" Type = "Table">
 		<MibNode Logic="rcHighAvailabilitySwitchedCount" Physics="rcHighAvailabilitySwitchedCount"></MibNode>
 	</MibTable>
-
 	<MibTable Name="rcPortIsolateTable" Type = "Table">
 		<MibNode Logic="rcPortIsolateGroupId" Physics="rcPortIsolateGroupId"></MibNode>
 		<MibNode Logic="rcPortIsolateGroupPortList" Physics="rcPortIsolateGroupPortList">
@@ -174,9 +172,8 @@
 		<MibNode Logic="rcEponONUIndex" Physics="rcEponONUIndex"/>
 		<MibNode Logic="rcEponONUWorkStatus" Physics="rcEponONUWorkStatus"/>
 		<MibNode Logic="rcEponONUOfflineReason" Physics="rcEponONUOfflineReason"/>
-
 	</MibTable>
-	<!--上次掉线原因-->
+
 	<MibTable Name = "rcCardProtectTable" Type = "Table">
 		<MibNode Logic = "rcCardProtectGroupIndex" 	                      Physics = "rcHighAvailabilityIndex"/>
 		<MibNode Logic = "rcCardProtectGroupMajorCardSlotIndex" 	                  Physics = "rcHighAvailabilityMajorSlot" ModifyDisp = "false"/>
@@ -227,6 +224,22 @@
 	<MibTable Name="rcEponTransceiverMonitorTable">
 		<MibNode Logic="rcEponTransceiverIndex" Physics="rcEponTransceiverIndex"/>
 		<MibNode Logic="rcEponTransceiverMonitorValue" Physics="rcEponTransceiverMonitorValue"/>
+	</MibTable>
+
+	<MibTable Name="rcGponOnuLoopbackDetectionPortTable" Type="Table">
+		<MibNode Logic="rcGponOnuLoopbackDetectionPortIndex" Physics="rcGponOnuLoopbackDetectionPortIndex" />
+		<MibNode Logic = "rcGponOnuLoopbackDetectionPortEnable" 	    Physics = "rcGponOnuLoopbackDetectionPortEnable" />
+	</MibTable>
+
+	<MibTable Name = "rcEponOnuCtcLoopDetectPortTable" Type = "Table">
+		<MibNode Logic = "rcEponOnuLoopDetectPortIndex"  			         Physics = "rcEponOnuLoopDetectPortIndex"  />
+		<MibNode Logic = "rcEponOnuCtcLoopDetectPortEnable" 	    Physics = "rcEponOnuCtcLoopDetectPortEnable" />
+	</MibTable>
+
+	<MibTable Name="rcEponOnuCtcEthPortTable" Type="Table">
+		<MibNode Logic="rcEponOnuEthPortIndex" Physics="rcEponOnuEthPortIndex"/>
+		<MibNode Logic="rcEponOnuCtcEthPortAdminState" Physics="rcEponOnuCtcEthPortAdminState"/>
+		<MibNode Logic="rcEponOnuEthPortDuplexSpeedSet" Physics="rcEponOnuEthPortDuplexSpeedSet"/>
 	</MibTable>
 
 	<!--liujs add end-->

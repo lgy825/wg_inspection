@@ -6,10 +6,7 @@ import com.raisecom.ems.templet.server.driver.Driver;
 import com.raisecom.ems.templet.server.snmp.GeneralSnmpOperator;
 import com.raisecom.nms.platform.cnet.ObjService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ligy-008494 on 2019/1/17.
@@ -198,13 +195,57 @@ public class SnmpOperationForONU {
 
     }
 
-    public static String getONULoopPort(String instance, String iRCNETypeID, ObjService options) {
-
-        return null;
+    public static String getONULoopPort(String onuInstance, String iRCNETypeID, ObjService options) {
+        ObjService snmpParams = options.clone();
+        String tableName = "";
+        String loopPort="";
+       if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
+            tableName = " rcGponOnuLoopbackDetectionPortTable";
+        }else{
+            tableName = "rcEponOnuCtcLoopDetectPortTable";
+        }
+        //String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
+        snmpParams.setValue("TableName", tableName);
+        snmpParams.setValue("ValueOnly", "true");
+        List<String> list=new ArrayList<>();
+        String baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
+        String ins = "0";
+        while(true){
+            snmpParams.remove("RowSet");
+            ObjService rowSet = new ObjService("RowSet");
+            rowSet.setValue(baseOID + "." + ins,"");
+            snmpParams.addContainedObject(rowSet);
+            ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
+            if (!res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
+                ObjService objService1=res.objectAt("RowSet",0);
+                String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
+                String index=objService1.getStringValue(key);
+                ins=index;
+                if(!key.startsWith(baseOID)){
+                    break;
+                }
+                if(index==null || "NULL".equalsIgnoreCase(index)){
+                    break;
+                }else{
+                    list.add(index);
+                }
+            }
+        }
+        if(list==null){
+            return "--";
+        }else{
+            String str="";
+            for(int i=0;i<list.size();i++){
+                str+=list.get(i);
+                if(i<list.size()-1){
+                    str+=",";
+                }
+            }
+            return str;
+        }
     }
 
     public static String getONUPortStatus(String instance, String iRCNETypeID, ObjService options) {
-
         return null;
     }
     public static List<String> getDeviceInstance(ObjService params, String onuInstance, String oid){
@@ -243,7 +284,7 @@ public class SnmpOperationForONU {
     }
 
     public static String eponOffnlineReason(String lastDownCause) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap();
         String templastDownCause = "";
 
         map.put("1", "unknown");
