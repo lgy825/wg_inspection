@@ -499,7 +499,6 @@ public class EPONCommonDBUtil {
             } catch (SQLException e) {
                 errResult.setErrCode("-1");
                 errResult.setErrDesc(e.toString());
-
                 DBConnectionManager.getInstance().free(conn, pstmt, result);
             }
         } else {

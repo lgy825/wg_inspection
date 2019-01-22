@@ -217,8 +217,7 @@
 	</MibTable>
 	<!--ONU接收到的光功率-->
 	<MibTable Name = "rcGponOnuPonMngTable" Type = "Table"   LabelWidth="350" >
-		<MibNode Logic="rcGponOnuPonPortIndex"                 Physics="rcGponOnuPonPortIndex">
-		</MibNode>
+		<MibNode Logic="rcGponOnuPonPortIndex"                 Physics="rcGponOnuPonPortIndex"/>
 		<MibNode Logic = "rcGponOnuPonRxPower"			Physics = "rcGponOnuPonRxPower" />
 	</MibTable>
 	<MibTable Name="rcEponTransceiverMonitorTable">

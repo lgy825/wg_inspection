@@ -52,6 +52,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                     onuInfo.setOnuHangMacCount("--");
                     onuInfo.setLoopPort("--");
                     onuInfo.setPortStatus("--");
+                    SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
                     continue;
                 }
                 if("1".equals(status)){
@@ -74,7 +75,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                     onuInfo.setReceivedPower(processResult(receivedPower));
                 }
                 //5.ONU下挂 mac地址数
-                String onuHangMacCount = SnmpOperationForONU.getONUHangMacConut(instance,iRCNETypeID,options);
+                 String onuHangMacCount = SnmpOperationForONU.getONUHangMacConut(instance,iRCNETypeID,options);
                 if(onuHangMacCount == null || "NULL".equals(onuHangMacCount)){
                     onuInfo.setOnuHangMacCount("--");
                 }else {
