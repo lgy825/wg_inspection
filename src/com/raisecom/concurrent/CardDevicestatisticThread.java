@@ -25,7 +25,12 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
             String cardId=objService.getStringValue("cardId");
             String inMib=objService.getStringValue("inMib");
 
-            //
+            //cpu的使用率
+
+            //内存的使用率
+            //温度
+            //电压
+
 
         }
         return null;
