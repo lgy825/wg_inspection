@@ -34,7 +34,7 @@ public class SnmpOperationForCard {
             String total=result.objectAt("RowSet", 0).getStringValue("rcMemoryTotoalMemory");
             String available=result.objectAt("RowSet", 0).getStringValue("rcMemoryAvailableMemory");
             String usage="";
-            if((total!=null && !"".equalsIgnoreCase(total))  &&  (available!=null && !"".equalsIgnoreCase(available))  ){
+            if((total!=null && !"NULL".equalsIgnoreCase(total))  &&  (available!=null && !"NULL".equalsIgnoreCase(available))  ){
                 usage=Math.ceil((Integer.parseInt(total)-Integer.parseInt(available))/Integer.parseInt(total)*100)+"";
             }
             return usage;
