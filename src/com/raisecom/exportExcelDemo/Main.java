@@ -67,10 +67,9 @@ public class Main {
             //设置列宽默认宽度
             ws.getSettings().setDefaultColumnWidth(15);
             //设置指定列的宽度
-            ws.setColumnView(9,35);
-            ws.setColumnView(13,35);
-            ws.setColumnView(14,40);
-            ws.setColumnView(15,65);
+            ws.setColumnView(2,25);
+            ws.setColumnView(12,40);
+
             //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
             WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
             //定义格式
