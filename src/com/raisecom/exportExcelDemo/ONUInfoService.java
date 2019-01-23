@@ -7,8 +7,7 @@ import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.util.EPONCommonDBUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by liujs-008398 on 2018-12-28.
@@ -26,26 +25,26 @@ public class ONUInfoService {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet result = pstmt.executeQuery();
         ObjService resultONUInfo = EPONCommonDBUtil.executeQuery(sqlONU);
-
-
+        //缓存数据
+        Vector<ObjService> verctor = resultONUInfo.getAllChildObjects();
+        Map<Integer,ObjService> map = new HashMap();
+        for(ObjService obj : verctor){
+            Integer iRCNENODEID = obj.getIntValue("IRCNETNODEID");
+            map.put(iRCNENODEID,obj);
+        }
 
         //连接数据库 将数据放入List中
         try {
             while (result.next()) {
-
                 ONUInfo onuInfo = new ONUInfo();
                 onuInfo.setIrcnetnodeid(result.getInt("IRCNETNODEID"));
-                for(int i = 0;i < resultONUInfo.objectSize("row"); i ++) {
-                    ObjService objService = resultONUInfo.objectAt("row", i);
-                    Integer iRCNENODEID = objService.getIntValue("IRCNETNODEID");
-                    if(iRCNENODEID.equals(result.getInt("IRCNETNODEID")) || iRCNENODEID == result.getInt("IRCNETNODEID")){
-                        onuInfo.setIpaddress(objService.getStringValue("IPADDRESS"));
-                        onuInfo.setFriendlyName(objService.getStringValue("FRIENDLY_NAME"));
-                        onuInfo.setSubnetype(objService.getStringValue("iRCNETypeID"));
-                        onuInfo.setSoftware(objService.getStringValue("SOFTWARE_VER"));
-                        onuInfo.setMacaddress(objService.getStringValue("MACADDRESS"));
-                        continue;
-                    }
+                if(map.containsKey(result.getInt("IRCNETNODEID"))){
+                    ObjService obj = map.get(result.getInt("IRCNETNODEID"));
+                    onuInfo.setIpaddress(obj.getStringValue("IPADDRESS"));
+                    onuInfo.setFriendlyName(obj.getStringValue("FRIENDLY_NAME"));
+                    onuInfo.setSubnetype(obj.getStringValue("iRCNETypeID"));
+                    onuInfo.setSoftware(obj.getStringValue("SOFTWARE_VER"));
+                    onuInfo.setMacaddress(obj.getStringValue("MACADDRESS"));
                 }
                 onuInfo.setStatus(result.getString("STATUS"));
                 onuInfo.setLastDownCause(result.getString("LAST_DOWN_CAUSE"));

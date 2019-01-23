@@ -87,12 +87,14 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 onuInfo.setPortStatus(processResult(portStatus));
                 //入库
                 SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
+
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return null;
     }
     public  String processResult(String s) {
         if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){
