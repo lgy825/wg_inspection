@@ -20,7 +20,9 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
     public Boolean call() throws Exception {
         CardInfo cardInfo=new CardInfo();
         String oltId = objService.getStringValue("IRCNETNODEID");
+        String configFile=objService.getStringValue("ConfigFile");
         ObjService options = SnmpParamsHelper.getOption(oltId);
+        options.setValue("ConfigFile",configFile);
         //获取板卡相关信息
         List<ObjService> objServices = EPONCommonDBUtil.getInstance().getCardInfoFromDBByOltNeId(oltId);
         for(ObjService objService:objServices){
@@ -40,7 +42,7 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
             cardInfo.setRam(processResult(ram));
             //温度
             String cardTemperature = SnmpOperationUtil.getTemperature4OLT(options);
-
+            cardInfo.setTemperature(cardTemperature);
             //入库
             SqlMappingCardUtil.insertDispectCardInfo(cardInfo);
 

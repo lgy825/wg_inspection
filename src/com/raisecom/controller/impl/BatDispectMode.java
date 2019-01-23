@@ -28,9 +28,6 @@ public class BatDispectMode implements DispectMode {
         boolean isCon=InitSelfmDBPoolTask.execute();
         if(isCon){
             dispectMode.processDispect(null);
-            //log.info(300,"数据库初始化成功");
-        }else{
-           // logger.log(300,"数据库初始化失败");
         }
     }
 
@@ -64,7 +61,7 @@ public class BatDispectMode implements DispectMode {
             boolean isSuccessful=deviceTask.processStatistics(list,"CARD");
             if(isSuccessful){
                 //Main.FromDbToExcel("2007");
-                //Main.FromDBToONUExcel("2108");
+                Main.FromDBToCardExcel("2125");
             }else{
                 System.out.print("巡检失败");
             }
