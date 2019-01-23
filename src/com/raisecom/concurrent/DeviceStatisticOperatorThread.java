@@ -92,8 +92,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             String fanStatus = SnmpOperationUtil.getFanStatus4OLT(options);
             oltInfo.setFan(processResult(fanStatus));
 
-
-
             //当前主控运行时间
 //            String sysUpTime=SnmpOperationUtil.getsysUpTime(options);
 //            oltInfo.setSys_uptime(processResult(sysUpTime));
@@ -101,10 +99,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //主备倒换次数
             String switchedCount=SnmpOperationUtil.getSwitchedCount(options);
             oltInfo.setSwitched_count(Integer.parseInt(processResult(switchedCount)));
-
-            //主控异常重启次数
-//            String exceptionSysRebCount=SnmpOperationUtil.getSysRebCountCount(options);
-//            oltInfo.setReboot_count(Integer.parseInt(processResult(exceptionSysRebCount)));
 
             //主控电压
             String controlVoltage = SnmpOperationUtil.getControlVoltage(options);
@@ -117,7 +111,6 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
             //ONU数量统计
             String onuCount = SnmpOperationUtil.getONUCount(options);
             oltInfo.setOnu_count_info(processResult(onuCount));
-
 
             //入库
             SqlMappingUtil.insertDevice(oltInfo);

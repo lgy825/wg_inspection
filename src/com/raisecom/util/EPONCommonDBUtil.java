@@ -517,8 +517,8 @@ public class EPONCommonDBUtil {
     }
 
     public  List<ObjService> getCardInfoFromDBByOltNeId(String neID) throws Exception {
-        String sql = "SELECT card_id as cardId,INDEX_IN_MIB as inMib from card where IRCNETNODEID==" + neID+"'";
-        List<ObjService> objServices=objServiceToList(selectObject(sql, null), "ONU");
+        String sql = "SELECT card_id,INDEX_IN_MIB from card where IRCNETNODEID='" + neID+"'";
+        List<ObjService> objServices=objServiceToList(selectObject(sql, null), "Card");
         return objServices;
     }
 
