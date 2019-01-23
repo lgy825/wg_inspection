@@ -1,6 +1,7 @@
 package com.raisecom.exportExcelDemo;
 
 
+import com.raisecom.bean.CardInfo;
 import com.raisecom.bean.OLTInfo;
 import com.raisecom.bean.ONUInfo;
 import com.raisecom.common.logging.LogFactory;
@@ -29,8 +30,9 @@ public class Main {
     public static void main(String[] args){
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
-            //FromDbToExcel("2070");
-            FromDBToONUExcel("2108");
+            //FromDbToExcel("2108");
+            //FromDBToONUExcel("2108");
+            FromDBToCardExcel("2108");
             logger.log(300,"数据库初始化成功");
         }else{
             logger.log(300,"数据库初始化失败");
@@ -39,7 +41,122 @@ public class Main {
 
     //板卡导出Excel
     public static void FromDBToCardExcel(String str){
+        try {
+            List<CardInfo> list = CardInfoService.getAllByDb(str);
+            // 创建可写入的Excel工作簿
+            WritableWorkbook wwb = null;
 
+            //文件名为时间精确到秒
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+            String dataStr = sdf.format(new Date());
+
+            String fileName = "D://" + dataStr + ".xls";
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            //以fileName为文件名来创建一个Workbook
+            wwb = Workbook.createWorkbook(file);
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+
+            WritableSheet ws = wwb.createSheet("Test Sheet 1", 0);
+            //设置列宽默认宽度
+            ws.getSettings().setDefaultColumnWidth(15);
+            //设置指定列的宽度
+
+            ws.setColumnView(9,40);
+            ws.setColumnView(10,40);
+            //设置字体 TIMES是字体大小，9，BOLD是判断是否为斜体,
+            WritableFont fontTitle = new WritableFont(WritableFont.TIMES, 9, WritableFont.NO_BOLD);
+            //定义格式
+            WritableCellFormat formatTitle = new WritableCellFormat(fontTitle);
+            //表头设置背景为灰色
+            formatTitle.setBackground(Colour.GRAY_25);
+            //自动换行
+            formatTitle.setWrap(true);
+            //formatTitle.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
+            //查询数据库中所有的数据
+
+            //插入表头。行号，默认从0开始，列号从0开始，
+            Label friendlyName = new Label(0, 0, ResourceManager.getString(bundle,"FRIENDLY_NAME"),formatTitle);
+            Label ipAddr = new Label(1, 0, ResourceManager.getString(bundle,"Address"),formatTitle);
+            Label ircnetype = new Label(2, 0, ResourceManager.getString(bundle,"type_Id"),formatTitle);
+            Label cardType = new Label(3, 0, ResourceManager.getString(bundle,"card_type"),formatTitle);
+            Label slotId = new Label(4, 0, ResourceManager.getString(bundle,"slot_id"),formatTitle);
+            Label status = new Label(5, 0, ResourceManager.getString(bundle,"card_status"),formatTitle);
+
+            Label cpu = new Label(6, 0, ResourceManager.getString(bundle,"CPU"),formatTitle);
+            Label ram = new Label(7, 0, ResourceManager.getString(bundle,"RAM"),formatTitle);
+            Label temperature = new Label(8, 0, ResourceManager.getString(bundle,"Temperature"),formatTitle);
+            Label power = new Label(9, 0, ResourceManager.getString(bundle,"Voltage"),formatTitle);
+            Label ver = new Label(10, 0, ResourceManager.getString(bundle,"Ver"),formatTitle);
+
+
+
+
+            //将Label 添加到工作表
+            ws.addCell(friendlyName);
+            ws.addCell(ipAddr);
+            ws.addCell(ircnetype);
+            ws.addCell(cardType);
+            ws.addCell(slotId);
+            ws.addCell(status);
+            ws.addCell(cpu);
+            ws.addCell(ram);
+            ws.addCell(temperature);
+            ws.addCell(power);
+            ws.addCell(ver);
+
+
+
+            //将数据库数据加入工作表
+
+            WritableCellFormat formatTitle1 = new WritableCellFormat(fontTitle);
+
+            formatTitle1.setWrap(true);
+            //formatTitle1.setAlignment(Alignment.CENTRE); //设置把水平对齐方式指定为居中
+            formatTitle1.setVerticalAlignment(VerticalAlignment.CENTRE);//把垂直对齐方式指定为居中
+            for (int i = 0; i < list.size(); i++) {
+
+                Label friendlyName_i = new Label(0, i+1, list.get(i).getFriendlyName(),formatTitle1);
+                Label ipAddr_i = new Label(1, i+1, list.get(i).getIpAddr(),formatTitle1);
+                Label ircnetype_i = new Label(2, i+1, list.get(i).getIrcnetype(),formatTitle1);
+                Label cardType_i = new Label(3, i+1,list.get(i).getCardType(),formatTitle1);
+                Label slotId_i = new Label(4, i+1,list.get(i).getSlotId(),formatTitle1);
+                Label status_i = new Label(5, i+1,list.get(i).getStatus(),formatTitle1);
+                Label cpu_i = new Label(6, i+1,list.get(i).getCpu(),formatTitle1);
+                Label ram_i = new Label(7, i+1,list.get(i).getRam(),formatTitle1);
+                Label temperature_i = new Label(8, i+1,list.get(i).getTemperature(),formatTitle1);
+                Label power_i = new Label(9, i+1,list.get(i).getPower(),formatTitle1);
+                Label ver_i = new Label(10, i+1,list.get(i).getVer(),formatTitle1);
+
+
+                ws.addCell(friendlyName_i);
+                ws.addCell(ipAddr_i);
+                ws.addCell(ircnetype_i);
+                ws.addCell(cardType_i);
+                ws.addCell(slotId_i);
+                ws.addCell(status_i);
+                ws.addCell(cpu_i);
+                ws.addCell(ram_i);
+                ws.addCell(temperature_i);
+                ws.addCell(power_i);
+                ws.addCell(ver_i);
+
+
+            }
+
+
+            //写进文档
+            wwb.write();
+            // 关闭Excel工作簿对象
+            System.out.println("数据导出成功!");
+            wwb.close();
+        }catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 
