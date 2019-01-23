@@ -71,8 +71,10 @@
 	 </MibTable>
 	
 		<!--CPU监控-->
-	<MibTable Name = "rcCpuMonTable" Type = "Table" ModifyRefresh = "true"> 	  
-		<MibNode Logic = "raisecomCPUUtilizationTotal" 	                      Physics = "rcCpuUtilizationTotal" Unit="%" />
+	<MibTable Name = "rcCpuMonTable" Type = "Table" ModifyRefresh = "true">
+		<MibNode Logic="rcCpuUsage1Second" Physics="rcCpuUsage1Second"/>
+		<MibNode Logic="rcMemoryAvailableMemory" Physics="rcMemoryAvailableMemory"/>
+		<MibNode Logic="rcMemoryTotoalMemory" Physics="rcMemoryTotoalMemory"/>
 	</MibTable>
 	
 	<MibTable Name = "raisecomPowerOutputTable" Type = "Table" PageSize = "25" >

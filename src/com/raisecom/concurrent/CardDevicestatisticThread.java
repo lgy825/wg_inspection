@@ -1,9 +1,8 @@
 package com.raisecom.concurrent;
 
+import com.raisecom.bean.CardInfo;
 import com.raisecom.nms.platform.cnet.ObjService;
-import com.raisecom.util.EPONCommonDBUtil;
-import com.raisecom.util.SnmpOperationUtil;
-import com.raisecom.util.SnmpParamsHelper;
+import com.raisecom.util.*;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -19,24 +18,39 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
     }
     @Override
     public Boolean call() throws Exception {
+        CardInfo cardInfo=new CardInfo();
         String oltId = objService.getStringValue("IRCNETNODEID");
         ObjService options = SnmpParamsHelper.getOption(oltId);
         //获取板卡相关信息
         List<ObjService> objServices = EPONCommonDBUtil.getInstance().getCardInfoFromDBByOltNeId(oltId);
         for(ObjService objService:objServices){
-            String cardId=objService.getStringValue("cardId");
-            String inMib=objService.getStringValue("inMib");
+            String cardId=objService.getStringValue("CARD_ID");
+            String inMib=objService.getStringValue("INDEX_IN_MIB");
 
+            cardInfo.setCardId(cardId);
             //电压
             String voltage = SnmpOperationUtil.getVoltage(options);
+            cardInfo.setPower(processResult(voltage));
             //cpu的使用率
-
+            String cpu= SnmpOperationForCard.getCardCpu(options,inMib);
+            cardInfo.setCpu(processResult(cpu));
             //内存的使用率
 
+            String ram=SnmpOperationForCard.getRamUsage(options,inMib);
+            cardInfo.setRam(processResult(ram));
             //温度
 
+            //入库
+            SqlMappingCardUtil.insertDispectCardInfo(cardInfo);
 
         }
-        return null;
+        return true;
+    }
+    public  String processResult(String s) {
+        if(s==null||"".equals(s)||"null".equalsIgnoreCase(s)){
+            return "--";
+        }else{
+            return s;
+        }
     }
 }
