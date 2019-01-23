@@ -14,7 +14,7 @@ public class SqlMappingCardUtil {
 
         if(cardInfo!=null && cardInfo.getCardId()!=null){
             firstStr+="CARD_ID";
-            midStr+="'"+cardInfo.getCardId()+"'";
+            midStr+="'"+cardInfo.getCardId();
             if(cardInfo.getCpu()!=null){
                 firstStr+=",CPU";
                 midStr+=",'"+cardInfo.getCpu();
