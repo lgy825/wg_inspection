@@ -37,11 +37,9 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 String IRCNETNODEID=objServices.get(i).getStringValue("IRCNETNODEID");
                 String iRCNETypeID = objServices.get(i).getStringValue("iRCNETypeID");
                 String distance=objServices.get(i).getStringValue("DISTANCE");
-                //Boolean aBoolean = IfIndexHelperV2.isNewOnuIndex(instance);
 
                 onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
                 onuInfo.setDistance(distance);
-
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
                 if(status == null || "NULL".equals(status)){
@@ -82,22 +80,19 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                     onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
                 }
                 //6.环路端口
-                //String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
-                //onuInfo.setLoopPort(processResult(loopPort));
+                String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
+                onuInfo.setLoopPort(processResult(loopPort));
                 //7.端口状态
-               // String portStatus = SnmpOperationForONU.getONUPortStatus(instance,iRCNETypeID,options);
-                //onuInfo.setPortStatus(processResult(portStatus));
-
+                String portStatus = SnmpOperationForONU.getONUPortStatus(instance,iRCNETypeID,options);
+                onuInfo.setPortStatus(processResult(portStatus));
                 //入库
                 SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
-
-
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return true;
     }
     public  String processResult(String s) {
         if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){

@@ -39,7 +39,7 @@ public class OLTDeviceContrller implements DeviceTask {
         //1.通过Ip获取所要巡检的OLT设备信息
         List<ObjService> rcnetnodes=getOLTInfoByIP(addres);
         //ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
-        XPONThreadPool xponPool = XPONThreadPool.getNewPool("DeviceStatistic", 5);
+        XPONThreadPool xponPool = XPONThreadPool.getNewPool("DeviceStatistic", 10);
         String configFile = "";
         Map<String,Future<Boolean>> results = new HashMap();
         if(addres!=null){

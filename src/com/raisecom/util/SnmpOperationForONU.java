@@ -188,8 +188,6 @@ public class SnmpOperationForONU {
                 return hangCount;
             }
         }
-
-
     }
 
     //获取环路端口索引
@@ -203,10 +201,12 @@ public class SnmpOperationForONU {
         }
         List<String> portIdList = getDeviceInstance(snmpParams, IfIndexHelperGp.getPortInstance(onuInstance, 0), baseOID);
         String str="";
-        for(int i=0;i<portIdList.size();i++){
-            str+=IfIndexHelper.getPortIdFromPortIndex(portIdList.get(i));
-            if(i<portIdList.size()-1){
-                str+=",";
+        if(portIdList!=null && portIdList.size()>0){
+            for(int i=0;i<portIdList.size();i++){
+                str+=IfIndexHelper.getPortIdFromPortIndex(portIdList.get(i));
+                if(i<portIdList.size()-1){
+                    str+=",";
+                }
             }
         }
         return str;
@@ -230,7 +230,7 @@ public class SnmpOperationForONU {
         ObjService result=null;
         String str="";
         ObjService params=options.clone();
-        if(portIndexs.size()>0){
+        if(portIndexs!=null && portIndexs.size()>0){
             for(int i=0;i<portIndexs.size();i++){
                 String portIndex=portIndexs.get(i);
                 result = getMibNodesFromONU(tableName, portIndex, params);
@@ -268,11 +268,7 @@ public class SnmpOperationForONU {
     public static List<String> getDeviceInstance(ObjService params, String onuInstance, String oid){
 
         ArrayList<String> list = new ArrayList();
-        boolean flag = true;
-
-        ObjService result = new ObjService();
         String instance = onuInstance;
-
         while(true){
             params.remove("RowSet");
             ObjService rowSet = new ObjService("RowSet");
@@ -301,7 +297,6 @@ public class SnmpOperationForONU {
     public static String eponOffnlineReason(String lastDownCause) {
         Map<String, String> map = new HashMap();
         String templastDownCause = "";
-
         map.put("1", "unknown");
         map.put("2", "dyingGasp");
         map.put("3", "backboneFiberCut");
@@ -362,9 +357,7 @@ public class SnmpOperationForONU {
         return templastDownCause ;
     }
 
-    //
     public static Map<String,String>  getDuplexSpeed(){
-
         Map<String,String> map=new HashMap<>();
         map.put("1","auto");
         map.put("2","half_10");
@@ -374,7 +367,6 @@ public class SnmpOperationForONU {
         map.put("6","half_1000");
         map.put("7","full_1000");
         map.put("8","1000");
-
         return map;
     }
 }
