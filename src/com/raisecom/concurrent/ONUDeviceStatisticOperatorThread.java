@@ -82,11 +82,11 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                     onuInfo.setOnuHangMacCount(processResult(onuHangMacCount));
                 }
                 //6.环路端口
-                String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
-                onuInfo.setLoopPort(processResult(loopPort));
+                //String loopPort = SnmpOperationForONU.getONULoopPort(instance,iRCNETypeID,options);
+                //onuInfo.setLoopPort(processResult(loopPort));
                 //7.端口状态
-                String portStatus = SnmpOperationForONU.getONUPortStatus(instance,iRCNETypeID,options);
-                onuInfo.setPortStatus(processResult(portStatus));
+               // String portStatus = SnmpOperationForONU.getONUPortStatus(instance,iRCNETypeID,options);
+                //onuInfo.setPortStatus(processResult(portStatus));
 
                 //入库
                 SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
@@ -101,7 +101,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
     }
     public  String processResult(String s) {
         if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){
-            return "NONE";
+            return "--";
         }else{
             return s;
         }

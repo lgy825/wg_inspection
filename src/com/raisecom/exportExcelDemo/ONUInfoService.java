@@ -17,7 +17,7 @@ public class ONUInfoService {
 
 
     public static List<ONUInfo> getAllByDb(String str)  throws Exception{
-        String sqlONU = "select IRCNETNODEID,IPADDRESS,FRIENDLY_NAME,SUBNETYPE,IFNULL(SOFTWARE_VER,'--') AS SOFTWARE_VER,IFNULL(MACADDRESS,'--') AS MACADDRESS  from rcnetnode " +
+        String sqlONU = "select IRCNETNODEID,IPADDRESS,FRIENDLY_NAME,iRCNETypeID,IFNULL(SOFTWARE_VER,'--') AS SOFTWARE_VER,IFNULL(MACADDRESS,'--') AS MACADDRESS  from rcnetnode " +
                 "WHERE MANAGED_URL = '/ne=" +str +"'";
         String sql = "select * from ONU_STATISTICS_INFO " ;
 
@@ -41,7 +41,7 @@ public class ONUInfoService {
                     if(iRCNENODEID.equals(result.getInt("IRCNETNODEID")) || iRCNENODEID == result.getInt("IRCNETNODEID")){
                         onuInfo.setIpaddress(objService.getStringValue("IPADDRESS"));
                         onuInfo.setFriendlyName(objService.getStringValue("FRIENDLY_NAME"));
-                        onuInfo.setSubnetype(objService.getStringValue("SUBNETYPE"));
+                        onuInfo.setSubnetype(objService.getStringValue("iRCNETypeID"));
                         onuInfo.setSoftware(objService.getStringValue("SOFTWARE_VER"));
                         onuInfo.setMacaddress(objService.getStringValue("MACADDRESS"));
                         continue;

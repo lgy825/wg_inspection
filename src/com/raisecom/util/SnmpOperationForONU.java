@@ -121,10 +121,11 @@ public class SnmpOperationForONU {
 
             tableName = "rcGponOnuPonMngTable";
             List<String> list = getDeviceInstance((ObjService) options.clone(), IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
-            for (int i = 0; i < list.size(); i++) {
-                snmpParams.setValue("ValueOnly", true);
-                snmpParams.setValue("Instance", list.get(i));
-                gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+            if(list != null && list.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    snmpParams.setValue("ValueOnly", true);
+                    gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+                }
             }
             if (gponresult == null) {
                 return "";
@@ -134,7 +135,6 @@ public class SnmpOperationForONU {
                 }
                 return receivedPower;
             }
-
         } else {
             tableName = "rcEponTransceiverMonitorTable";
             instance = "5"+"."+instance;
@@ -150,7 +150,7 @@ public class SnmpOperationForONU {
         }
 
 }
-    //ONU下挂MAC 地址数
+    //ONU下挂 MAC 地址数
     public static String getONUHangMacConut(String instance, String iRCNETypeID, ObjService options) {
         ObjService snmpParams = options.clone();
         String tableName = "";
@@ -159,12 +159,14 @@ public class SnmpOperationForONU {
         //ObjService eponResult = new ObjService();
         if ("GPON_ONU".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
             tableName = "rcGponOnuMacAddrTable";
-            List<String> list = getDeviceInstance((ObjService) options.clone(), IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.3.1.1.1");
-            for (int i = 0; i < list.size(); i++) {
-                snmpParams.setValue("ValueOnly", true);
-                snmpParams.setValue("Instance", list.get(i));
-                gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+            List<String> list = getDeviceInstance((ObjService) options.clone(), IfIndexHelperGp.getPortInstance(instance, 0), ".1.3.6.1.4.1.8886.18.3.6.5.1.1.1");
+            if(list != null && list.size() > 0){
+                for (int i = 0; i < list.size(); i++) {
+                    snmpParams.setValue("ValueOnly", true);
+                    gponresult = getMibNodesFromONU(tableName, list.get(i), snmpParams);
+                }
             }
+
             if (gponresult == null) {
                 return "";
             } else {
@@ -217,12 +219,13 @@ public class SnmpOperationForONU {
                     if(!key.startsWith(baseOID)){
                         break;
                     }
-                    if(!instance.startsWith(index.substring(0,3))){
-                        break;
-                    }
+
                     if(index==null || "NULL".equalsIgnoreCase(index)){
                         break;
                     }else{
+                        if(!instance.startsWith(index.substring(0,3))){
+                            break;
+                        }
                         String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
                         list.add(retStr);
                     }
@@ -278,12 +281,12 @@ public class SnmpOperationForONU {
                     if(!key.startsWith(baseOID)){
                         break;
                     }
-                    if(!instance.startsWith(index.substring(0,3))){
-                        break;
-                    }
                     if(index==null || "NULL".equalsIgnoreCase(index)){
                         break;
                     }else{
+                        if(!instance.startsWith(index.substring(0,3))){
+                            break;
+                        }
                         portIndexs.add(index);
                     }
                 }else{
@@ -337,35 +340,30 @@ public class SnmpOperationForONU {
     public static List<String> getDeviceInstance(ObjService params, String onuInstance, String oid){
 
         ArrayList<String> list = new ArrayList<String>();
-        boolean flag = true;
 
-        ObjService result = new ObjService();
         String instance = onuInstance;
-
-        while(flag){
-            params.remove("RowSet");
-            ObjService rowset = new ObjService("RowSet");
-            rowset.setValue(oid + "." + instance, "");
-
-
-            params.addContainedObject(rowset);
-            result = SnmpUtilities.GeneralSnmpOperation(params, "snmpGetNext");
-            if(!result.getStringValue("ErrCode").equalsIgnoreCase("0")){
-                break;
+            while(true){
+                params.remove("RowSet");
+                ObjService rowSet = new ObjService("RowSet");
+                rowSet.setValue(oid + "." + instance,"");
+                params.addContainedObject(rowSet);
+                ObjService res=GeneralSnmpOperator.snmpGetNext(params);
+                if(!res.getStringValue("ErrCode").equalsIgnoreCase("0")){
+                    break;
+                }
+                ObjService obj = res.objectAt("RowSet", 0);
+                String key = obj.getCurrentHashtable().keySet().toArray()[0].toString();
+                if(!key.substring(0, key.lastIndexOf(".")).equalsIgnoreCase(oid)){
+                    break;
+                }
+                String compareInstance = onuInstance.substring(0,onuInstance.length()-3);
+                String keyInstance = obj.getStringValue(key);
+                if(keyInstance.substring(0, keyInstance.length()-3).equalsIgnoreCase(compareInstance)){
+                    list.add(obj.getStringValue(key));
+                    instance = obj.getStringValue(key);
+                }else
+                    break;
             }
-            ObjService obj = result.objectAt("RowSet", 0);
-            String key = obj.getCurrentHashtable().keySet().toArray()[0].toString();
-            if(!key.substring(0, key.lastIndexOf(".")).equalsIgnoreCase(oid)){
-                break;
-            }
-            String compareInstance = onuInstance.substring(0,onuInstance.length()-3);
-            String keyInstance = obj.getStringValue(key);
-            if(keyInstance.substring(0, keyInstance.length()-3).equalsIgnoreCase(compareInstance)){
-                list.add(obj.getStringValue(key));
-                instance = obj.getStringValue(key);
-            }else
-                break;
-        }
         return list;
     }
 

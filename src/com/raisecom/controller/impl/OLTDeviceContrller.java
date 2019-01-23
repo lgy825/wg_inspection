@@ -1,6 +1,7 @@
 package com.raisecom.controller.impl;
 
 import com.raisecom.bean.Rcnetnode;
+import com.raisecom.concurrent.CardDevicestatisticThread;
 import com.raisecom.concurrent.DeviceStatisticOperatorThread;
 import com.raisecom.concurrent.ONUDeviceStatisticOperatorThread;
 import com.raisecom.concurrent.XPONThreadPool;
@@ -57,6 +58,8 @@ public class OLTDeviceContrller implements DeviceTask {
                      fs = xponPool.submitTask(new DeviceStatisticOperatorThread(rcnetnode));
                  }else if("ONU".equals(deviceType)){
                      fs = xponPool.submitTask(new ONUDeviceStatisticOperatorThread(rcnetnode));
+                 }else if("CARD".equals(deviceType)){
+                     fs = xponPool.submitTask(new CardDevicestatisticThread(rcnetnode));
                  }
 
                  results.put(ip,fs);
