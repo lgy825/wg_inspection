@@ -2,6 +2,8 @@ package com.raisecom.concurrent;
 
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.EPONCommonDBUtil;
+import com.raisecom.util.SnmpOperationUtil;
+import com.raisecom.util.SnmpParamsHelper;
 
 import java.util.List;
 import java.util.concurrent.Callable;

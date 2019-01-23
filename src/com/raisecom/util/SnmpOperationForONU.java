@@ -150,7 +150,7 @@ public class SnmpOperationForONU {
         }
 
 }
-    //ONU下挂MAC 地址数
+    //ONU下挂 MAC 地址数
     public static String getONUHangMacConut(String instance, String iRCNETypeID, ObjService options) {
         ObjService snmpParams = options.clone();
         String tableName = "";
