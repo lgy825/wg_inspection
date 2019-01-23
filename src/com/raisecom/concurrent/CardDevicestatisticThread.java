@@ -29,7 +29,7 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
 
             cardInfo.setCardId(cardId);
             //电压
-            String voltage = SnmpOperationUtil.getVoltage(options);
+            String voltage = SnmpOperationUtil.getVoltage(inMib,options);
             cardInfo.setPower(processResult(voltage));
             //cpu的使用率
             String cpu= SnmpOperationForCard.getCardCpu(options,inMib);
