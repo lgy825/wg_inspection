@@ -28,7 +28,7 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
             String inMib=objService.getStringValue("inMib");
 
             //电压
-            String voltage = SnmpOperationUtil.getVoltage(inMib,options);
+            String voltage = SnmpOperationUtil.getVoltage(options);
 
 
             //cpu的使用率
