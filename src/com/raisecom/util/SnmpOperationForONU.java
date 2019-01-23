@@ -150,7 +150,7 @@ public class SnmpOperationForONU {
         }
 
 }
-    //ONU下挂 MAC 地址数
+    //ONU下挂MAC 地址数
     public static String getONUHangMacConut(String instance, String iRCNETypeID, ObjService options) {
         ObjService snmpParams = options.clone();
         String tableName = "";
@@ -197,57 +197,19 @@ public class SnmpOperationForONU {
         ObjService snmpParams = options.clone();
         String baseOID = "";
        if ("GPON_onu".equals(iRCNETypeID) || "UNKNOWN".equals(iRCNETypeID)) {
-           baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
-        }else{
            baseOID = ".1.3.6.1.4.1.8886.18.3.6.22.1.1.1";
-        }
-        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
-        List<String> list=new ArrayList<>();
-        String ins = instance;
-        try {
-            while(true){
-                snmpParams.remove("RowSet");
-                ObjService rowSet = new ObjService("RowSet");
-                rowSet.setValue(baseOID + "." + ins,"");
-                snmpParams.addContainedObject(rowSet);
-                ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
-                if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
-                    ObjService objService1=res.objectAt("RowSet",0);
-                    String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
-                    String index=objService1.getStringValue(key);
-                    ins=index;
-                    if(!key.startsWith(baseOID)){
-                        break;
-                    }
-
-                    if(index==null || "NULL".equalsIgnoreCase(index)){
-                        break;
-                    }else{
-                        if(!instance.startsWith(index.substring(0,3))){
-                            break;
-                        }
-                        String retStr=IfIndexHelper.getPortIdFromPortIndex(index);
-                        list.add(retStr);
-                    }
-                }else{
-                    break;
-                }
-            }
-        } catch (Exception e) {
-           e.printStackTrace();
-        }
-        if(list==null){
-            return "--";
         }else{
-            String str="";
-            for(int i=0;i<list.size();i++){
-                str+=list.get(i);
-                if(i<list.size()-1){
-                    str+=",";
-                }
-            }
-            return str;
+           baseOID = ".1.3.6.1.4.1.8886.18.2.6.10.1.1.1";
         }
+        List<String> portIdList = getDeviceInstance(snmpParams, IfIndexHelperGp.getPortInstance(onuInstance, 0), baseOID);
+        String str="";
+        for(int i=0;i<portIdList.size();i++){
+            str+=IfIndexHelper.getPortIdFromPortIndex(portIdList.get(i));
+            if(i<portIdList.size()-1){
+                str+=",";
+            }
+        }
+        return str;
     }
 
     //获取端口状态
@@ -262,41 +224,7 @@ public class SnmpOperationForONU {
             baseOID = ".1.3.6.1.4.1.8886.18.2.6.3.1.1.1";
             tableName="rcEponOnuCtcEthPortTable";
         }
-        String  instance=IfIndexHelper.getPortInstance(onuInstance,0+"");
-        String ins=instance;
-        //缓存portindex的所有索引
-        List<String> portIndexs=new ArrayList<>();
-        try {
-            while(true){
-                snmpParams.remove("RowSet");
-                ObjService rowSet = new ObjService("RowSet");
-                rowSet.setValue(baseOID + "." + ins,"");
-                snmpParams.addContainedObject(rowSet);
-                ObjService res=GeneralSnmpOperator.snmpGetNext(snmpParams);
-                if (res.getStringValue("ErrCode").equalsIgnoreCase("0")) {
-                    ObjService objService1=res.objectAt("RowSet",0);
-                    String key = objService1.getCurrentHashtable().keySet().toArray()[0].toString();
-                    String index=objService1.getStringValue(key);
-                    ins=index;
-                    if(!key.startsWith(baseOID)){
-                        break;
-                    }
-                    if(index==null || "NULL".equalsIgnoreCase(index)){
-                        break;
-                    }else{
-                        if(!instance.startsWith(index.substring(0,3))){
-                            break;
-                        }
-                        portIndexs.add(index);
-                    }
-                }else{
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
+        List<String> portIndexs = getDeviceInstance(snmpParams, IfIndexHelperGp.getPortInstance(onuInstance, 0), baseOID);
         //根据索引获取相应的值
         //snmpParams.setValue("ValueOnly", true);
         ObjService result=null;
@@ -339,31 +267,34 @@ public class SnmpOperationForONU {
     }
     public static List<String> getDeviceInstance(ObjService params, String onuInstance, String oid){
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList();
+        boolean flag = true;
 
+        ObjService result = new ObjService();
         String instance = onuInstance;
-            while(true){
-                params.remove("RowSet");
-                ObjService rowSet = new ObjService("RowSet");
-                rowSet.setValue(oid + "." + instance,"");
-                params.addContainedObject(rowSet);
-                ObjService res=GeneralSnmpOperator.snmpGetNext(params);
-                if(!res.getStringValue("ErrCode").equalsIgnoreCase("0")){
-                    break;
-                }
-                ObjService obj = res.objectAt("RowSet", 0);
-                String key = obj.getCurrentHashtable().keySet().toArray()[0].toString();
-                if(!key.substring(0, key.lastIndexOf(".")).equalsIgnoreCase(oid)){
-                    break;
-                }
-                String compareInstance = onuInstance.substring(0,onuInstance.length()-3);
-                String keyInstance = obj.getStringValue(key);
-                if(keyInstance.substring(0, keyInstance.length()-3).equalsIgnoreCase(compareInstance)){
-                    list.add(obj.getStringValue(key));
-                    instance = obj.getStringValue(key);
-                }else
-                    break;
+
+        while(true){
+            params.remove("RowSet");
+            ObjService rowSet = new ObjService("RowSet");
+            rowSet.setValue(oid + "." + instance,"");
+            params.addContainedObject(rowSet);
+            ObjService res=GeneralSnmpOperator.snmpGetNext(params);
+            if(!res.getStringValue("ErrCode").equalsIgnoreCase("0")){
+                break;
             }
+            ObjService obj = res.objectAt("RowSet", 0);
+            String key = obj.getCurrentHashtable().keySet().toArray()[0].toString();
+            if(!key.substring(0, key.lastIndexOf(".")).equalsIgnoreCase(oid)){
+                break;
+            }
+            String compareInstance = onuInstance.substring(0,onuInstance.length()-3);
+            String keyInstance = obj.getStringValue(key);
+            if(keyInstance.substring(0, keyInstance.length()-3).equalsIgnoreCase(compareInstance)){
+                list.add(obj.getStringValue(key));
+                instance = obj.getStringValue(key);
+            }else
+                break;
+        }
         return list;
     }
 

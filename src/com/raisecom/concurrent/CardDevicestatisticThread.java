@@ -2,8 +2,6 @@ package com.raisecom.concurrent;
 
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.EPONCommonDBUtil;
-import com.raisecom.util.SnmpOperationUtil;
-import com.raisecom.util.SnmpParamsHelper;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,6 +29,12 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
             String voltage = SnmpOperationUtil.getVoltage(options);
 
 
+
+            //cpu的使用率
+
+            //内存的使用率
+            //温度
+            //电压
 
 
         }
