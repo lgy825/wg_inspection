@@ -40,6 +40,7 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
 
                 onuInfo.setIrcnetnodeid(Integer.parseInt(IRCNETNODEID));
                 onuInfo.setDistance(distance);
+                onuInfo.setIrcnetoltId(oltId);
                 //1.ONU的在线状态
                 String status = SnmpOperationForONU.getONUStatusForParam(instance,iRCNETypeID,options);
                 if(status == null || "NULL".equals(status)){
@@ -88,13 +89,12 @@ public class ONUDeviceStatisticOperatorThread implements Callable<Boolean> {
                 //入库
                 SqlMappingONUUtil.insertDispectONUInfo(onuInfo);
 
-
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return true;
     }
     public  String processResult(String s) {
         if(s == null || "".equals(s) || "null".equalsIgnoreCase(s)){

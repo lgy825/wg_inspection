@@ -30,6 +30,7 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
             String inMib=objService.getStringValue("INDEX_IN_MIB");
 
             cardInfo.setCardId(cardId);
+            cardInfo.setIrcnetoltId(oltId);
             //电压
             String voltage = SnmpOperationUtil.getVoltage(inMib,options);
             cardInfo.setPower(processResult(voltage));

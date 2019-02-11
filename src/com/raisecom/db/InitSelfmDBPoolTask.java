@@ -2,6 +2,7 @@ package com.raisecom.db;
 
 import com.raisecom.common.logging.LogFactory;
 import com.raisecom.common.logging.Logger;
+import com.raisecom.ems.templet.util.XmlFile;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
 import com.raisecom.util.XMLFileHelperUtil;
@@ -20,9 +21,10 @@ public class InitSelfmDBPoolTask  {
 //    }
     public static   boolean execute() {
         logger.log(300, "******************* Initialize database connection pool ***************");
-        ObjService dbConn = XMLFileHelperUtil.loadConfigInObjService("../wg_inspection/src/config/dbproperty.xml");
+        //ObjService dbConn = XMLFileHelperUtil.loadConfigInObjService("../wg_inspection/src/config/dbproperty.xml");
+        ObjService objService= XmlFile.getXmlFile("config/dbproperty.xml");
         try {
-            DBConnectionManager.getInstance().init(dbConn);
+            DBConnectionManager.getInstance().init(objService);
         } catch (Exception e) {
             e.printStackTrace();
             //logger.log(300,"数据库连接异常");
