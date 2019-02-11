@@ -20,7 +20,7 @@ public class CardDevicestatisticThread implements Callable<Boolean> {
     public Boolean call() throws Exception {
         CardInfo cardInfo=new CardInfo();
         String oltId = objService.getStringValue("IRCNETNODEID");
-        String configFile=objService.getStringValue("ConfigFile");
+        String configFile = objService.getStringValue("ConfigFile");
         ObjService options = SnmpParamsHelper.getOption(oltId);
         options.setValue("ConfigFile",configFile);
         //获取板卡相关信息

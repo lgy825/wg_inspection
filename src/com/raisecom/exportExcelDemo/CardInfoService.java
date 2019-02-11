@@ -1,10 +1,8 @@
 package com.raisecom.exportExcelDemo;
 
 import com.raisecom.bean.CardInfo;
-import com.raisecom.bean.ONUInfo;
-import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.nms.util.DBConnectionManager;
-import com.raisecom.util.EPONCommonDBUtil;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,26 +27,11 @@ public class CardInfoService {
         Connection conn = DBConnectionManager.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sqlCard);
         ResultSet result = pstmt.executeQuery();
-//        ObjService resultONUInfo = EPONCommonDBUtil.executeQuery(sqlCard);
-//        //缓存数据
-//        Vector<ObjService> verctor = resultONUInfo.getAllChildObjects();
-//        Map<Integer,ObjService> map = new HashMap();
-//        for(ObjService obj : verctor){
-//            Integer iRCNENODEID = obj.getIntValue("IRCNETNODEID");
-//            map.put(iRCNENODEID,obj);
-//        }
 
         //连接数据库 将数据放入List中
         try {
             while (result.next()) {
                 CardInfo cardInfo = new CardInfo();
-
-//                if(map.containsKey(result.getInt("IRCNETNODEID"))){
-//                    ObjService obj = map.get(result.getInt("IRCNETNODEID"));
-//
-//                    cardInfo.setFriendlyName(obj.getStringValue("FRIENDLY_NAME"));
-//
-//                }
                 cardInfo.setFriendlyName(result.getString("FRIENDLY_NAME"));
                 cardInfo.setIpAddr(result.getString("IPADDRESS"));
                 cardInfo.setIrcnetype(result.getString("iRCNETypeID"));
