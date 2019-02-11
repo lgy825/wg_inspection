@@ -1,5 +1,6 @@
 package com.raisecom.controller;
 
+import com.raisecom.bean.Contact;
 import com.raisecom.nms.platform.cnet.ObjService;
 
 import java.util.List;
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface DeviceTask {
 
-    public boolean  processStatistics(List<String> addres,String deviceType);
+    public boolean  processStatistics(Contact contact);
 
 }

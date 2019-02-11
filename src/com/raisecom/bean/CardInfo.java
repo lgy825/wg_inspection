@@ -16,6 +16,15 @@ public class CardInfo {
     private String temperature;
     private String power;
     private String ver;
+    private String ircnetoltId;//
+
+    public String getIrcnetoltId() {
+        return ircnetoltId;
+    }
+
+    public void setIrcnetoltId(String ircnetoltId) {
+        this.ircnetoltId = ircnetoltId;
+    }
 
     @Override
     public String toString() {

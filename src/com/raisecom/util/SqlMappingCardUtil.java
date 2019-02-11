@@ -20,6 +20,11 @@ public class SqlMappingCardUtil {
                 midStr+=",'"+cardInfo.getCpu();
                 lastStr+="CPU = '" +cardInfo.getCpu();
             }
+            if(cardInfo.getIrcnetoltId()!=null){
+                firstStr+=",IRCNETOLTID";
+                midStr+="','"+cardInfo.getIrcnetoltId();
+                lastStr+="',IRCNETOLTID = '" +cardInfo.getIrcnetoltId();
+            }
             if(cardInfo.getRam()!=null){
                 firstStr+=",MEMORY";
                 midStr+="','"+cardInfo.getRam();

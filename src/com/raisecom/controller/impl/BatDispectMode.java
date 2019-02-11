@@ -1,5 +1,6 @@
 package com.raisecom.controller.impl;
 
+import com.raisecom.bean.Contact;
 import com.raisecom.controller.DeviceTask;
 import com.raisecom.controller.DispectMode;
 import com.raisecom.db.InitSelfmDBPoolTask;
@@ -9,6 +10,10 @@ import com.raisecom.nms.platform.client.Logger;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.EPONCommonDBUtil;
 import org.apache.commons.io.FileUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +28,7 @@ import java.util.*;
 public class BatDispectMode implements DispectMode {
 
     Logger log = LogManager.getLogger("BatDispectMode");
+    File path = new File(System.getProperty("user.dir"));
     public static void main(String[] args) {
         DispectMode dispectMode=new BatDispectMode();
         boolean isCon=InitSelfmDBPoolTask.execute();
@@ -34,39 +40,64 @@ public class BatDispectMode implements DispectMode {
     @Override
     public void processDispect(ObjService objService) {
 
-        String path = "../wg_inspection/src/config/deviceinfo.json";
-        JSONArray optionIps = null;
-        JSONArray optionSubnet = null;
+//        String path = "../wg_inspection/src/config/deviceinfo.json";
+//        JSONArray optionIps = null;
+//        JSONArray optionSubnet = null;
         try {
-            String input = FileUtils.readFileToString(new File(path), "UTF-8");
-            JSONObject jsonObject = new JSONObject(input);
-
-            if (jsonObject != null) {
-                optionIps = jsonObject.getJSONArray("optionIp");
-                optionSubnet=jsonObject.getJSONArray("optionSubnet");
+//            String input = FileUtils.readFileToString(new File(path), "UTF-8");
+//            JSONObject jsonObject = new JSONObject(input);
+//
+//            if (jsonObject != null) {
+//                optionIps = jsonObject.getJSONArray("optionIp");
+//                optionSubnet=jsonObject.getJSONArray("optionSubnet");
+//            }
+//            List<String> list=new ArrayList<>();
+//            Iterator<Object> ips = optionIps.iterator();
+//            Iterator<Object> subnets = optionSubnet.iterator();
+//            while (subnets.hasNext()) {
+//                JSONObject subnet = (JSONObject) subnets.next();
+//                list.addAll(getIpAddreForSubnet(subnet.get("sign").toString()));
+//            }
+//            while (ips.hasNext()) {
+//                JSONObject btn = (JSONObject) ips.next();
+//                list.add(btn.get("ip").toString());
+//            }
+            //解析配置文件：
+            // 读取XML文档，封装对象
+            Contact contact = new Contact();
+            SAXReader reader = new SAXReader();
+            String strs=path+"/"+"config.xml";
+            Document doc=reader.read(new File(strs));
+            // 读取contact标签
+            Iterator<Element> it = doc.getRootElement().elementIterator("contact");
+            String str="";
+            while (it.hasNext()) {
+                Element elem = it.next();
+                // 创建Contact
+                str=elem.elementText("ipAddr");
+                contact.setCount(elem.elementText("count"));
+                contact.setInspectType(elem.elementText("inspectType"));
             }
             List<String> list=new ArrayList<>();
-            Iterator<Object> ips = optionIps.iterator();
-            Iterator<Object> subnets = optionSubnet.iterator();
-            while (subnets.hasNext()) {
-                JSONObject subnet = (JSONObject) subnets.next();
-                list.addAll(getIpAddreForSubnet(subnet.get("sign").toString()));
+            String[] strings=str.split(",");
+            for(String string:strings){
+                list.add(string);
             }
-            while (ips.hasNext()) {
-                JSONObject btn = (JSONObject) ips.next();
-                list.add(btn.get("ip").toString());
-            }
+            contact.setIpAddr(list);
             DeviceTask deviceTask=new OLTDeviceContrller();
-
-            boolean isSuccessful=deviceTask.processStatistics(list,"CARD");
+            boolean isSuccessful=deviceTask.processStatistics(contact);
             if(isSuccessful){
-                //Main.FromDbToExcel("2007");
-                //Main.FromDBToONUExcel("2108");
-                Main.FromDBToCardExcel("2108");
+                if("OLT".equalsIgnoreCase(contact.getInspectType())){
+                    Main.FromDbToExcel("2125");
+                }else if("ONU".equalsIgnoreCase(contact.getInspectType())){
+                    Main.FromDBToONUExcel("2125");
+                }else{
+                    Main.FromDBToCardExcel("2125");
+                }
             }else{
                 System.out.print("巡检失败");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

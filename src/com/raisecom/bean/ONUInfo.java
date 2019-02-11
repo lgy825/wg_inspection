@@ -18,6 +18,15 @@ public class ONUInfo {
     private String onuHangMacCount ; //onu下挂mac地址数
     private String loopPort ; //环路端口
     private String portStatus ; //环路状态
+    private String ircnetoltId;//
+
+    public String getIrcnetoltId() {
+        return ircnetoltId;
+    }
+
+    public void setIrcnetoltId(String ircnetoltId) {
+        this.ircnetoltId = ircnetoltId;
+    }
 
     @Override
     public String toString() {

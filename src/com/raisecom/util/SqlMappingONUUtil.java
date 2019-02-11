@@ -21,6 +21,11 @@ public class SqlMappingONUUtil {
                 midStr+=",'"+onuInfo.getStatus();
                 lastStr+="STATUS = '" +onuInfo.getStatus();
             }
+            if(onuInfo.getIrcnetoltId()!=null){
+                firstStr+=",IRCNETOLTID";
+                midStr+="','"+onuInfo.getIrcnetoltId();
+                lastStr+="',IRCNETOLTID = '" +onuInfo.getIrcnetoltId();
+            }
             if(onuInfo.getLastDownCause()!=null){
                 firstStr+=",LAST_DOWN_CAUSE";
                 midStr+="','"+onuInfo.getLastDownCause();
