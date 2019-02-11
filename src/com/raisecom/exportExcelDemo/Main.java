@@ -32,7 +32,7 @@ public class Main {
         boolean isCon= InitSelfmDBPoolTask.execute();
         if(isCon){
             //FromDbToExcel("2108");
-            FromDBToONUExcel("2108");
+            //FromDBToONUExcel("2108");
             //FromDBToCardExcel("2108");
             logger.log(300,"数据库初始化成功");
         }else{
@@ -162,7 +162,7 @@ public class Main {
 
 
     //ONU导出Excel
-    public static void FromDBToONUExcel(String str) throws Exception {
+    public static void FromDBToONUExcel(List<String> str) throws Exception {
         try {
             List<ONUInfo> list = ONUInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿

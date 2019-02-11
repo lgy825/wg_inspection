@@ -15,7 +15,12 @@ import java.util.*;
 public class ONUInfoService {
 
 
-    public static List<ONUInfo> getAllByDb(String str)  throws Exception{
+    public static List<ONUInfo> getAllByDb(List<String> str)  throws Exception{
+        String temp ;
+        for(int i = 0 ; i < str.size() ; i++){
+            temp = "('/ne="+str.get(i)+"',";
+
+        }
         String sqlONU = "select IRCNETNODEID,IPADDRESS,FRIENDLY_NAME,iRCNETypeID,IFNULL(SOFTWARE_VER,'--') AS SOFTWARE_VER,IFNULL(MACADDRESS,'--') AS MACADDRESS  from rcnetnode " +
                 "WHERE MANAGED_URL = '/ne=" +str +"'";
         String sql = "select * from ONU_STATISTICS_INFO " ;

@@ -62,6 +62,7 @@ public class BatDispectMode implements DispectMode {
             if(isSuccessful){
                 //Main.FromDbToExcel("2007");
                 //Main.FromDBToONUExcel("2108");
+                Main.FromDBToCardExcel("2108");
             }else{
                 System.out.print("巡检失败");
             }
