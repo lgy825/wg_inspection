@@ -41,7 +41,7 @@ public class Main {
     }
 
     //板卡导出Excel
-    public static void FromDBToCardExcel(String str){
+    public static void FromDBToCardExcel(List<String> str){
         try {
             List<CardInfo> list = CardInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿

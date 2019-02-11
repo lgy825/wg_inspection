@@ -22,14 +22,41 @@ public class OLTInfoService {
     }
 
 
-    public static List<OLTInfo> getAllByDb(String str)  throws Exception{
-        String sql = "select * from OLT_STATISTICS_INFO where IRCNETNODEID ="+ str ;
+    public static List<OLTInfo> getAllByDb(List<String> str)  throws Exception{
+        String temp = "";
+        String tempstr = "";
+        for(int i = 0 ; i < str.size() ; i++){
+            if(str.size() == 1 ){
+                temp = "'/ne="+str.get(i).toString()+"'";
+                tempstr = "'" + str.get(i).toString() +"'";
+            }
+            else {
+
+                if(i == str.size()-1){
+                    temp += "'/ne=" + str.get(i).toString() + "'";
+                    tempstr += "'" + str.get(i).toString() +"'" ;
+                }else{
+                    temp += "'/ne=" + str.get(i).toString() + "',";
+                    tempstr += "'" + str.get(i).toString() +"',";
+                }
+            }
+
+       }
+//        String sql = "select * from OLT_STATISTICS_INFO where IRCNETNODEID ="+ str ;
+//        String onuCountsql = "SELECT iRCNETypeID ,COUNT(*) AS Device_Number " +
+//                "FROM rcnetnode WHERE managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+//        String onlineCountsql = "select iRCNETypeID ,COUNT(*) AS Online_Number " +
+//                "FROM rcnetnode WHERE ISPINGOK = '1' and managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+//        String offlineCountsql = "select iRCNETypeID ,COUNT(*) AS Offline_Number " +
+//                "FROM rcnetnode WHERE ISPINGOK = '0' and managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+
+        String sql = "select * from OLT_STATISTICS_INFO where IRCNETNODEID in ("+ tempstr +")";
         String onuCountsql = "SELECT iRCNETypeID ,COUNT(*) AS Device_Number " +
-                "FROM rcnetnode WHERE managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+                "FROM rcnetnode WHERE managed_url in ("+ temp +")"+" GROUP BY iRCNETypeID ";
         String onlineCountsql = "select iRCNETypeID ,COUNT(*) AS Online_Number " +
-                "FROM rcnetnode WHERE ISPINGOK = '1' and managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+                "FROM rcnetnode WHERE ISPINGOK = '1' and managed_url in ("+ temp +")"+" GROUP BY iRCNETypeID ";
         String offlineCountsql = "select iRCNETypeID ,COUNT(*) AS Offline_Number " +
-                "FROM rcnetnode WHERE ISPINGOK = '0' and managed_url= '/ne="+str+"' GROUP BY iRCNETypeID ";
+                "FROM rcnetnode WHERE ISPINGOK = '0' and managed_url in ("+ temp +")"+" GROUP BY iRCNETypeID ";
         List<OLTInfo> list = new ArrayList<OLTInfo>();
         String onu_count = "";
         String epon_onu_count = "";
