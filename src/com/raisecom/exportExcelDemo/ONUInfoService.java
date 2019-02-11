@@ -16,14 +16,30 @@ public class ONUInfoService {
 
 
     public static List<ONUInfo> getAllByDb(List<String> str)  throws Exception{
-        String temp ;
+        String temp = "";
+        String tempstr = "";
         for(int i = 0 ; i < str.size() ; i++){
-            temp = "('/ne="+str.get(i)+"',";
+            if(str.size() == 1 ){
+                temp = "'/ne="+str.get(i).toString()+"'";
+                tempstr = "'" + str.get(i).toString() +"'";
+            }
+            else {
+
+                if(i == str.size()-1){
+                    temp += "'/ne=" + str.get(i).toString() + "'";
+                    tempstr += "'" + str.get(i).toString() +"'" ;
+                }else{
+                    temp += "'/ne=" + str.get(i).toString() + "',";
+                    tempstr += "'" + str.get(i).toString() +"',";
+                }
+            }
 
         }
+//        String sqlONU = "select IRCNETNODEID,IPADDRESS,FRIENDLY_NAME,iRCNETypeID,IFNULL(SOFTWARE_VER,'--') AS SOFTWARE_VER,IFNULL(MACADDRESS,'--') AS MACADDRESS  from rcnetnode " +
+//                "WHERE MANAGED_URL = '/ne=" +str +"'";
         String sqlONU = "select IRCNETNODEID,IPADDRESS,FRIENDLY_NAME,iRCNETypeID,IFNULL(SOFTWARE_VER,'--') AS SOFTWARE_VER,IFNULL(MACADDRESS,'--') AS MACADDRESS  from rcnetnode " +
-                "WHERE MANAGED_URL = '/ne=" +str +"'";
-        String sql = "select * from ONU_STATISTICS_INFO " ;
+                "WHERE MANAGED_URL in ( "+ temp +")";
+        String sql = "select * from ONU_STATISTICS_INFO where IRCNETOLTID in ("+ tempstr +")";
 
         List<ONUInfo> list = new ArrayList<ONUInfo>();
         Connection conn = DBConnectionManager.getConnection();
