@@ -87,13 +87,7 @@ public class BatDispectMode implements DispectMode {
             DeviceTask deviceTask=new OLTDeviceContrller();
             boolean isSuccessful=deviceTask.processStatistics(contact);
             if(isSuccessful){
-                if("OLT".equalsIgnoreCase(contact.getInspectType())){
-                    Main.FromDbToExcel("2125");
-                }else if("ONU".equalsIgnoreCase(contact.getInspectType())){
-                    Main.FromDBToONUExcel("2125");
-                }else{
-                    Main.FromDBToCardExcel("2125");
-                }
+
             }else{
                 System.out.print("巡检失败");
             }

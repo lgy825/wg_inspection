@@ -7,6 +7,7 @@ import com.raisecom.concurrent.ONUDeviceStatisticOperatorThread;
 import com.raisecom.concurrent.XPONThreadPool;
 import com.raisecom.controller.DeviceTask;
 
+import com.raisecom.exportExcelDemo.Main;
 import com.raisecom.nms.platform.cnet.ObjService;
 import com.raisecom.util.EPONCommonDBUtil;
 import com.raisecom.util.ParseAdapterUtil;
@@ -36,12 +37,14 @@ public class OLTDeviceContrller implements DeviceTask {
         XPONThreadPool xponPool = XPONThreadPool.getNewPool("DeviceStatistic", 10);
         String configFile = "";
         Map<String,Future<Boolean>> results = new HashMap();
+        List<String> oltIds=new ArrayList<>();
         if(rcnetnodes!=null){
              for(ObjService rcnetnode:rcnetnodes){
                  if(rcnetnode.storeValue.size()>0){
                      String softVer=rcnetnode.getStringValue("SOFTWARE_VER");
                      String ver= ParseAdapterUtil.getVersBySoftVer(softVer);
                      String ip=rcnetnode.getStringValue("IPADDRESS");
+                     oltIds.add(rcnetnode.getStringValue("IRCNETNODEID"));
                      if(ver.startsWith("2.") || ver.startsWith("3.")){
                          configFile= "com/raisecom/profile/2.X/oltStatisticsConfig_Mib.xml";
                      }else{
@@ -76,7 +79,13 @@ public class OLTDeviceContrller implements DeviceTask {
             }
         }
         xponPool.shutDown();
-
+        if("OLT".equalsIgnoreCase(contact.getInspectType())){
+            //Main.FromDbToExcel(oltIds);
+        }else if("ONU".equalsIgnoreCase(contact.getInspectType())){
+            //Main.FromDBToONUExcel("2125");
+        }else{
+            //Main.FromDBToCardExcel("2125");
+        }
         return true;
     }
 

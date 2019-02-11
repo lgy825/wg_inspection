@@ -35,5 +35,7 @@
     <orderEntry type="library" name="xbean-2.3.0" level="project" />
     <orderEntry type="library" name="res_security_component" level="project" />
     <orderEntry type="library" name="viewworks" level="project" />
+    <orderEntry type="library" name="dom4j-1.6.1" level="project" />
+    <orderEntry type="library" name="log4j-1.2.16" level="project" />
   </component>
 </module>
