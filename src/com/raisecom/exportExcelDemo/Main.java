@@ -5,14 +5,13 @@ import com.raisecom.bean.CardInfo;
 import com.raisecom.bean.OLTInfo;
 import com.raisecom.bean.ONUInfo;
 import com.raisecom.common.logging.LogFactory;
+import com.raisecom.common.logging.Logger;
 import com.raisecom.db.InitSelfmDBPoolTask;
 import com.raisecom.nms.platform.client.ResourceManager;
 import com.raisecom.util.EPONConstants;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.write.*;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 
 import java.io.File;
@@ -27,10 +26,18 @@ import java.util.ResourceBundle;
  * Created by liujs-008398 on 2018-12-28.
  */
 public class Main {
+    private static final Logger logger = LogFactory.getLogger("selfm");
     private static ResourceBundle bundle = EPONConstants.EPON_RB;
     public static void main(String[] args) throws Exception {
-        Logger log = LogManager.getLogger(Main.class);
-        log.debug("调试");
+        boolean isCon= InitSelfmDBPoolTask.execute();
+        if(isCon){
+            //FromDbToExcel("2108");
+            //FromDBToONUExcel("2108");
+            //FromDBToCardExcel("2108");
+            logger.log(300,"数据库初始化成功");
+        }else{
+            logger.log(300,"数据库初始化失败");
+        }
     }
 
     //板卡导出Excel
@@ -155,7 +162,7 @@ public class Main {
 
 
     //ONU导出Excel
-    public static void FromDBToONUExcel(String str) throws Exception {
+    public static void FromDBToONUExcel(List<String> str) throws Exception {
         try {
             List<ONUInfo> list = ONUInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿

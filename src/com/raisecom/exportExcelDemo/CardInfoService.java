@@ -14,14 +14,35 @@ import java.util.*;
  */
 public class CardInfoService {
 
-    public static List<CardInfo> getAllByDb(String str)  throws Exception{
+    public static List<CardInfo> getAllByDb(List<String> str)  throws Exception{
+
+        String tempstr = "";
+        for(int i = 0 ; i < str.size() ; i++){
+            if(str.size() == 1 ){
+                tempstr = "'" + str.get(i).toString() +"'";
+            }
+            else {
+                if(i == str.size()-1){
+                    tempstr += "'" + str.get(i).toString() +"'" ;
+                }else{
+                    tempstr += "'" + str.get(i).toString() +"',";
+                }
+            }
+
+        }
+//        String sqlCard = "SELECT rc.FRIENDLY_NAME,rc.IPADDRESS,rc.iRCNETypeID,ct.CARD_TYPE_NAME," +
+//                "c.CARD_NAME,c.CARD_STATUS,IFNULL(c.SOFTWARE_VER,'--') AS SOFTWARE_VER," +
+//                "cs.CPU,cs.MEMORY,cs.TEMPERATURE,cs.POWER " +
+//                "from card c,card_type ct,card_statistics_info cs,rcnetnode rc " +
+//                "where c.CARD_TYPE_ID=ct.CARD_TYPE_ID AND c.CARD_ID=cs.CARD_ID " +
+//                "AND rc.IRCNETNODEID=c.IRCNETNODEID AND rc.iRCNETypeID = ct.NETYPE_ID AND rc.IRCNETNODEID='"+ str +"'";
         String sqlCard = "SELECT rc.FRIENDLY_NAME,rc.IPADDRESS,rc.iRCNETypeID,ct.CARD_TYPE_NAME," +
                 "c.CARD_NAME,c.CARD_STATUS,IFNULL(c.SOFTWARE_VER,'--') AS SOFTWARE_VER," +
                 "cs.CPU,cs.MEMORY,cs.TEMPERATURE,cs.POWER " +
                 "from card c,card_type ct,card_statistics_info cs,rcnetnode rc " +
                 "where c.CARD_TYPE_ID=ct.CARD_TYPE_ID AND c.CARD_ID=cs.CARD_ID " +
-                "AND rc.IRCNETNODEID=c.IRCNETNODEID AND rc.iRCNETypeID = ct.NETYPE_ID AND rc.IRCNETNODEID='"+ str +"'";
-        String sql = "select * from CARD_STATISTICS_INFO " ;
+                "AND rc.IRCNETNODEID=c.IRCNETNODEID AND rc.iRCNETypeID = ct.NETYPE_ID AND rc.IRCNETNODEID in ("+ tempstr +")";
+//        String sql = "select * from CARD_STATISTICS_INFO where IRCNETOLTID in ("+ tempstr +")" ;
 
         List<CardInfo> list = new ArrayList<CardInfo>();
         Connection conn = DBConnectionManager.getConnection();
