@@ -304,7 +304,7 @@ public class Main {
         }
     }
     //从数据库导出OLT Excel
-    public static void FromDbToExcel(String str) {
+    public static void FromDbToExcel(List<String> str) {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
 
