@@ -31,7 +31,6 @@ public class OLTInfoService {
                 tempstr = "'" + str.get(i).toString() +"'";
             }
             else {
-
                 if(i == str.size()-1){
                     temp += "'/ne=" + str.get(i).toString() + "'";
                     tempstr += "'" + str.get(i).toString() +"'" ;
@@ -40,7 +39,6 @@ public class OLTInfoService {
                     tempstr += "'" + str.get(i).toString() +"',";
                 }
             }
-
        }
 //        String sql = "select * from OLT_STATISTICS_INFO where IRCNETNODEID ="+ str ;
 //        String onuCountsql = "SELECT iRCNETypeID ,COUNT(*) AS Device_Number " +
@@ -63,14 +61,18 @@ public class OLTInfoService {
         String gpon_onu_count = "";
         String unknown_onu_count = "";
         String unknowne_onu_count = "";
-        Connection conn = DBConnectionManager.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet result = pstmt.executeQuery();
-        ObjService countResult = EPONCommonDBUtil.executeQuery(onuCountsql);
-        ObjService onlineResult = EPONCommonDBUtil.executeQuery(onlineCountsql);
-
-        //连接数据库 将数据放入List中
+        Connection conn=null;
+        PreparedStatement pstmt=null;
+        ResultSet result=null;
         try {
+            conn = DBConnectionManager.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            result = pstmt.executeQuery();
+            ObjService countResult = EPONCommonDBUtil.executeQuery(onuCountsql);
+            ObjService onlineResult = EPONCommonDBUtil.executeQuery(onlineCountsql);
+
+            //连接数据库 将数据放入List中
+
             while (result.next()) {
                 OLTInfo oltInfo = new OLTInfo();
                 oltInfo.setIrcnetnodeid(result.getInt("IRCNETNODEID"));

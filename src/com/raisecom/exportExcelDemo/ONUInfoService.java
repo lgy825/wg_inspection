@@ -15,7 +15,7 @@ import java.util.*;
 public class ONUInfoService {
 
 
-    public static List<ONUInfo> getAllByDb(List<String> str)  throws Exception{
+    public static List<ONUInfo> getAllByDb(List<String> str){
         String temp = "";
         String tempstr = "";
         for(int i = 0 ; i < str.size() ; i++){
@@ -42,20 +42,23 @@ public class ONUInfoService {
         String sql = "select * from ONU_STATISTICS_INFO where IRCNETOLTID in ("+ tempstr +")";
 
         List<ONUInfo> list = new ArrayList<ONUInfo>();
-        Connection conn = DBConnectionManager.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet result = pstmt.executeQuery();
-        ObjService resultONUInfo = EPONCommonDBUtil.executeQuery(sqlONU);
-        //缓存数据
-        Vector<ObjService> verctor = resultONUInfo.getAllChildObjects();
-        Map<Integer,ObjService> map = new HashMap();
-        for(ObjService obj : verctor){
-            Integer iRCNENODEID = obj.getIntValue("IRCNETNODEID");
-            map.put(iRCNENODEID,obj);
-        }
-
-        //连接数据库 将数据放入List中
+        Connection conn=null;
+        PreparedStatement pstmt=null;
+        ResultSet result=null;
         try {
+            conn = DBConnectionManager.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            result = pstmt.executeQuery();
+            ObjService resultONUInfo = EPONCommonDBUtil.executeQuery(sqlONU);
+            //缓存数据
+            Vector<ObjService> verctor = resultONUInfo.getAllChildObjects();
+            Map<Integer,ObjService> map = new HashMap();
+            for(ObjService obj : verctor){
+                Integer iRCNENODEID = obj.getIntValue("IRCNETNODEID");
+                map.put(iRCNENODEID,obj);
+            }
+
+            //连接数据库 将数据放入List中
             while (result.next()) {
                 ONUInfo onuInfo = new ONUInfo();
                 onuInfo.setIrcnetnodeid(result.getInt("IRCNETNODEID"));

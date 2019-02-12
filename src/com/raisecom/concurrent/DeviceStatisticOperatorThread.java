@@ -98,7 +98,9 @@ public class DeviceStatisticOperatorThread implements Callable<Boolean> {
 
             //主备倒换次数
             String switchedCount=SnmpOperationUtil.getSwitchedCount(options);
-            oltInfo.setSwitched_count(Integer.parseInt(processResult(switchedCount)));
+            if(switchedCount!=null){
+                Integer.parseInt(processResult(switchedCount));
+            }
 
             //主控电压
             String controlVoltage = SnmpOperationUtil.getControlVoltage(options);

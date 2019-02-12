@@ -15,7 +15,6 @@ import jxl.write.*;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -28,16 +27,19 @@ import java.util.ResourceBundle;
 public class Main {
     private static final Logger logger = LogFactory.getLogger("selfm");
     private static ResourceBundle bundle = EPONConstants.EPON_RB;
-    public static void main(String[] args) throws Exception {
-        boolean isCon= InitSelfmDBPoolTask.execute();
-        if(isCon){
-            //FromDbToExcel("2108");
-            //FromDBToONUExcel("2108");
-            //FromDBToCardExcel("2108");
-            logger.log(300,"数据库初始化成功");
-        }else{
-            logger.log(300,"数据库初始化失败");
-        }
+    private  static
+    File path = new File(System.getProperty("user.dir"));
+    public static void main(String[] args){
+//        boolean isCon= InitSelfmDBPoolTask.execute();
+//        if(isCon){
+//            //FromDbToExcel("2108");
+//            //FromDBToONUExcel("2108");
+//            FromDBToCardExcel("2108");
+//            logger.log(300,"数据库初始化成功");
+//        }else{
+//            logger.log(300,"数据库初始化失败");
+//        }
+        System.out.print(path.toString());
     }
 
     //板卡导出Excel
@@ -51,7 +53,7 @@ public class Main {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
             String dataStr = sdf.format(new Date());
 
-            String fileName = "D://" + dataStr + ".xls";
+            String fileName = path + "/CARD_"+dataStr + ".xls";
             File file = new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
@@ -162,7 +164,7 @@ public class Main {
 
 
     //ONU导出Excel
-    public static void FromDBToONUExcel(List<String> str) throws Exception {
+    public static void FromDBToONUExcel(List<String> str){
         try {
             List<ONUInfo> list = ONUInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿
@@ -184,7 +186,7 @@ public class Main {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
             String dataStr = sdf.format(new Date());
 
-            String fileName = "D://" + dataStr + ".xls";
+            String fileName = path + "/ONU_"+dataStr + ".xls";
             File file = new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
@@ -304,11 +306,9 @@ public class Main {
         }
     }
     //从数据库导出OLT Excel
-    public static void FromDbToExcel(String str) {
+    public static void FromDbToExcel(List<String> str) {
 //        String sql = "select * from OLT_STATISTICS_INFO";
 //        ObjService result = EPONCommonDBUtil.executeQuery(sql);
-
-
         try {
             List<OLTInfo> list = OLTInfoService.getAllByDb(str);
             // 创建可写入的Excel工作簿
@@ -318,7 +318,7 @@ public class Main {
             SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddhhmmss");
             String dataStr=sdf.format(new Date());
 
-            String fileName = "D://"+dataStr+".xls";
+            String fileName = path+ "/OLT_"+dataStr+".xls";
             File file=new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();

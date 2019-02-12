@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class CardInfoService {
 
-    public static List<CardInfo> getAllByDb(List<String> str)  throws Exception{
+    public static List<CardInfo> getAllByDb(List<String> str){
 
         String tempstr = "";
         for(int i = 0 ; i < str.size() ; i++){
@@ -44,13 +44,15 @@ public class CardInfoService {
                 "AND rc.IRCNETNODEID=c.IRCNETNODEID AND rc.iRCNETypeID = ct.NETYPE_ID AND rc.IRCNETNODEID in ("+ tempstr +")";
 //        String sql = "select * from CARD_STATISTICS_INFO where IRCNETOLTID in ("+ tempstr +")" ;
 
+        Connection conn=null;
+        PreparedStatement pstmt=null;
+        ResultSet result=null;
         List<CardInfo> list = new ArrayList<CardInfo>();
-        Connection conn = DBConnectionManager.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sqlCard);
-        ResultSet result = pstmt.executeQuery();
-
-        //连接数据库 将数据放入List中
         try {
+            conn = DBConnectionManager.getConnection();
+            pstmt = conn.prepareStatement(sqlCard);
+            result = pstmt.executeQuery();
+            //连接数据库 将数据放入List中
             while (result.next()) {
                 CardInfo cardInfo = new CardInfo();
                 cardInfo.setFriendlyName(result.getString("FRIENDLY_NAME"));
@@ -74,7 +76,6 @@ public class CardInfoService {
         } finally {
             DBConnectionManager.getInstance().free(conn, pstmt, result);
         }
-
         return list;
     }
 }

@@ -80,11 +80,11 @@ public class OLTDeviceContrller implements DeviceTask {
         }
         xponPool.shutDown();
         if("OLT".equalsIgnoreCase(contact.getInspectType())){
-            //Main.FromDbToExcel(oltIds);
+            Main.FromDbToExcel(oltIds);
         }else if("ONU".equalsIgnoreCase(contact.getInspectType())){
-            //Main.FromDBToONUExcel("2125");
+            Main.FromDBToONUExcel(oltIds);
         }else{
-            //Main.FromDBToCardExcel("2125");
+            Main.FromDBToCardExcel(oltIds);
         }
         return true;
     }

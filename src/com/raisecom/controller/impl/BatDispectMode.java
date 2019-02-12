@@ -87,7 +87,7 @@ public class BatDispectMode implements DispectMode {
             DeviceTask deviceTask=new OLTDeviceContrller();
             boolean isSuccessful=deviceTask.processStatistics(contact);
             if(isSuccessful){
-
+                System.out.print("巡检成功");
             }else{
                 System.out.print("巡检失败");
             }
